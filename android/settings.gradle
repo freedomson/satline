@@ -1,0 +1,20 @@
+rootProject.name = 'paseeo'
+include ':react-native-device-info'
+project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
+include ':react-native-background-fetch'
+project(':react-native-background-fetch').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-background-fetch/android')
+include ':react-native-android-broadcast-receiver-event-reminder'
+project(':react-native-android-broadcast-receiver-event-reminder').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-broadcast-receiver-event-reminder/android')
+include ':react-native-sms-android'
+project(':react-native-sms-android').projectDir = new File(settingsDir, '../node_modules/react-native-sms-android/android')
+include ':react-native-android-broadcast-receiver-event-reminder'
+project(':react-native-android-broadcast-receiver-event-reminder').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-broadcast-receiver-event-reminder/android')
+include ':react-native-simple-contacts'
+project(':react-native-simple-contacts').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-simple-contacts/android')
+include ':react-native-calendar-events'
+project(':react-native-calendar-events').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-calendar-events/android')
+include ':react-native-shimmer'
+project(':react-native-shimmer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-shimmer/android')
+include ':react-native-gesture-handler'
+project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
+include ':app'

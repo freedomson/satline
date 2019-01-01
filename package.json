@@ -1,0 +1,79 @@
+{
+  "name": "paseeo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "ios": "react-native run-ios",
+    "android": "react-native run-android",
+    "tsc": "tsc -b",
+    "xcode": "open ios/smscalendar.xcodeproj",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "date-and-time": "^0.6.3",
+    "immer": "^1.7.2",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "react": "^16.7.0-alpha.2",
+    "react-dom": "16.7.0-alpha.0",
+    "react-native": "npm:@brunolemos/react-native",
+    "react-native-android-broadcast-receiver-event-reminder": "file:./private_modules/react-native-android-broadcast-receiver-event-reminder",
+    "react-native-background-fetch": "file:./private_modules/react-native-background-fetch",
+    "react-native-calendar-events": "wmcmahan/react-native-calendar-events",
+    "react-native-device-info": "file:./private_modules/react-native-device-info",
+    "react-native-elements": "^1.0.0",
+    "react-native-email": "^1.0.2",
+    "react-native-gesture-handler": "^1.0.16",
+    "react-native-hooks": "^0.0.6",
+    "react-native-shimmer": "^0.5.0",
+    "react-native-simple-contacts": "file:./private_modules/react-native-simple-contacts",
+    "react-native-sms-android": "file:./private_modules/react-native-sms-android",
+    "react-native-sound": "file:./private_modules/react-native-sound",
+    "react-native-vector-icons": "^6.3.0",
+    "react-navigation": "^3.3.0",
+    "toggle-switch-react-native": "^2.0.2",
+    "typesafe-actions": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.2",
+    "@types/lodash": "^4.14.116",
+    "@types/react": "^16.7.17",
+    "@types/react-dom": "^16.0.9",
+    "@types/react-native": "^0.57.18",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.47.0",
+    "prettier": "^1.14.3",
+    "react-native-typescript-transformer": "^1.2.10",
+    "react-test-renderer": "16.5.0",
+    "typescript": "^3.1.1"
+  },
+  "resolutions": {
+    "scheduler": "0.12.0-alpha.3"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ],
+    "cacheDirectory": ".jest/cache"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
+  }
+}
