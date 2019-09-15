@@ -23,6 +23,7 @@ export const Home: FunctionComponent = (props) => {
 
   //onst dimensions = useDimensions()   
   const scanner = useScanner();
+  console.log(scanner)
 
 
   //const authorizationStatus = useAuthorizations()

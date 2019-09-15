@@ -10,22 +10,17 @@ import SubnetmaskModule from 'get-subnet-mask';
 var sip = require ('shift8-ip-func');
 var ipaddr = require('ipaddr.js');
 
-// import fetch from 'react-native-fetch-polyfill';
-
 export let useScanner = () => {
 
-    const [scanner, setScanner] = useState({
-        status: null
-    });
+    const [scanner, setScanner] = useState([null]);
 
     useEffect(
         () => { 
-            if (scanner.status === null) {
+            if (scanner[0] === null) {
                 let status = getDeviceNetworkStatus()
-                setScanner({status : status})
             }
         }, 
-        [scanner.status],
+        [scanner],
       );
 
     async function getDeviceNetworkStatus() { 
@@ -77,7 +72,7 @@ export let useScanner = () => {
     async function scanNet(setup) { 
 
         // console.log('[SMSC][NETSCAN] setup', setup)
-        var stbs = []
+        var stbs: never[] | null[] | ((prevState: null[]) => null[]) | any[] = []
         for (let i = 0; i < setup["ip_range"].length; i++) {
 
             let ip = setup["ip_range"][i]
@@ -92,19 +87,30 @@ export let useScanner = () => {
             xhr.responseType = "json";
 
             xhr.onload = async function(e) {  
-                console.log("detected", ip)
+                console.log("Detected STB", ip)
                 portalResp = await apiCall(urlPortal) 
-                console.log(portalResp.response.status , portalResp.data.indexOf("Linkdroid WebServer"))
+                //console.log(portalResp.response.status , portalResp.data.indexOf("Linkdroid WebServer"))
                 if (portalResp.response.status == 200 && portalResp.data.indexOf("Linkdroid WebServer")>=0)
                 {
                     startResp = await apiCall(urlStart)
                     statusResp = await apiCall(urlStatus)
-                    console.log(statusResp)
-                    
+
+                    if (startResp.response.status==200 && statusResp.response.status==200)
+                    {
+                        let start = statusResp.data.split(" ")
+                        let startStatus = start[0]
+                        let startData = JSON.parse(start[1])
+                        console.log(startData)
+                        if (startStatus==200) {
+                            startData.ip = ip
+                            stbs.push(startData) 
+                            setScanner(stbs)
+                        }
+                    }
                 } 
             }
             xhr.ontimeout = function (e) { 
-                console.log("timeout")
+                console.log("Server scan timeout")
             };
             xhr.send(); 
         }
