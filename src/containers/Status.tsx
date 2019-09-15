@@ -2,7 +2,7 @@
 import React, {  useState,  FunctionComponent } from "react";
 import { Animated, StyleSheet, View, Text, ImageBackground, TouchableOpacity } from "react-native";
 
-import { useEmitter } from "./useEmitter";
+import { useScanner } from "./useScanner";
 
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
 
@@ -15,14 +15,14 @@ import { NavigationEvents } from "react-navigation";
 
 export const Status: FunctionComponent = (props) => { 
 
-  let emitter = useEmitter();
+  let emitter = useScanner();
 
   const onToggle = function(isoff:boolean){
     return isoff ? emitter.activate() : emitter.deactivate()
   }
 
   const  NavigationsonWillFocus = ()=>{
-    emitter.update()
+    useScanner.update()
   }
 
   return (

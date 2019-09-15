@@ -1,0 +1,12 @@
+node_modules
+.gradle
+android/.idea/
+android/app/app.iml
+android/app/build/
+android/local.properties
+android/paseeo.iml
+android/app/paseeo.keystore
+android/build/
+private_modules/react-native-device-info/android/.project
+private_modules/react-native-device-info/android/.settings/
+.vscode/
