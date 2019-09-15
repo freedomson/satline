@@ -4874,6 +4874,11 @@ react-native-shimmer@^0.5.0:
 "react-native-simple-contacts@file:./private_modules/react-native-simple-contacts":
   version "1.0.2"
 
+react-native-simple-table@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-simple-table/-/react-native-simple-table-0.0.3.tgz#5bb37337078d0043a5b4ee862b44173bb36a1fff"
+  integrity sha512-U5b6KXqsCxOgwqm26Ej4G3T3gCch4BV3micK/WYFjMENW33fh/DmoTfr11Gwb92/FDToH8dzuNY/peA0oEbkjQ==
+
 "react-native-sms-android@file:./private_modules/react-native-sms-android":
   version "0.4.1"
 

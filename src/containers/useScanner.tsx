@@ -12,11 +12,11 @@ var ipaddr = require('ipaddr.js');
 
 export let useScanner = () => {
 
-    const [scanner, setScanner] = useState([null]);
+    const [scanner, setScanner] = useState([]);
 
     useEffect(
         () => { 
-            if (scanner[0] === null) {
+            if (scanner.length === 0) {
                 let status = getDeviceNetworkStatus()
             }
         }, 
@@ -87,7 +87,7 @@ export let useScanner = () => {
             xhr.responseType = "json";
 
             xhr.onload = async function(e) {  
-                console.log("Detected STB", ip)
+                // console.log("Detected STB", ip)
                 portalResp = await apiCall(urlPortal) 
                 //console.log(portalResp.response.status , portalResp.data.indexOf("Linkdroid WebServer"))
                 if (portalResp.response.status == 200 && portalResp.data.indexOf("Linkdroid WebServer")>=0)
@@ -100,8 +100,10 @@ export let useScanner = () => {
                         let start = statusResp.data.split(" ")
                         let startStatus = start[0]
                         let startData = JSON.parse(start[1])
-                        console.log(startData)
-                        if (startStatus==200) {
+
+                        //console.log(startData)
+                        
+                        if (startStatus==200) { 
                             startData.ip = ip
                             stbs.push(startData) 
                             setScanner(stbs)
@@ -110,7 +112,7 @@ export let useScanner = () => {
                 } 
             }
             xhr.ontimeout = function (e) { 
-                console.log("Server scan timeout")
+                // console.log("Server scan timeout")
             };
             xhr.send(); 
         }
