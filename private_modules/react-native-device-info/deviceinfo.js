@@ -4,26 +4,20 @@
 import { Platform, NativeModules, Dimensions } from 'react-native';
 
 var RNDeviceInfo = NativeModules.RNDeviceInfo;
+var OS = Platform.OS;
 
-if (Platform.OS === 'web' || Platform.OS === 'dom') {
+if (OS === 'web' || OS === 'dom') {
   RNDeviceInfo = require('./web');
 }
 if (!RNDeviceInfo) {
   // Produce an error if we don't have the native module
-  if (
-    Platform.OS === 'android' ||
-    Platform.OS === 'ios' ||
-    Platform.OS === 'web' ||
-    Platform.OS === 'dom'
-  ) {
+  if (OS === 'android' || OS === 'ios' || OS === 'web' || OS === 'dom') {
     throw new Error(`@react-native-community/react-native-device-info: NativeModule.RNDeviceInfo is null. To fix this issue try these steps:
-  • Run \`react-native link react-native-device-info\` in the project root.
+  • For react-native <= 0.59: Run \`react-native link react-native-device-info\` in the project root.
   • Rebuild and re-run the app.
   • If you are using CocoaPods on iOS, run \`pod install\` in the \`ios\` directory and then rebuild and re-run the app. You may also need to re-open Xcode to get the new pods.
   If none of these fix the issue, please open an issue on the Github repository: https://github.com/react-native-community/react-native-device-info`);
   }
-
-  RNDeviceInfo = require('./default');
 }
 
 const devicesWithNotch = [
@@ -81,6 +75,22 @@ const devicesWithNotch = [
   },
   {
     brand: 'Huawei',
+    model: 'Mate 20 Lite',
+  },
+  {
+    brand: 'Huawei',
+    model: 'Mate 20 Pro',
+  },
+  {
+    brand: 'Huawei',
+    model: 'P30 Lite',
+  },
+  {
+    brand: 'Huawei',
+    model: 'P30 Pro',
+  },
+  {
+    brand: 'Huawei',
     model: 'Nova 3',
   },
   {
@@ -116,12 +126,32 @@ const devicesWithNotch = [
     model: 'LM-V405', //V40 ThinQ
   },
   {
+    brand: 'Motorola',
+    model: 'Moto g7 Play',
+  },
+  {
+    brand: 'Motorola',
+    model: 'Moto g7 Power',
+  },
+  {
+    brand: 'Motorola',
+    model: 'One',
+  },
+  {
+    brand: 'Nokia',
+    model: '5.1 Plus',
+  },
+  {
     brand: 'Nokia',
     model: '6.1 Plus',
   },
   {
     brand: 'Nokia',
     model: '7.1',
+  },
+  {
+    brand: 'Nokia',
+    model: '8.1',
   },
   {
     brand: 'OnePlus',
@@ -316,192 +346,1471 @@ const deviceNamesByCode = {
   'AppleTV6,2': 'Apple TV 4K', // Apple TV 4K
 };
 
-export default {
-  getUniqueID: function() {
-    return RNDeviceInfo.uniqueId;
-  },
-  getInstanceID: function() {
-    return RNDeviceInfo.instanceId;
-  },
-  getSerialNumber: function() {
-    return RNDeviceInfo.serialNumber;
-  },
-  getIPAddress: function() {
+let uniqueId;
+export async function getUniqueId() {
+  if (!uniqueId) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      uniqueId = await RNDeviceInfo.getUniqueId();
+    } else {
+      uniqueId = 'unknown';
+    }
+  }
+  return uniqueId;
+}
+
+export function getUniqueIdSync() {
+  if (!uniqueId) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      uniqueId = RNDeviceInfo.getUniqueIdSync();
+    } else {
+      uniqueId = 'unknown';
+    }
+  }
+  return uniqueId;
+}
+
+let instanceId;
+export async function getInstanceId() {
+  if (!instanceId) {
+    if (OS === 'android') {
+      instanceId = await RNDeviceInfo.getInstanceId();
+    } else {
+      instanceId = 'unknown';
+    }
+  }
+  return instanceId;
+}
+
+export function getInstanceIdSync() {
+  if (!instanceId) {
+    if (OS === 'android') {
+      instanceId = RNDeviceInfo.getInstanceIdSync();
+    } else {
+      instanceId = 'unknown';
+    }
+  }
+  return instanceId;
+}
+
+let serialNumber;
+export async function getSerialNumber() {
+  if (!serialNumber) {
+    if (OS === 'android') {
+      serialNumber = await RNDeviceInfo.getSerialNumber();
+    } else {
+      serialNumber = 'unknown';
+    }
+  }
+  return serialNumber;
+}
+
+export function getSerialNumberSync() {
+  if (!serialNumber) {
+    if (OS === 'android') {
+      serialNumber = RNDeviceInfo.getSerialNumberSync();
+    } else {
+      serialNumber = 'unknown';
+    }
+  }
+  return serialNumber;
+}
+
+let androidId;
+export async function getAndroidId() {
+  if (!androidId) {
+    if (OS === 'android') {
+      androidId = await RNDeviceInfo.getAndroidId();
+    } else {
+      androidId = 'unknown';
+    }
+  }
+  return androidId;
+}
+
+export function getAndroidIdSync() {
+  if (!androidId) {
+    if (OS === 'android') {
+      androidId = RNDeviceInfo.getAndroidIdSync();
+    } else {
+      androidId = 'unknown';
+    }
+  }
+  return androidId;
+}
+
+export async function getIpAddress() {
+  if (OS === 'android' || OS === 'ios' || OS === 'windows') {
     return RNDeviceInfo.getIpAddress();
-  },
-  getCameraPresence: function() {
+  }
+  return 'unknown';
+}
+
+export function getIpAddressSync() {
+  if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+    return RNDeviceInfo.getIpAddressSync();
+  }
+  return 'unknown';
+}
+
+export async function getCameraPresence() {
+  if (OS === 'android' || OS === 'windows') {
     return RNDeviceInfo.getCameraPresence();
-  },
-  getMACAddress: function() {
+  }
+  return false;
+}
+
+export function getCameraPresenceSync() {
+  if (OS === 'android' || OS === 'windows') {
+    return RNDeviceInfo.getCameraPresenceSync();
+  }
+  return false;
+}
+
+export async function getMacAddress() {
+  if (OS === 'android') {
     return RNDeviceInfo.getMacAddress();
-  },
-  getDeviceId: function() {
-    return RNDeviceInfo.deviceId;
-  },
-  getManufacturer: function() {
-    return RNDeviceInfo.systemManufacturer;
-  },
-  getModel: function() {
-    if (Platform.OS === 'ios') {
-      var deviceName;
-      var deviceId = RNDeviceInfo.deviceId;
-      if (deviceId) {
-        deviceName = deviceNamesByCode[deviceId];
+  } else if (OS === 'ios') {
+    return '02:00:00:00:00:00';
+  }
+  return 'unknown';
+}
+
+export function getMacAddressSync() {
+  if (OS === 'android') {
+    return RNDeviceInfo.getMacAddressSync();
+  } else if (OS === 'ios') {
+    return '02:00:00:00:00:00';
+  }
+  return 'unknown';
+}
+
+let deviceId;
+export async function getDeviceId() {
+  if (!deviceId) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      deviceId = await RNDeviceInfo.getDeviceId();
+    } else {
+      deviceId = 'unknown';
+    }
+  }
+  return deviceId;
+}
+
+export function getDeviceIdSync() {
+  if (!deviceId) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      deviceId = RNDeviceInfo.getDeviceIdSync();
+    } else {
+      deviceId = 'unknown';
+    }
+  }
+  return deviceId;
+}
+
+let manufacturer;
+export async function getManufacturer() {
+  if (!manufacturer) {
+    if (OS === 'android' || OS === 'windows') {
+      manufacturer = await RNDeviceInfo.getSystemManufacturer();
+    } else if (OS === 'ios') {
+      manufacturer = 'Apple';
+    } else {
+      manufacturer = 'unknown';
+    }
+  }
+  return manufacturer;
+}
+
+export function getManufacturerSync() {
+  if (!manufacturer) {
+    if (OS === 'android' || OS === 'windows') {
+      manufacturer = RNDeviceInfo.getSystemManufacturerSync();
+    } else if (OS === 'ios') {
+      manufacturer = 'Apple';
+    } else {
+      manufacturer = 'unknown';
+    }
+  }
+  return manufacturer;
+}
+
+let model;
+export async function getModel() {
+  if (!model) {
+    if (OS === 'ios') {
+      let deviceName;
+      let _deviceId = await RNDeviceInfo.getDeviceId();
+      if (_deviceId) {
+        deviceName = deviceNamesByCode[_deviceId];
         if (!deviceName) {
           // Not found on database. At least guess main device type from string contents:
-          if (deviceId.startsWith('iPod')) {
+          if (device.startsWith('iPod')) {
             deviceName = 'iPod Touch';
-          } else if (deviceId.startsWith('iPad')) {
+          } else if (device.startsWith('iPad')) {
             deviceName = 'iPad';
-          } else if (deviceId.startsWith('iPhone')) {
+          } else if (device.startsWith('iPhone')) {
             deviceName = 'iPhone';
-          } else if (deviceId.startsWith('AppleTV')) {
+          } else if (device.startsWith('AppleTV')) {
             deviceName = 'Apple TV';
           }
         }
       }
-      return deviceName;
+      model = deviceName;
+    } else if (OS === 'android' || OS === 'windows') {
+      model = await RNDeviceInfo.getModel();
     } else {
-      return RNDeviceInfo.model;
+      model = 'unknown';
     }
-  },
-  getBrand: function() {
-    return RNDeviceInfo.brand;
-  },
-  getSystemName: function() {
-    return RNDeviceInfo.systemName;
-  },
-  getSystemVersion: function() {
-    return RNDeviceInfo.systemVersion;
-  },
-  getBuildId: function() {
-    return RNDeviceInfo.buildId;
-  },
-  getAPILevel: function() {
-    return RNDeviceInfo.apiLevel;
-  },
-  getBundleId: function() {
-    return RNDeviceInfo.bundleId;
-  },
-  getApplicationName: function() {
-    return RNDeviceInfo.appName;
-  },
-  getBuildNumber: function() {
-    return RNDeviceInfo.buildNumber;
-  },
-  getVersion: function() {
-    return RNDeviceInfo.appVersion;
-  },
-  getReadableVersion: function() {
-    return RNDeviceInfo.appVersion + '.' + RNDeviceInfo.buildNumber;
-  },
-  getDeviceName: function() {
-    return RNDeviceInfo.deviceName;
-  },
-  getUserAgent: function() {
-    return RNDeviceInfo.userAgent;
-  },
-  getDeviceLocale: function() {
-    return RNDeviceInfo.deviceLocale;
-  },
-  getPreferredLocales: function() {
-    return RNDeviceInfo.preferredLocales;
-  },
-  getDeviceCountry: function() {
-    return RNDeviceInfo.deviceCountry;
-  },
-  getTimezone: function() {
-    return RNDeviceInfo.timezone;
-  },
-  getFontScale: function() {
-    return RNDeviceInfo.fontScale;
-  },
-  isEmulator: function() {
-    return RNDeviceInfo.isEmulator;
-  },
-  isTablet: function() {
-    return RNDeviceInfo.isTablet;
-  },
-  is24Hour: function() {
-    return RNDeviceInfo.is24Hour;
-  },
-  isPinOrFingerprintSet: function() {
-    return RNDeviceInfo.isPinOrFingerprintSet;
-  },
-  hasNotch: function() {
-    return (
+  }
+  return model;
+}
+
+export function getModelSync() {
+  if (!model) {
+    if (OS === 'ios') {
+      var deviceName;
+      var _deviceId = RNDeviceInfo.getDeviceIdSync();
+      if (_deviceId) {
+        deviceName = deviceNamesByCode[_deviceId];
+        if (!deviceName) {
+          // Not found on database. At least guess main device type from string contents:
+          if (device.startsWith('iPod')) {
+            deviceName = 'iPod Touch';
+          } else if (device.startsWith('iPad')) {
+            deviceName = 'iPad';
+          } else if (device.startsWith('iPhone')) {
+            deviceName = 'iPhone';
+          } else if (device.startsWith('AppleTV')) {
+            deviceName = 'Apple TV';
+          }
+        }
+      }
+      model = deviceName;
+    } else if (OS === 'android' || OS === 'windows') {
+      model = RNDeviceInfo.getModelSync();
+    } else {
+      model = 'unknown';
+    }
+  }
+  return model;
+}
+
+let brand;
+export async function getBrand() {
+  if (!brand) {
+    if (OS === 'android' || OS === 'windows') {
+      brand = await RNDeviceInfo.getBrand();
+    } else if (OS === 'ios') {
+      brand = 'Apple';
+    } else {
+      brand = 'unknown';
+    }
+  }
+  return brand;
+}
+
+export function getBrandSync() {
+  if (!brand) {
+    if (OS === 'android' || OS === 'windows') {
+      return RNDeviceInfo.getBrandSync();
+    } else if (OS === 'ios') {
+      return 'Apple';
+    } else {
+      brand = 'unknown';
+    }
+  }
+  return brand;
+}
+
+let systemName;
+export async function getSystemName() {
+  if (!systemName) {
+    if (OS === 'ios') {
+      systemName = await RNDeviceInfo.getSystemName();
+    } else if (OS === 'android') {
+      systemName = 'Android';
+    } else if (OS === 'windows') {
+      systemName = 'Windows';
+    } else {
+      systemName = 'unknown';
+    }
+  }
+  return systemName;
+}
+
+export function getSystemNameSync() {
+  if (!systemName) {
+    if (OS === 'ios') {
+      systemName = RNDeviceInfo.getSystemNameSync();
+    } else if (OS === 'android') {
+      systemName = 'Android';
+    } else if (OS === 'windows') {
+      systemName = 'Windows';
+    } else {
+      systemName = 'unknown';
+    }
+  }
+  return systemName;
+}
+
+let systemVersion;
+export async function getSystemVersion() {
+  if (!systemVersion) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      systemVersion = await RNDeviceInfo.getSystemVersion();
+    } else {
+      systemVersion = 'unknown';
+    }
+  }
+  return systemVersion;
+}
+
+export function getSystemVersionSync() {
+  if (!systemVersion) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      systemVersion = RNDeviceInfo.getSystemVersionSync();
+    } else {
+      systemVersion = 'unknown';
+    }
+  }
+  return systemVersion;
+}
+
+let buildId;
+export async function getBuildId() {
+  if (!buildId) {
+    if (OS === 'android' || OS === 'ios') {
+      buildId = await RNDeviceInfo.getBuildId();
+    } else {
+      buildId = 'unknown';
+    }
+  }
+  return buildId;
+}
+
+export function getBuildIdSync() {
+  if (!buildId) {
+    if (OS === 'android' || OS === 'ios') {
+      buildId = RNDeviceInfo.getBuildIdSync();
+    } else {
+      buildId = 'unknown';
+    }
+  }
+  return buildId;
+}
+
+let apiLevel;
+export async function getApiLevel() {
+  if (!apiLevel) {
+    if (OS === 'android') {
+      apiLevel = await RNDeviceInfo.getApiLevel();
+    } else {
+      apiLevel = -1;
+    }
+  }
+  return apiLevel;
+}
+
+export function getApiLevelSync() {
+  if (!apiLevel) {
+    if (OS === 'android') {
+      apiLevel = RNDeviceInfo.getApiLevelSync();
+    } else {
+      apiLevel = -1;
+    }
+  }
+  return apiLevel;
+}
+
+let bundleId;
+export async function getBundleId() {
+  if (!bundleId) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      bundleId = await RNDeviceInfo.getBundleId();
+    } else {
+      bundleId = 'unknown';
+    }
+  }
+  return bundleId;
+}
+
+export function getBundleIdSync() {
+  if (!bundleId) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      bundleId = RNDeviceInfo.getBundleIdSync();
+    } else {
+      bundleId = 'unknown';
+    }
+  }
+  return bundleId;
+}
+
+let appName;
+export async function getApplicationName() {
+  if (!appName) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      appName = await RNDeviceInfo.getAppName();
+    } else {
+      appName = 'unknown';
+    }
+  }
+  return appName;
+}
+
+export function getApplicationNameSync() {
+  if (!appName) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      appName = RNDeviceInfo.getAppNameSync();
+    } else {
+      appName = 'unknown';
+    }
+  }
+  return appName;
+}
+
+let buildNumber;
+export async function getBuildNumber() {
+  if (!buildNumber) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      buildNumber = await RNDeviceInfo.getBuildNumber();
+    } else {
+      buildNumber = 'unknown';
+    }
+  }
+  return buildNumber;
+}
+
+export function getBuildNumberSync() {
+  if (!buildNumber) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      buildNumber = RNDeviceInfo.getBuildNumberSync();
+    } else {
+      buildNumber = 'unknown';
+    }
+  }
+  return buildNumber;
+}
+
+let version;
+export async function getVersion() {
+  if (!version) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      version = await RNDeviceInfo.getAppVersion();
+    } else {
+      version = 'unknown';
+    }
+  }
+  return version;
+}
+
+export function getVersionSync() {
+  if (!version) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      version = RNDeviceInfo.getAppVersionSync();
+    } else {
+      version = 'unknown';
+    }
+  }
+  return version;
+}
+
+export async function getReadableVersion() {
+  return (await RNDeviceInfo.getAppVersion()) + '.' + (await RNDeviceInfo.getBuildNumber());
+}
+
+export function getReadableVersionSync() {
+  return RNDeviceInfo.getAppVersionSync() + '.' + RNDeviceInfo.getBuildNumberSync();
+}
+
+let deviceName;
+export async function getDeviceName() {
+  if (!deviceName) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      deviceName = await RNDeviceInfo.getDeviceName();
+    } else {
+      deviceName = 'unknown';
+    }
+  }
+  return deviceName;
+}
+
+export function getDeviceNameSync() {
+  if (!deviceName) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      deviceName = RNDeviceInfo.getDeviceNameSync();
+    } else {
+      deviceName = 'unknown';
+    }
+  }
+  return deviceName;
+}
+
+export async function getUsedMemory() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getUsedMemory();
+  }
+  return -1;
+}
+
+export function getUsedMemorySync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getUsedMemorySync();
+  }
+  return -1;
+}
+
+let userAgent;
+export async function getUserAgent() {
+  if (!userAgent) {
+    if (OS === 'android' || OS === 'ios' || OS === 'web') {
+      userAgent = await RNDeviceInfo.getUserAgent();
+    } else {
+      userAgent = 'unknown';
+    }
+  }
+  return userAgent;
+}
+
+export function getUserAgentSync() {
+  throw new Error('getUserAgent is only available async');
+}
+
+export async function getFontScale() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getFontScale();
+  }
+  return Promise.resolve('unknown');
+}
+
+export function getFontScaleSync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getFontScaleSync();
+  }
+  return 'unknown';
+}
+
+let bootloader;
+export async function getBootloader() {
+  if (!bootloader) {
+    if (OS === 'android') {
+      bootloader = await RNDeviceInfo.getBootloader();
+    } else {
+      bootloader = 'unknown';
+    }
+  }
+  return bootloader;
+}
+
+export function getBootloaderSync() {
+  if (!bootloader) {
+    if (OS === 'android') {
+      bootloader = RNDeviceInfo.getBootloaderSync();
+    } else {
+      bootloader = 'unknown';
+    }
+  }
+  return bootloader;
+}
+
+let device;
+export async function getDevice() {
+  if (!device) {
+    if (OS === 'android') {
+      device = RNDeviceInfo.getDevice();
+    } else {
+      device = 'unknown';
+    }
+  }
+  return device;
+}
+
+export function getDeviceSync() {
+  if (!device) {
+    if (OS === 'android') {
+      device = RNDeviceInfo.getDeviceSync();
+    } else {
+      device = 'unknown';
+    }
+  }
+  return device;
+}
+
+let display;
+export async function getDisplay() {
+  if (!display) {
+    if (OS === 'android') {
+      display = await RNDeviceInfo.getDisplay();
+    } else {
+      display = 'unknown';
+    }
+  }
+  return display;
+}
+
+export function getDisplaySync() {
+  if (!display) {
+    if (OS === 'android') {
+      display = RNDeviceInfo.getDisplaySync();
+    } else {
+      display = 'unknown';
+    }
+  }
+  return display;
+}
+
+let fingerprint;
+export async function getFingerprint() {
+  if (!fingerprint) {
+    if (OS === 'android') {
+      fingerprint = await RNDeviceInfo.getFingerprint();
+    } else {
+      fingerprint = 'unknown';
+    }
+  }
+  return fingerprint;
+}
+
+export function getFingerprintSync() {
+  if (!fingerprint) {
+    if (OS === 'android') {
+      fingerprint = RNDeviceInfo.getFingerprintSync();
+    } else {
+      fingerprint = 'unknown';
+    }
+  }
+  return fingerprint;
+}
+
+let hardware;
+export async function getHardware() {
+  if (!hardware) {
+    if (OS === 'android') {
+      hardware = await RNDeviceInfo.getHardware();
+    } else {
+      hardware = 'unknown';
+    }
+  }
+  return hardware;
+}
+
+export function getHardwareSync() {
+  if (!hardware) {
+    if (OS === 'android') {
+      hardware = RNDeviceInfo.getHardwareSync();
+    } else {
+      hardware = 'unknown';
+    }
+  }
+  return hardware;
+}
+
+let host;
+export async function getHost() {
+  if (!host) {
+    if (OS === 'android') {
+      host = await RNDeviceInfo.getHost();
+    } else {
+      host = 'unknown';
+    }
+  }
+  return host;
+}
+
+export function getHostSync() {
+  if (!host) {
+    if (OS === 'android') {
+      host = RNDeviceInfo.getHostSync();
+    } else {
+      host = 'unknown';
+    }
+  }
+  return host;
+}
+
+let product;
+export async function getProduct() {
+  if (!product) {
+    if (OS === 'android') {
+      product = await RNDeviceInfo.getProduct();
+    } else {
+      product = 'unknown';
+    }
+  }
+  return product;
+}
+
+export function getProductSync() {
+  if (!product) {
+    if (OS === 'android') {
+      product = RNDeviceInfo.getProductSync();
+    } else {
+      product = 'unknown';
+    }
+  }
+  return product;
+}
+
+let tags;
+export async function getTags() {
+  if (!tags) {
+    if (OS === 'android') {
+      tags = await RNDeviceInfo.getTags();
+    } else {
+      tags = 'unknown';
+    }
+  }
+  return tags;
+}
+
+export function getTagsSync() {
+  if (!tags) {
+    if (OS === 'android') {
+      tags = RNDeviceInfo.getTagsSync();
+    } else {
+      tags = 'unknown';
+    }
+  }
+  return tags;
+}
+
+let type;
+export async function getType() {
+  if (!type) {
+    if (OS === 'android') {
+      type = await RNDeviceInfo.getType();
+    } else {
+      type = 'unknown';
+    }
+  }
+  return type;
+}
+
+export function getTypeSync() {
+  if (!type) {
+    if (OS === 'android') {
+      type = RNDeviceInfo.getTypeSync();
+    } else {
+      type = 'unknown';
+    }
+  }
+  return type;
+}
+
+let baseOs;
+export async function getBaseOs() {
+  if (!baseOs) {
+    if (OS === 'android') {
+      baseOs = await RNDeviceInfo.getBaseOs();
+    } else {
+      baseOs = 'unknown';
+    }
+  }
+  return baseOs;
+}
+
+export function getBaseOsSync() {
+  if (!baseOs) {
+    if (OS === 'android') {
+      baseOs = RNDeviceInfo.getBaseOsSync();
+    } else {
+      baseOs = 'unknown';
+    }
+  }
+  return baseOs;
+}
+
+let previewSdkInt;
+export async function getPreviewSdkInt() {
+  if (!previewSdkInt) {
+    if (OS === 'android') {
+      previewSdkInt = await RNDeviceInfo.getPreviewSdkInt();
+    } else {
+      previewSdkInt = 'unknown';
+    }
+  }
+  return previewSdkInt;
+}
+
+export function getPreviewSdkIntSync() {
+  if (!previewSdkInt) {
+    if (OS === 'android') {
+      previewSdkInt = RNDeviceInfo.getPreviewSdkIntSync();
+    } else {
+      previewSdkInt = 'unknown';
+    }
+  }
+  return previewSdkInt;
+}
+
+let securityPatch;
+export async function getSecurityPatch() {
+  if (!securityPatch) {
+    if (OS === 'android') {
+      securityPatch = await RNDeviceInfo.getSecurityPatch();
+    } else {
+      securityPatch = 'unknown';
+    }
+  }
+  return securityPatch;
+}
+
+export function getSecurityPatchSync() {
+  if (!securityPatch) {
+    if (OS === 'android') {
+      securityPatch = RNDeviceInfo.getSecurityPatchSync();
+    } else {
+      securityPatch = 'unknown';
+    }
+  }
+  return securityPatch;
+}
+
+let codeName;
+export async function getCodename() {
+  if (!codeName) {
+    if (OS === 'android') {
+      codeName = await RNDeviceInfo.getCodename();
+    } else {
+      codeName = 'unknown';
+    }
+  }
+  return codeName;
+}
+
+export function getCodenameSync() {
+  if (!codeName) {
+    if (OS === 'android') {
+      codeName = RNDeviceInfo.getCodenameSync();
+    } else {
+      codeName = 'unknown';
+    }
+  }
+  return codeName;
+}
+
+let incremental;
+export async function getIncremental() {
+  if (!incremental) {
+    if (OS === 'android') {
+      incremental = await RNDeviceInfo.getIncremental();
+    } else {
+      incremental = 'unknown';
+    }
+  }
+  return incremental;
+}
+
+export function getIncrementalSync() {
+  if (!incremental) {
+    if (OS === 'android') {
+      incremental = RNDeviceInfo.getIncrementalSync();
+    } else {
+      incremental = 'unknown';
+    }
+  }
+  return incremental;
+}
+
+let emulator;
+export async function isEmulator() {
+  if (!emulator) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      emulator = await RNDeviceInfo.isEmulator();
+    } else {
+      emulator = false;
+    }
+  }
+  return emulator;
+}
+
+export function isEmulatorSync() {
+  if (!emulator) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      emulator = RNDeviceInfo.isEmulatorSync();
+    } else {
+      emulator = false;
+    }
+  }
+  return emulator;
+}
+
+let tablet;
+export async function isTablet() {
+  if (!tablet) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      tablet = await RNDeviceInfo.isTablet();
+    } else {
+      tablet = false;
+    }
+  }
+  return tablet;
+}
+
+export function isTabletSync() {
+  if (!tablet) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      tablet = RNDeviceInfo.isTabletSync();
+    } else {
+      tablet = false;
+    }
+  }
+  return tablet;
+}
+
+export async function isPinOrFingerprintSet() {
+  if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+    return RNDeviceInfo.isPinOrFingerprintSet();
+  }
+  return Promise.resolve(false);
+}
+
+export function isPinOrFingerprintSetSync() {
+  if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+    return RNDeviceInfo.isPinOrFingerprintSetSync();
+  }
+  return false;
+}
+
+let notch;
+export async function hasNotch() {
+  if (!notch) {
+    let _brand = await getBrand();
+    let _model = await getModel();
+    notch =
       devicesWithNotch.findIndex(
         item =>
-          item.brand.toLowerCase() === RNDeviceInfo.brand.toLowerCase() &&
-          item.model.toLowerCase() === this.getModel().toLowerCase()
-      ) !== -1
-    );
-  },
-  getFirstInstallTime: function() {
-    return RNDeviceInfo.firstInstallTime;
-  },
-  getInstallReferrer: function() {
-    return RNDeviceInfo.installReferrer;
-  },
-  getLastUpdateTime: function() {
-    return RNDeviceInfo.lastUpdateTime;
-  },
-  getPhoneNumber: function() {
-    return RNDeviceInfo.phoneNumber;
-  },
-  getCarrier: function() {
-    return RNDeviceInfo.carrier;
-  },
-  getTotalMemory: function() {
-    return RNDeviceInfo.totalMemory;
-  },
-  getMaxMemory: function() {
-    return RNDeviceInfo.maxMemory;
-  },
-  getTotalDiskCapacity: function() {
-    return RNDeviceInfo.totalDiskCapacity;
-  },
-  getFreeDiskStorage: function() {
-    return RNDeviceInfo.freeDiskStorage;
-  },
-  getBatteryLevel: function() {
+          item.brand.toLowerCase() === _brand.toLowerCase() &&
+          item.model.toLowerCase() === _model.toLowerCase()
+      ) !== -1;
+  }
+  return notch;
+}
+
+export function hasNotchSync() {
+  if (!notch) {
+    let _brand = getBrandSync();
+    let _model = getModelSync();
+    notch =
+      devicesWithNotch.findIndex(
+        item =>
+          item.brand.toLowerCase() === _brand.toLowerCase() &&
+          item.model.toLowerCase() === _model.toLowerCase()
+      ) !== -1;
+  }
+  return notch;
+}
+
+let firstInstallTime;
+export async function getFirstInstallTime() {
+  if (!firstInstallTime) {
+    if (OS === 'android' || OS === 'windows') {
+      firstInstallTime = await RNDeviceInfo.getFirstInstallTime();
+    } else {
+      firstInstallTime = -1;
+    }
+  }
+  return firstInstallTime;
+}
+
+export function getFirstInstallTimeSync() {
+  if (!firstInstallTime) {
+    if (OS === 'android' || OS === 'windows') {
+      firstInstallTime = RNDeviceInfo.getFirstInstallTimeSync();
+    } else {
+      firstInstallTime = -1;
+    }
+  }
+  return firstInstallTime;
+}
+
+let installReferrer;
+export async function getInstallReferrer() {
+  if (!installReferrer) {
+    if (OS === 'android') {
+      installReferrer = await RNDeviceInfo.getInstallReferrer();
+    } else {
+      installReferrer = 'unknown';
+    }
+  }
+  return installReferrer;
+}
+
+export function getInstallReferrerSync() {
+  if (!installReferrer) {
+    if (OS === 'android') {
+      installReferrer = RNDeviceInfo.getInstallReferrerSync();
+    } else {
+      installReferrer = 'unknown';
+    }
+  }
+  return installReferrer;
+}
+
+let lastUpdateTime;
+export async function getLastUpdateTime() {
+  if (!lastUpdateTime) {
+    if (OS === 'android') {
+      lastUpdateTime = await RNDeviceInfo.getLastUpdateTime();
+    } else {
+      lastUpdateTime = -1;
+    }
+  }
+  return lastUpdateTime;
+}
+
+export function getLastUpdateTimeSync() {
+  if (!lastUpdateTime) {
+    if (OS === 'android') {
+      lastUpdateTime = RNDeviceInfo.getLastUpdateTimeSync();
+    } else {
+      lastUpdateTime = -1;
+    }
+  }
+  return lastUpdateTime;
+}
+
+export async function getPhoneNumber() {
+  if (OS === 'android') {
+    return RNDeviceInfo.getPhoneNumber();
+  }
+  return Promise.resolve('unknown');
+}
+
+export function getPhoneNumberSync() {
+  if (OS === 'android') {
+    return RNDeviceInfo.getPhoneNumberSync();
+  }
+  return 'unknown';
+}
+
+export async function getCarrier() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getCarrier();
+  }
+  return Promise.resolve('unknown');
+}
+
+export function getCarrierSync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getCarrierSync();
+  }
+  return 'unknown';
+}
+
+let totalMemory;
+export async function getTotalMemory() {
+  if (!totalMemory) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      totalMemory = await RNDeviceInfo.getTotalMemory();
+    } else {
+      totalMemory = -1;
+    }
+  }
+  return totalMemory;
+}
+
+export function getTotalMemorySync() {
+  if (!totalMemory) {
+    if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+      totalMemory = RNDeviceInfo.getTotalMemorySync();
+    } else {
+      totalMemory = -1;
+    }
+  }
+  return totalMemory;
+}
+
+let maxMemory;
+export async function getMaxMemory() {
+  if (!maxMemory) {
+    if (OS === 'android' || OS === 'windows') {
+      maxMemory = await RNDeviceInfo.getMaxMemory();
+    } else {
+      maxMemory = -1;
+    }
+  }
+  return maxMemory;
+}
+
+export function getMaxMemorySync() {
+  if (!maxMemory) {
+    if (OS === 'android' || OS === 'windows') {
+      maxMemory = RNDeviceInfo.getMaxMemorySync();
+    } else {
+      maxMemory = -1;
+    }
+  }
+  return maxMemory;
+}
+
+export async function getTotalDiskCapacity() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getTotalDiskCapacity();
+  }
+  return Promise.resolve(-1);
+}
+
+export function getTotalDiskCapacitySync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getTotalDiskCapacitySync();
+  }
+  return -1;
+}
+
+export async function getFreeDiskStorage() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getFreeDiskStorage();
+  }
+  return Promise.resolve(-1);
+}
+
+export function getFreeDiskStorageSync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getFreeDiskStorageSync();
+  }
+  return -1;
+}
+
+export async function getBatteryLevel() {
+  if (OS === 'android' || OS === 'ios' || OS === 'windows') {
     return RNDeviceInfo.getBatteryLevel();
-  },
-  getPowerState: function() {
+  }
+  return Promise.resolve(-1);
+}
+
+export function getBatteryLevelSync() {
+  if (OS === 'android' || OS === 'ios' || OS === 'windows') {
+    return RNDeviceInfo.getBatteryLevelSync();
+  }
+  return -1;
+}
+
+export async function getPowerState() {
+  if (OS === 'ios' || OS === 'android') {
     return RNDeviceInfo.getPowerState();
-  },
-  isBatteryCharging: function() {
+  }
+  return Promise.resolve({});
+}
+
+export function getPowerStateSync() {
+  if (OS === 'ios' || OS === 'android') {
+    return RNDeviceInfo.getPowerStateSync();
+  }
+  return {};
+}
+
+export async function isBatteryCharging() {
+  if (OS === 'android' || OS === 'ios') {
     return RNDeviceInfo.isBatteryCharging();
-  },
-  isLandscape: function() {
-    const { height, width } = Dimensions.get('window');
-    return width >= height;
-  },
-  isAirPlaneMode: function() {
-    return RNDeviceInfo.isAirPlaneMode();
-  },
-  getDeviceType: function() {
-    return RNDeviceInfo.deviceType;
-  },
-  isAutoDateAndTime: function() {
-    return RNDeviceInfo.isAutoDateAndTime();
-  },
-  isAutoTimeZone: function() {
-    return RNDeviceInfo.isAutoTimeZone();
-  },
-  supportedABIs: function() {
-    return RNDeviceInfo.supportedABIs;
-  },
-  hasSystemFeature: function(feature) {
+  }
+  return Promise.resolve(false);
+}
+
+export function isBatteryChargingSync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.isBatteryChargingSync();
+  }
+  return false;
+}
+
+export async function isLandscape() {
+  return Promise.resolve(isLandscapeSync());
+}
+
+export function isLandscapeSync() {
+  const { height, width } = Dimensions.get('window');
+  return width >= height;
+}
+
+export async function isAirplaneMode() {
+  if (OS === 'android') {
+    return RNDeviceInfo.isAirplaneMode();
+  }
+  return Promise.resolve(false);
+}
+
+export function isAirplaneModeSync() {
+  if (OS === 'android') {
+    return RNDeviceInfo.isAirplaneModeSync();
+  }
+  return false;
+}
+
+let deviceType;
+export async function getDeviceType() {
+  if (!deviceType) {
+    if (OS === 'android' || OS === 'ios') {
+      deviceType = await RNDeviceInfo.getDeviceType();
+    } else {
+      deviceType = 'unknown';
+    }
+  }
+  return deviceType;
+}
+
+export function getDeviceTypeSync() {
+  if (!deviceType) {
+    if (OS === 'android' || OS === 'ios') {
+      deviceType = RNDeviceInfo.getDeviceTypeSync();
+    } else {
+      deviceType = 'unknown';
+    }
+  }
+  return deviceType;
+}
+
+let _supportedAbis;
+export async function supportedAbis() {
+  if (!_supportedAbis) {
+    if (OS === 'android' || OS === 'ios') {
+      _supportedAbis = await RNDeviceInfo.getSupportedAbis();
+    } else {
+      _supportedAbis = [];
+    }
+  }
+  return _supportedAbis;
+}
+
+export function supportedAbisSync() {
+  if (!_supportedAbis) {
+    if (OS === 'android' || OS === 'ios') {
+      _supportedAbis = RNDeviceInfo.getSupportedAbisSync();
+    } else {
+      _supportedAbis = [];
+    }
+  }
+  return _supportedAbis;
+}
+
+let _supported32BitAbis;
+export async function supported32BitAbis() {
+  if (!_supported32BitAbis) {
+    if (OS === 'android') {
+      _supported32BitAbis = await RNDeviceInfo.getSupported32BitAbis();
+    } else {
+      _supported32BitAbis = [];
+    }
+  }
+  return _supported32BitAbis;
+}
+
+export function supported32BitAbisSync() {
+  if (!_supported32BitAbis) {
+    if (OS === 'android') {
+      _supported32BitAbis = RNDeviceInfo.getSupported32BitAbisSync();
+    } else {
+      _supported32BitAbis = [];
+    }
+  }
+  return _supported32BitAbis;
+}
+
+let _supported64BitAbis;
+export async function supported64BitAbis() {
+  if (!_supported64BitAbis) {
+    if (OS === 'android') {
+      _supported64BitAbis = await RNDeviceInfo.getSupported64BitAbis();
+    } else {
+      _supported64BitAbis = [];
+    }
+  }
+  return _supported64BitAbis;
+}
+
+export function supported64BitAbisSync() {
+  if (!_supported64BitAbis) {
+    if (OS === 'android') {
+      _supported64BitAbis = RNDeviceInfo.getSupported64BitAbisSync();
+    } else {
+      _supported64BitAbis = [];
+    }
+  }
+  return _supported64BitAbis;
+}
+
+export async function hasSystemFeature(feature) {
+  if (OS === 'android') {
     return RNDeviceInfo.hasSystemFeature(feature);
-  },
-  getSystemAvailableFeatures: function() {
+  }
+  return Promise.resolve(false);
+}
+
+export function hasSystemFeatureSync(feature) {
+  if (OS === 'android') {
+    return RNDeviceInfo.hasSystemFeatureSync(feature);
+  }
+  return false;
+}
+
+export async function getSystemAvailableFeatures() {
+  if (OS === 'android') {
     return RNDeviceInfo.getSystemAvailableFeatures();
-  },
-  isLocationEnabled: function() {
+  }
+  return Promise.resolve([]);
+}
+
+export function getSystemAvailableFeaturesSync() {
+  if (OS === 'android') {
+    return RNDeviceInfo.getSystemAvailableFeaturesSync();
+  }
+  return [];
+}
+
+export async function isLocationEnabled() {
+  if (OS === 'android' || OS === 'ios') {
     return RNDeviceInfo.isLocationEnabled();
-  },
-  getAvailableLocationProviders: function() {
+  }
+  return Promise.resolve(false);
+}
+
+export function isLocationEnabledSync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.isLocationEnabledSync();
+  }
+  return false;
+}
+
+export async function getAvailableLocationProviders() {
+  if (OS === 'android' || OS === 'ios') {
     return RNDeviceInfo.getAvailableLocationProviders();
-  },
+  }
+  return Promise.resolve({});
+}
+
+export function getAvailableLocationProvidersSync() {
+  if (OS === 'android' || OS === 'ios') {
+    return RNDeviceInfo.getAvailableLocationProvidersSync();
+  }
+  return {};
+}
+
+export default {
+  getUniqueId,
+  getUniqueIdSync,
+  getInstanceId,
+  getInstanceIdSync,
+  getSerialNumber,
+  getSerialNumberSync,
+  getAndroidId,
+  getAndroidIdSync,
+  getIpAddress,
+  getIpAddressSync,
+  getCameraPresence,
+  getCameraPresenceSync,
+  getMacAddress,
+  getMacAddressSync,
+  getDeviceId,
+  getDeviceIdSync,
+  getManufacturer,
+  getManufacturerSync,
+  getModel,
+  getModelSync,
+  getBrand,
+  getBrandSync,
+  getSystemName,
+  getSystemNameSync,
+  getSystemVersion,
+  getSystemVersionSync,
+  getBuildId,
+  getBuildIdSync,
+  getApiLevel,
+  getApiLevelSync,
+  getBundleId,
+  getBundleIdSync,
+  getApplicationName,
+  getApplicationNameSync,
+  getBuildNumber,
+  getBuildNumberSync,
+  getVersion,
+  getVersionSync,
+  getReadableVersion,
+  getReadableVersionSync,
+  getDeviceName,
+  getDeviceNameSync,
+  getUsedMemory,
+  getUsedMemorySync,
+  getUserAgent,
+  getUserAgentSync,
+  getFontScale,
+  getFontScaleSync,
+  getBootloader,
+  getBootloaderSync,
+  getDevice,
+  getDeviceSync,
+  getDisplay,
+  getDisplaySync,
+  getFingerprint,
+  getFingerprintSync,
+  getHardware,
+  getHardwareSync,
+  getHost,
+  getHostSync,
+  getProduct,
+  getProductSync,
+  getTags,
+  getTagsSync,
+  getType,
+  getTypeSync,
+  getBaseOs,
+  getBaseOsSync,
+  getPreviewSdkInt,
+  getPreviewSdkIntSync,
+  getSecurityPatch,
+  getSecurityPatchSync,
+  getCodename,
+  getCodenameSync,
+  getIncremental,
+  getIncrementalSync,
+  isEmulator,
+  isEmulatorSync,
+  isTablet,
+  isTabletSync,
+  isPinOrFingerprintSet,
+  isPinOrFingerprintSetSync,
+  hasNotch,
+  hasNotchSync,
+  getFirstInstallTime,
+  getFirstInstallTimeSync,
+  getInstallReferrer,
+  getInstallReferrerSync,
+  getLastUpdateTime,
+  getLastUpdateTimeSync,
+  getPhoneNumber,
+  getPhoneNumberSync,
+  getCarrier,
+  getCarrierSync,
+  getTotalMemory,
+  getTotalMemorySync,
+  getMaxMemory,
+  getMaxMemorySync,
+  getTotalDiskCapacity,
+  getTotalDiskCapacitySync,
+  getFreeDiskStorage,
+  getFreeDiskStorageSync,
+  getBatteryLevel,
+  getBatteryLevelSync,
+  getPowerState,
+  getPowerStateSync,
+  isBatteryCharging,
+  isBatteryChargingSync,
+  isLandscape,
+  isLandscapeSync,
+  isAirplaneMode,
+  isAirplaneModeSync,
+  getDeviceType,
+  getDeviceTypeSync,
+  supportedAbis,
+  supportedAbisSync,
+  supported32BitAbis,
+  supported32BitAbisSync,
+  supported64BitAbis,
+  supported64BitAbisSync,
+  hasSystemFeature,
+  hasSystemFeatureSync,
+  getSystemAvailableFeatures,
+  getSystemAvailableFeaturesSync,
+  isLocationEnabled,
+  isLocationEnabledSync,
+  getAvailableLocationProviders,
+  getAvailableLocationProvidersSync,
 };

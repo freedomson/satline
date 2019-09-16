@@ -21,7 +21,7 @@ const columns = [
   },
   {
     title: 'NAVIGATE',
-    dataIndex: 'index',
+    dataIndex: 'copy',
     width: DEVICE_WIDTH/3
   }
 ];
@@ -33,12 +33,13 @@ export const Stbs: FunctionComponent = (props) => {
     let style = {width: col.width || this.props.columnWidth};
     let data = <Text>{cellData}</Text> 
     switch (col.title) {
-        case 'NAVIGATE': 
+        case 'NAVIGATE':
             data =  <TouchableOpacity style = {stylesCommon.ButtonInnerContainerHalfScreen} onPress={()=>{
-                console.log(props.navigation) 
-                props.navigation.navigate(PAGES.HELP.name)
+                props.navigation.navigate(PAGES.STB.name, {
+                    data: cellData
+                })
             }}> 
-                <Icon name={PAGES.TEMPLATE.icon}  />
+                <Icon name={PAGES.STB.icon}  />
             </ TouchableOpacity >
             break;
     } 

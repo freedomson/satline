@@ -5,10 +5,10 @@ import android.content.IntentFilter;
 import android.provider.CalendarContract;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.example.habibi.mynativemodule.MyNativeModulePackage;
 import com.pusherman.networkinfo.RNNetworkInfoPackage;
 import com.brentvatne.react.ReactVideoPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.androidbroadcastreceivereventreminder.RNAndroidBroadcastReceiverEventReminderPackage;
 import ca.bigdata.voice.contacts.BDVSimpleContactsPackage;
 import com.oblador.shimmer.RNShimmerPackage;
@@ -35,10 +35,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
             new MyNativeModulePackage(),
             new RNNetworkInfoPackage(),
             new ReactVideoPackage(),
-            new RNDeviceInfo(),
             new RNAndroidBroadcastReceiverEventReminderPackage(),
             new BDVSimpleContactsPackage(),
             new CalendarEventsPackage(),

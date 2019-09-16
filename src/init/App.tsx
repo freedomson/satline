@@ -13,12 +13,15 @@ import { Icon } from 'react-native-elements'
 import Shimmer from 'react-native-shimmer';
 import styles  from "../config/styles";
 
+import Stb from '../pages/Stb';
+
 const LOCAL_PAGES = {
   [PAGES.HOME.name]: Home,
   [PAGES.TEMPLATE.name]: Template,
   [PAGES.STATUS.name]: Status,
   [PAGES.HELP.name]: Help,
-  [PAGES.ABOUT.name]: About
+  [PAGES.ABOUT.name]: About,  
+  [PAGES.STB.name]: Stb
 }
 
 
@@ -88,6 +91,17 @@ const DrawerNavigator = createDrawerNavigator({
         <Icon
         //onPress={()=>{navigation.dispatch(DrawerActions.openDrawer())}}
         name={PAGES.ABOUT.icon} />)
+    }),
+  },
+  [PAGES.STB.name]: {
+    screen:  LOCAL_PAGES[PAGES.STB.name],
+    path: `${PAGES.STB.name.toLocaleLowerCase}/:name`,
+    navigationOptions: ({ navigation }) => ({
+      title: PAGES.STB.name,
+      drawerIcon: (
+        <Icon
+        //onPress={()=>{navigation.dispatch(DrawerActions.openDrawer())}}
+        name={PAGES.STB.icon} />)
     }),
   }
 }, {

@@ -1,55 +1,40 @@
 
 import React, {  useState,  FunctionComponent } from "react";
-import { Linking, ScrollView, View, Text, ImageBackground } from "react-native";
-import styles from "../config/styles";
-export const Stb: FunctionComponent = () => { 
+import { Linking, ScrollView, View, Text, ImageBackground,StyleSheet } from "react-native";
+// import styles from "../config/styles";
+import Video from 'react-native-video';
+import { usePlayer } from "../containers/usePlayer";
+export const Stb: FunctionComponent =  (props) => { 
 
-  return (       
+  const { navigation } = props;
+  const data = navigation.getParam('data', 'no-data');
+  // console.log(data)
+  let player = usePlayer(data);
+ console.log( data.stream)
+  return (
      <View style={styles.MainContainer}>
-    <ScrollView>
-        <Text style = {styles.LegendTitle}>
-        Developer
-        </Text>
-
-        <Text style = {styles.LegendText}>
-        freedomson
-        </Text>
-
-        <Text style = {styles.LegendTitle}>
-        Application Icon
-        </Text>
-
-        <Text style = {styles.LegendText}>
-        {`Icon made by `}
-        <Text style = {styles.Link} onPress={() => Linking.openURL('https://www.flaticon.com/authors/freepik')}>
-        freepik
-        </Text>
-        {` from flaticon.com`}
-        </Text>
-
-        <Text style = {styles.LegendTitle}>
-        Application Cover
-        </Text>
-        <Text style = {styles.LegendText}>
-        {`Photo by `}
-        <Text style = {styles.Link} onPress={() => Linking.openURL('https://unsplash.com/photos/A5FaLf5d8nw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText')}>
-        Adam Gong
-        </Text>
-        {` from unsplash.com`}
-        </Text>
-
-        <Text style = {styles.LegendTitle}>
-        Open Source
-        </Text>
-        <Text style = {styles.LegendText}>
-        {`MIT by freedomson.com `}
-        <Text style = {styles.Link} onPress={() => Linking.openURL('https://bitbucket.org/dartmy/paseeo/src/V2/')}>
-        source code
-        </Text>
-        {` from Bitbucket`}
-        </Text>
-    </ScrollView>
+       { player && 
+   <Video source={{uri: data.stream}}   // Can be a URL or a local file.
+       ref={(ref) => { 
+         this.player = ref 
+       }}                                      // Store reference
+       onBuffer={this.onBuffer}                // Callback when remote video is buffering
+       onError={(err)=>{
+         console.log(err,"error")
+       }}               // Callback when video cannot be loaded
+       style={styles.backgroundVideo} /> }
   </View>)
 };
+// Later on in your styles..
+
+var styles = StyleSheet.create({
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0, 
+    right: 0,
+  },
+});
 
 export default Stb;

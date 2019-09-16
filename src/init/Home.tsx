@@ -15,11 +15,11 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
  
 // import {LivePlayer} from "react-native-live-stream";
  
-import Video from 'react-native-video';
+
 import { Stbs } from "../tables/stbs"
 
 //import DeviceInfo from 'react-native-device-info'; 
-
+// import Video from 'react-native-video';
 
 export const Home: FunctionComponent = (props) => {  
 
@@ -64,7 +64,6 @@ export const Home: FunctionComponent = (props) => {
         
     <Stbs navigation={props.navigation}  datasource={scanner} />
 
-
       </ScrollView>
         <NavigationEvents
         onWillFocus={() => { 
@@ -72,35 +71,9 @@ export const Home: FunctionComponent = (props) => {
         }}/>
      </ImageBackground>
 
-       
-    /* 
-  <LivePlayer source={{uri:"https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8"}}
- ref={(ref) => {
-         this.player = ref
-       }}  // Store reference
-        paused={false}
-        muted={false}
-        bufferTime={300}
-        maxBufferTime={1000} 
-   resizeMode={"contain"}
-   onLoading={()=>{}}
-   onLoad={()=>{}}
-   onEnd={()=>{}}
-       style={styles.backgroundVideo} /> */
 
   )
 };
 
-// Later on in your styles..
-/*
-var styles = StyleSheet.create({
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0, 
-    right: 0,
-  },
-});
-*/
+
 export default Home;

@@ -149,11 +149,15 @@ android {
             }
         }
     }
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
 }
 
 dependencies {
-    compile project(':get-subnet-mask')
-    compile project(':react-native-network-info')
+    implementation project(':react-native-device-info')
+    implementation project(':get-subnet-mask')
+    implementation project(':react-native-network-info')
     implementation project(':react-native-video')
     implementation project(':react-native-device-info')
     implementation project(':react-native-background-fetch')
@@ -177,6 +181,7 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 // https://github.com/facebook/react-native/issues/25364
+/*
 configurations.all {
    resolutionStrategy {
        force "com.google.firebase:firebase-core:11.4.2"
@@ -184,3 +189,4 @@ configurations.all {
        force "com.google.android.gms:play-services-gcm:16.0.0"
    }
 }
+*/

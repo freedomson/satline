@@ -64,7 +64,8 @@ export let useScanner = () => {
     let endpoints = {
         timeout: 750,
         port: ":8800",
-        portal: "/",
+        playPort: ":8802",
+        portal: "/", 
         start : "/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D",
         status : "/GET%20MEDIA%20STATUS%20tv"
     }
@@ -72,7 +73,7 @@ export let useScanner = () => {
     async function scanNet(setup) { 
 
         // console.log('[SMSC][NETSCAN] setup', setup)
-        var stbs: never[] | null[] | ((prevState: null[]) => null[]) | any[] = []
+        var stbs = []
         for (let i = 0; i < setup["ip_range"].length; i++) {
 
             let ip = setup["ip_range"][i]
@@ -88,23 +89,29 @@ export let useScanner = () => {
 
             xhr.onload = async function(e) {  
                 // console.log("Detected STB", ip)
-                portalResp = await apiCall(urlPortal) 
+                let portalResp = await apiCall(urlPortal) 
                 //console.log(portalResp.response.status , portalResp.data.indexOf("Linkdroid WebServer"))
                 if (portalResp.response.status == 200 && portalResp.data.indexOf("Linkdroid WebServer")>=0)
                 {
-                    startResp = await apiCall(urlStart)
-                    statusResp = await apiCall(urlStatus)
+                    let startResp = await apiCall(urlStart)
+                    let statusResp = await apiCall(urlStatus)
 
                     if (startResp.response.status==200 && statusResp.response.status==200)
                     {
                         let start = statusResp.data.split(" ")
                         let startStatus = start[0]
-                        let startData = JSON.parse(start[1])
+                        let startData = start[1] && JSON.parse(start[1])    
 
                         //console.log(startData)
-                        
-                        if (startStatus==200) { 
+
+                        if (startStatus==200 && startData) { 
                             startData.ip = ip
+                            startData.urlStart = urlStart 
+                            startData.urlStatus = urlStatus 
+                            startData.urlPortal = urlPortal
+                            startData.stream = `http://${ip}${endpoints.playPort}/${startData.index}.ts`
+                            startData.copy = startData
+                            // console.log(startData)
                             stbs.push(startData) 
                             setScanner(stbs)
                         }
@@ -122,6 +129,7 @@ export let useScanner = () => {
     {
         let response = await fetch(url);
         let data = await response.text()
+        // console.log(url,data)
         return {
             response,
             data

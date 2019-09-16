@@ -4801,7 +4801,7 @@ react-native-calendar-events@wmcmahan/react-native-calendar-events:
   resolved "https://codeload.github.com/wmcmahan/react-native-calendar-events/tar.gz/2d6f2416ba1eff3769f41b1237904c37e69a4ef6"
 
 "react-native-device-info@file:./private_modules/react-native-device-info":
-  version "2.1.1"
+  version "3.1.1"
 
 react-native-elements@^1.0.0:
   version "1.0.0"

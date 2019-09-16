@@ -68,9 +68,10 @@ export const TRANSLATIONS = {
     }
 };
 export const PAGES = { 
-    STATUS:     {name:'Power',     icon: 'power'},
-    ABOUT:      {name:'About Us',      icon: 'favorite'},
+    STATUS:     {name:'Power',      icon: 'power'},
+    ABOUT:      {name:'About Us',   icon: 'favorite'},
     TEMPLATE:   {name:'Settings',   icon: 'settings'},
-    HELP:       {name:'Help Me',       icon: 'help'},
+    HELP:       {name:'Help Me',    icon: 'help'},
     HOME:       {name:'Home',       icon: 'menu'},
+    STB:        {name:'STB',        icon: 'movie'},
 }
