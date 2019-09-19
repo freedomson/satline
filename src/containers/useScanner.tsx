@@ -9,21 +9,25 @@ import { NetworkInfo } from 'react-native-network-info';
 import SubnetmaskModule from 'get-subnet-mask';
 var sip = require ('shift8-ip-func');
 var ipaddr = require('ipaddr.js');
+import DeviceInfo from 'react-native-device-info';
 
 export let useScanner = () => {
 
     const [scanner, setScanner] = useState([]);
+    var stbs = []
 
     useEffect(
         () => { 
             if (scanner.length === 0) {
-                let status = getDeviceNetworkStatus()
+                DeviceInfo.getMacAddress().then(mac => {
+                    let status = getDeviceNetworkStatus(mac)
+                });
             }
-        }, 
+        },  
         [scanner],
       );
 
-    async function getDeviceNetworkStatus() { 
+    async function getDeviceNetworkStatus(mac) { 
         try { 
             NetworkInfo.getIPV4Address().then(ip => {
                 local_ip = ip;
@@ -48,7 +52,7 @@ export let useScanner = () => {
                                 first_host_hex: firstHostHex, 
                                 last_host_hex: lastHostHex, 
                                 ip_range: ipRange 
-                            });
+                            },mac);
                     });
                 }).catch((err)=>{
                     console.log('[SMSC][NETSCAN] ERROR', err) 
@@ -60,63 +64,54 @@ export let useScanner = () => {
             console.warn(err);  
         }
     }
- 
-    let endpoints = {
-        timeout: 750,
-        port: ":8800",
-        playPort: ":8802",
-        portal: "/", 
-        start : "/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D",
-        status : "/GET%20MEDIA%20STATUS%20tv"
-    }
 
-    async function scanNet(setup) { 
+    async function scanNet(setup,mac) { 
 
-        // console.log('[SMSC][NETSCAN] setup', setup)
-        var stbs = []
+        let timeout = 750
+
         for (let i = 0; i < setup["ip_range"].length; i++) {
 
+            let status_code_success = 200
             let ip = setup["ip_range"][i]
-            let host = `http://${ip}${endpoints.port}`
-            let urlPortal = `${host}${endpoints.portal}`
-            let urlStart =  `${host}${endpoints.start}`
-            let urlStatus = `${host}${endpoints.status}`
- 
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", urlStatus, true);
-            xhr.timeout = endpoints.timeout;
+            let port = "8800"
+            let endpoint_state = `http://${ip}:${port}/GET%20MEDIA%20STATUS%20tv`
+            
+            var xhr = new XMLHttpRequest(); // We need timeout capabilities
+            xhr.open("GET", endpoint_state, true);
+            xhr.withCredentials = true;
+            xhr.timeout = timeout;
             xhr.responseType = "json";
-
+  
             xhr.onload = async function(e) {  
-                // console.log("Detected STB", ip)
-                let portalResp = await apiCall(urlPortal) 
-                //console.log(portalResp.response.status , portalResp.data.indexOf("Linkdroid WebServer"))
-                if (portalResp.response.status == 200 && portalResp.data.indexOf("Linkdroid WebServer")>=0)
-                {
-                    let startResp = await apiCall(urlStart)
-                    let statusResp = await apiCall(urlStatus)
 
-                    if (startResp.response.status==200 && statusResp.response.status==200)
-                    {
-                        let start = statusResp.data.split(" ")
-                        let startStatus = start[0]
-                        let startData = start[1] && JSON.parse(start[1])    
+                console.log("Detected STB", ip, xhr) 
+                let rpass = Math.floor((Math.random() * 100000) + 1)
+                
+                let resgister = await apiCall(`http://${ip}:${port}/backup/REGISTER?id=${mac}&password=${rpass}`)
 
-                        //console.log(startData)
+                let password = await apiCall(`http://${ip}:${port}/PASSWORD%20%20`) 
 
-                        if (startStatus==200 && startData) { 
-                            startData.ip = ip
-                            startData.urlStart = urlStart 
-                            startData.urlStatus = urlStatus 
-                            startData.urlPortal = urlPortal
-                            startData.stream = `http://${ip}${endpoints.playPort}/${startData.index}.ts`
-                            startData.copy = startData
-                            // console.log(startData)
-                            stbs.push(startData) 
-                            setScanner(stbs)
-                        }
+                let model = await apiCall(`http://${ip}:${port}/POST%20MOBILE%20MODEL%20%20SATLINE%20000-000`)
+
+                let startStart = await apiCall(`http://${ip}:${port}/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
+
+                let stateResp = await apiCall(endpoint_state)
+    
+                console.log(resgister,password,model,startStart,stateResp)
+ 
+                if (stateResp.response.status == status_code_success)
+                { 
+                    let data = stateResp.data.split(" ")
+                    let status = parseInt(data[0])
+                    let config = data[1] && JSON.parse(data[1])
+                    if ( status==status_code_success && config ) {  
+                        config.ip = ip
+                        config.clone = config
+                        stbs.push(config)
+                        setScanner(stbs)
                     }
                 } 
+                
             }
             xhr.ontimeout = function (e) { 
                 // console.log("Server scan timeout")
@@ -124,10 +119,24 @@ export let useScanner = () => {
             xhr.send(); 
         }
     }
-
+ 
     async function apiCall(url)
-    {
-        let response = await fetch(url);
+    { 
+        let response = await fetch(url,{
+            mode: 'same-origin', // no-cors, *cors, same-origin
+            cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'same-origin', // include, *same-origin, omit
+            headers: {
+                'Accept': '*/*',
+                'Accept-Language': 'en-GB,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Connection': 'keep-alive',
+                'Pragma': 'no-cache',
+                'Cache-Control': 'no-cache'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        });
         let data = await response.text()
         // console.log(url,data)
         return {

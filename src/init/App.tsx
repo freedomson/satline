@@ -13,7 +13,7 @@ import { Icon } from 'react-native-elements'
 import Shimmer from 'react-native-shimmer';
 import styles  from "../config/styles";
 
-import Stb from '../pages/Stb';
+import Stb from '../pages/stb';
 
 const LOCAL_PAGES = {
   [PAGES.HOME.name]: Home,

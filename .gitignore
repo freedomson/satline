@@ -7,6 +7,4 @@ android/local.properties
 android/paseeo.iml
 android/app/paseeo.keystore
 android/build/
-private_modules/react-native-device-info/android/.project
-private_modules/react-native-device-info/android/.settings/
 .vscode/

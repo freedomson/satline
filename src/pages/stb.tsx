@@ -8,13 +8,12 @@ export const Stb: FunctionComponent =  (props) => {
 
   const { navigation } = props;
   const data = navigation.getParam('data', 'no-data');
-  // console.log(data)
+  const stream = navigation.getParam('stream', 'no-data');
   let player = usePlayer(data);
- console.log( data.stream)
+
   return (
-     <View style={styles.MainContainer}>
-       { player && 
-   <Video source={{uri: data.stream}}   // Can be a URL or a local file.
+        player && 
+   <Video source={{uri: stream}}   // Can be a URL or a local file.
        ref={(ref) => { 
          this.player = ref 
        }}                                      // Store reference
@@ -22,13 +21,14 @@ export const Stb: FunctionComponent =  (props) => {
        onError={(err)=>{
          console.log(err,"error")
        }}               // Callback when video cannot be loaded
-       style={styles.backgroundVideo} /> }
-  </View>)
+       style={styles.backgroundVideo} /> 
+  )
 };
 // Later on in your styles..
 
 var styles = StyleSheet.create({
   backgroundVideo: {
+    backgroundColor: "#000000",
     position: 'absolute',
     top: 0,
     left: 0,

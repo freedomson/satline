@@ -10,7 +10,6 @@ import {DailyEvents} from "../events/DailyEvents"
 var SmsAndroid = require('react-native-sms-android');
 import email from 'react-native-email'
 import moment from 'moment';
-import DeviceInfo from 'react-native-device-info';
 
 export let AlertManager = (calendarevents) => {
 

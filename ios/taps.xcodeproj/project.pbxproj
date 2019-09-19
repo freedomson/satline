@@ -36,25 +36,23 @@
 		2DCD954D1E0B4F2C00145EB5 /* smscalendarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* smscalendarTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		51A7B85C21C50689005C72A9 /* water-drip-1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 51A7B85B21C50689005C72A9 /* water-drip-1.mp3 */; };
-		51A7B85D21C509DA005C72A9 /* libRNSound.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51A7B85221C5058C005C72A9 /* libRNSound.a */; };
 		51A7B85F21C5107E005C72A9 /* water-drip-2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 51A7B85E21C5107E005C72A9 /* water-drip-2.mp3 */; };
 		51A7B86121C5173F005C72A9 /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 51A7B86021C5173F005C72A9 /* gradient.png */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		840C8C66141F422CBC98DDFB /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 47EC9DD908694354BCAF184E /* libRNGestureHandler.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B87ABD3BD81C4971A496220C /* libRNShimmer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1148F42646604D84A287FB9F /* libRNShimmer.a */; };
 		A65E7401EA154DA6BB4BA87B /* libRNBackgroundFetch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A740A7520144FD8ABBAF1AC /* libRNBackgroundFetch.a */; };
 		B12D8A35EDE14854A9770EB0 /* TSBackgroundFetch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66C789E81CF648C29ACBA947 /* TSBackgroundFetch.framework */; };
 		724ABA475EC74501927F11F0 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 565F85F717824C3089819324 /* RNBackgroundFetch+AppDelegate.m */; };
-		B0100FC0430A4C02A286DDFD /* libRNCalendarEvents.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9177B47E32874C228A857B0F /* libRNCalendarEvents.a */; };
-		037A3102A50244C9B956A736 /* libBDVSimpleContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 38BD9E9759B948C0A8C97BDE /* libBDVSimpleContacts.a */; };
 		42BC89AFCEC0461FB313FB1F /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 12879B3112354A3080937A89 /* libRCTVideo.a */; };
 		1BEAF7BDCC2E4BCCACA90287 /* libRNNetworkInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46563B804F8F4C7A81F533CC /* libRNNetworkInfo.a */; };
 		BCB9C8414A8C44658AD30E98 /* libRNNetworkInfo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B528FB7BFA451A9A8C05BB /* libRNNetworkInfo-tvOS.a */; };
 		8EF4A3E3DC5944D880F66ECD /* libRCTCustomModule.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B21D8DF046844AFB13D62BE /* libRCTCustomModule.a */; };
 		954E560A0A814B9980434DEA /* libTcpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C98B58777634A65B2B155D3 /* libTcpSockets.a */; };
-		D7598910A18E4E939F22FD45 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CF46981989042C99458B438 /* libRNDeviceInfo.a */; };
-		E9615CDB938B4A3BBC23CC13 /* libRNDeviceInfo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 432B779BAC074F45BD7F6A09 /* libRNDeviceInfo-tvOS.a */; };
+		99DC943DDE5C4748ABA565AD /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 319AD3B8E4F64418898833D2 /* libRNGestureHandler.a */; };
+		44000BF3777F4A7F9139FDAE /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44B9883F30064209BECAA0C0 /* libRNGestureHandler-tvOS.a */; };
+		19636D68C0D34F0CB3534914 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F50085E862BF4748A4DB3634 /* libRNDeviceInfo.a */; };
+		91EA602A9ECD49D497728405 /* libRNDeviceInfo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC077F79BEEA4CD784B09EC2 /* libRNDeviceInfo-tvOS.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,20 +294,6 @@
 			remoteGlobalIDString = 3D3CD9181DE5FBD800167DC4;
 			remoteInfo = "jschelpers-tvOS";
 		};
-		51209207218C682900316E60 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 025723B08FC944E9BE3F8FB9 /* RNGestureHandler.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNGestureHandler;
-		};
-		51A7B85121C5058C005C72A9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D64C5C8860FE465298A11D34 /* RNSound.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 19825A1E1BD4A89800EE0337;
-			remoteInfo = RNSound;
-		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -357,7 +341,6 @@
 		00E356EE1AD99517003FC87E /* smscalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = smscalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* smscalendarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = smscalendarTests.m; sourceTree = "<group>"; };
-		025723B08FC944E9BE3F8FB9 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* smscalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smscalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -371,26 +354,19 @@
 		2D02E47B1E0B4A5D006451C7 /* smscalendar-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "smscalendar-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* smscalendar-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "smscalendar-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		47EC9DD908694354BCAF184E /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
 		51A7B85B21C50689005C72A9 /* water-drip-1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "water-drip-1.mp3"; sourceTree = "<group>"; };
 		51A7B85E21C5107E005C72A9 /* water-drip-2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "water-drip-2.mp3"; sourceTree = "<group>"; };
 		51A7B86021C5173F005C72A9 /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gradient.png; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
-		657315CBA7C840899A717F0C /* libRNSound.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSound.a; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		D64C5C8860FE465298A11D34 /* RNSound.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSound.xcodeproj; path = "../node_modules/react-native-sound/RNSound.xcodeproj"; sourceTree = "<group>"; };
 		EF03CEF96B134DBE8733F251 /* RNShimmer.xcodeproj */ = {isa = PBXFileReference; name = "RNShimmer.xcodeproj"; path = "../node_modules/react-native-shimmer/ios/RNShimmer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		1148F42646604D84A287FB9F /* libRNShimmer.a */ = {isa = PBXFileReference; name = "libRNShimmer.a"; path = "libRNShimmer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		A762953EF70949A9A89BF71A /* RNBackgroundFetch.xcodeproj */ = {isa = PBXFileReference; name = "RNBackgroundFetch.xcodeproj"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		8A740A7520144FD8ABBAF1AC /* libRNBackgroundFetch.a */ = {isa = PBXFileReference; name = "libRNBackgroundFetch.a"; path = "libRNBackgroundFetch.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		66C789E81CF648C29ACBA947 /* TSBackgroundFetch.framework */ = {isa = PBXFileReference; name = "TSBackgroundFetch.framework"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/TSBackgroundFetch.framework"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = wrapper.framework; explicitFileType = undefined; includeInIndex = 0; };
 		565F85F717824C3089819324 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
-		A7D03C4D7EB94D6B83793057 /* RNCalendarEvents.xcodeproj */ = {isa = PBXFileReference; name = "RNCalendarEvents.xcodeproj"; path = "../node_modules/react-native-calendar-events/RNCalendarEvents.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		9177B47E32874C228A857B0F /* libRNCalendarEvents.a */ = {isa = PBXFileReference; name = "libRNCalendarEvents.a"; path = "libRNCalendarEvents.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		64BC355A34D14A079A8CA078 /* BDVSimpleContacts.xcodeproj */ = {isa = PBXFileReference; name = "BDVSimpleContacts.xcodeproj"; path = "../node_modules/react-native-simple-contacts/ios/BDVSimpleContacts.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		38BD9E9759B948C0A8C97BDE /* libBDVSimpleContacts.a */ = {isa = PBXFileReference; name = "libBDVSimpleContacts.a"; path = "libBDVSimpleContacts.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		8D72B382365149A89CF34B27 /* RCTLiveStream.xcodeproj */ = {isa = PBXFileReference; name = "RCTLiveStream.xcodeproj"; path = "../node_modules/react-native-live-stream/ios/RCTLiveStream.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		F72060D90F5B42C98911C9EA /* libRCTLiveStream.a */ = {isa = PBXFileReference; name = "libRCTLiveStream.a"; path = "libRCTLiveStream.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		49E390D586974CE4AF267B91 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; name = "RCTVideo.xcodeproj"; path = "../node_modules/react-native-video/ios/RCTVideo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
@@ -402,9 +378,12 @@
 		4B21D8DF046844AFB13D62BE /* libRCTCustomModule.a */ = {isa = PBXFileReference; name = "libRCTCustomModule.a"; path = "libRCTCustomModule.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		F280478E787D4A71868EE600 /* TcpSockets.xcodeproj */ = {isa = PBXFileReference; name = "TcpSockets.xcodeproj"; path = "../node_modules/react-native-tcp/ios/TcpSockets.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		9C98B58777634A65B2B155D3 /* libTcpSockets.a */ = {isa = PBXFileReference; name = "libTcpSockets.a"; path = "libTcpSockets.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		A03AFD8D210D4039BCD252F8 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNDeviceInfo.xcodeproj"; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		3CF46981989042C99458B438 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; name = "libRNDeviceInfo.a"; path = "libRNDeviceInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		432B779BAC074F45BD7F6A09 /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; name = "libRNDeviceInfo-tvOS.a"; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		168E211931C249EDAA243135 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		319AD3B8E4F64418898833D2 /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		44B9883F30064209BECAA0C0 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; name = "libRNGestureHandler-tvOS.a"; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		AFBD7107D3F04FA38A040DBA /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; name = "RNDeviceInfo.xcodeproj"; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		F50085E862BF4748A4DB3634 /* libRNDeviceInfo.a */ = {isa = PBXFileReference; name = "libRNDeviceInfo.a"; path = "libRNDeviceInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		EC077F79BEEA4CD784B09EC2 /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; name = "libRNDeviceInfo-tvOS.a"; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,7 +399,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51A7B85D21C509DA005C72A9 /* libRNSound.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -433,18 +411,16 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				840C8C66141F422CBC98DDFB /* libRNGestureHandler.a in Frameworks */,
 				B87ABD3BD81C4971A496220C /* libRNShimmer.a in Frameworks */,
 				A65E7401EA154DA6BB4BA87B /* libRNBackgroundFetch.a in Frameworks */,
 				B12D8A35EDE14854A9770EB0 /* TSBackgroundFetch.framework in Frameworks */,
-				B0100FC0430A4C02A286DDFD /* libRNCalendarEvents.a in Frameworks */,
-				037A3102A50244C9B956A736 /* libBDVSimpleContacts.a in Frameworks */,
 				EE5BB85CB10645FE913744C6 /* libRCTLiveStream.a in Frameworks */,
 				42BC89AFCEC0461FB313FB1F /* libRCTVideo.a in Frameworks */,
 				1BEAF7BDCC2E4BCCACA90287 /* libRNNetworkInfo.a in Frameworks */,
 				8EF4A3E3DC5944D880F66ECD /* libRCTCustomModule.a in Frameworks */,
 				954E560A0A814B9980434DEA /* libTcpSockets.a in Frameworks */,
-				D7598910A18E4E939F22FD45 /* libRNDeviceInfo.a in Frameworks */,
+				99DC943DDE5C4748ABA565AD /* libRNGestureHandler.a in Frameworks */,
+				19636D68C0D34F0CB3534914 /* libRNDeviceInfo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,6 +439,8 @@
 				597E78764C9F40129FA73C91 /* libRNDeviceInfo-tvOS.a in Frameworks */,
 				BCB9C8414A8C44658AD30E98 /* libRNNetworkInfo-tvOS.a in Frameworks */,
 				E9615CDB938B4A3BBC23CC13 /* libRNDeviceInfo-tvOS.a in Frameworks */,
+				44000BF3777F4A7F9139FDAE /* libRNGestureHandler-tvOS.a in Frameworks */,
+				91EA602A9ECD49D497728405 /* libRNDeviceInfo-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,22 +590,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		51209204218C682700316E60 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				51209208218C682900316E60 /* libRNGestureHandler.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		51A7B84E21C5058A005C72A9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				51A7B85221C5058C005C72A9 /* libRNSound.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -661,18 +623,15 @@
 				832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */,
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
-				025723B08FC944E9BE3F8FB9 /* RNGestureHandler.xcodeproj */,
-				D64C5C8860FE465298A11D34 /* RNSound.xcodeproj */,
 				EF03CEF96B134DBE8733F251 /* RNShimmer.xcodeproj */,
 				A762953EF70949A9A89BF71A /* RNBackgroundFetch.xcodeproj */,
-				A7D03C4D7EB94D6B83793057 /* RNCalendarEvents.xcodeproj */,
-				64BC355A34D14A079A8CA078 /* BDVSimpleContacts.xcodeproj */,
 				8D72B382365149A89CF34B27 /* RCTLiveStream.xcodeproj */,
 				49E390D586974CE4AF267B91 /* RCTVideo.xcodeproj */,
 				6A1A5E0EB261438A84D8F091 /* RNNetworkInfo.xcodeproj */,
 				EC9B7F76E42047B6AEEC57B1 /* RCTCustomModule.xcodeproj */,
 				F280478E787D4A71868EE600 /* TcpSockets.xcodeproj */,
-				A03AFD8D210D4039BCD252F8 /* RNDeviceInfo.xcodeproj */,
+				168E211931C249EDAA243135 /* RNGestureHandler.xcodeproj */,
+				AFBD7107D3F04FA38A040DBA /* RNDeviceInfo.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -890,14 +849,6 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
-				},
-				{
-					ProductGroup = 51209204218C682700316E60 /* Products */;
-					ProjectRef = 025723B08FC944E9BE3F8FB9 /* RNGestureHandler.xcodeproj */;
-				},
-				{
-					ProductGroup = 51A7B84E21C5058A005C72A9 /* Products */;
-					ProjectRef = D64C5C8860FE465298A11D34 /* RNSound.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -1135,20 +1086,6 @@
 			remoteRef = 3DAD3EAE1DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		51209208218C682900316E60 /* libRNGestureHandler.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNGestureHandler.a;
-			remoteRef = 51209207218C682900316E60 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		51A7B85221C5058C005C72A9 /* libRNSound.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNSound.a;
-			remoteRef = 51A7B85121C5058C005C72A9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1328,17 +1265,14 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = smscalendarTests/Info.plist;
@@ -1369,17 +1303,14 @@
 				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = smscalendarTests/Info.plist;
@@ -1412,17 +1343,14 @@
 				DEVELOPMENT_TEAM = G65HTDBUSN;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = smscalendar/Info.plist;
@@ -1449,17 +1377,14 @@
 				DEVELOPMENT_TEAM = G65HTDBUSN;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = smscalendar/Info.plist;
@@ -1492,17 +1417,14 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = "smscalendar-tvOS/Info.plist";
@@ -1541,17 +1463,14 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = "smscalendar-tvOS/Info.plist";
@@ -1589,17 +1508,14 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = "smscalendar-tvOSTests/Info.plist";
@@ -1637,17 +1553,14 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-sound/RNSound",
 					"$(SRCROOT)/../node_modules/react-native-shimmer/ios",
 					"$(SRCROOT)/../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/**",
-					"$(SRCROOT)/../node_modules/react-native-calendar-events",
-					"$(SRCROOT)/../node_modules/react-native-simple-contacts/ios",
 					"$(SRCROOT)/../node_modules/react-native-live-stream/ios/RCTLiveStream/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-network-info/ios",
 					"$(SRCROOT)/../node_modules/get-subnet-mask/ios/RCTCustomModule",
 					"$(SRCROOT)/../node_modules/react-native-tcp/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = "smscalendar-tvOSTests/Info.plist";

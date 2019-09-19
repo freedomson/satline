@@ -4,8 +4,6 @@ import { AsyncStorage } from 'react-native';
 
 import { APP_DATA_KEYS, APP_SMS_TEMPLATE } from "../config/app";
 
-import DeviceInfo from 'react-native-device-info';
-
 export let TemplateHelper =  () => {
 
     let getTemplate  = async () => {

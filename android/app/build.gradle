@@ -155,17 +155,22 @@ android {
 }
 
 dependencies {
+    implementation("androidx.fragment:fragment:1.0.0")
+    implementation("androidx.legacy:legacy-support-core-ui:1.0.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+    implementation("androidx.cursoradapter:cursoradapter:1.0.0")
+    implementation("androidx.interpolator:interpolator:1.0.0")
+    implementation("androidx.customview:customview:1.0.0")
+    implementation("androidx.viewpager:viewpager:1.0.0")
+    implementation("androidx.drawerlayout:drawerlayout:1.0.0")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.0.0")
+    implementation("androidx.asynclayoutinflater:asynclayoutinflater:1.0.0")
+    implementation("androidx.legacy:legacy-support-core-utils:1.0.0")
+    implementation("androidx.slidingpanelayout:slidingpanelayout:1.0.0")
     implementation project(':react-native-device-info')
     implementation project(':get-subnet-mask')
     implementation project(':react-native-network-info')
     implementation project(':react-native-video')
-    implementation project(':react-native-device-info')
-    implementation project(':react-native-background-fetch')
-    implementation project(':react-native-android-broadcast-receiver-event-reminder')
-    implementation project(':react-native-sms-android')
-    implementation project(':react-native-android-broadcast-receiver-event-reminder')
-    implementation project(':react-native-simple-contacts')
-    implementation project(':react-native-calendar-events')
     implementation project(':react-native-shimmer')
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -181,7 +186,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 // https://github.com/facebook/react-native/issues/25364
-/*
+/*´
+
 configurations.all {
    resolutionStrategy {
        force "com.google.firebase:firebase-core:11.4.2"

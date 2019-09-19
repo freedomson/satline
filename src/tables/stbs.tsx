@@ -21,14 +21,14 @@ const columns = [
   },
   {
     title: 'NAVIGATE',
-    dataIndex: 'copy',
+    dataIndex: 'clone',
     width: DEVICE_WIDTH/3
   }
 ];
 
 
 export const Stbs: FunctionComponent = (props) => {  
-
+  
   let renderCell = function (cellData, col) {
     let style = {width: col.width || this.props.columnWidth};
     let data = <Text>{cellData}</Text> 
@@ -36,7 +36,8 @@ export const Stbs: FunctionComponent = (props) => {
         case 'NAVIGATE':
             data =  <TouchableOpacity style = {stylesCommon.ButtonInnerContainerHalfScreen} onPress={()=>{
                 props.navigation.navigate(PAGES.STB.name, {
-                    data: cellData
+                    data: cellData,
+                    stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
                 })
             }}> 
                 <Icon name={PAGES.STB.icon}  />
