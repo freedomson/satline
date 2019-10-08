@@ -8,3 +8,5 @@ android/paseeo.iml
 android/app/paseeo.keystore
 android/build/
 .vscode/
+report*
+yarn-error.log

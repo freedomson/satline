@@ -88,12 +88,13 @@ const DrawerNavigator = createDrawerNavigator({
     navigationOptions: ({ navigation }) => ({
       title: PAGES.ABOUT.name,
       drawerIcon: (
-        <Icon
+        <Icon 
         //onPress={()=>{navigation.dispatch(DrawerActions.openDrawer())}}
         name={PAGES.ABOUT.icon} />)
     }),
   },
   [PAGES.STB.name]: {
+    lazy: false,
     screen:  LOCAL_PAGES[PAGES.STB.name],
     path: `${PAGES.STB.name.toLocaleLowerCase}/:name`,
     navigationOptions: ({ navigation }) => ({
@@ -104,7 +105,7 @@ const DrawerNavigator = createDrawerNavigator({
         name={PAGES.STB.icon} />)
     }),
   }
-}, {
+}, {  
   drawerBackgroundColor: "#D4EEC7",
   contentComponent: CustomDrawerContentComponent,
   initialRouteName: PAGES.HOME.name,

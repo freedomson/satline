@@ -1,5 +1,5 @@
 
-import React, {  FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState, useLayoutEffect  } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Linking, ScrollView, View, Text, ImageBackground } from "react-native";
 import Table from 'react-native-simple-table'
@@ -7,7 +7,8 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
 import stylesCommon from "../config/styles";
 import { Icon } from "react-native-elements";
 import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
-import { createStackNavigator, createDrawerNavigator, createAppContainer } from "react-navigation";
+// import STB from "../pages/stb";
+ 
 const columns = [
   {
     title: 'STB',
@@ -26,23 +27,53 @@ const columns = [
   }
 ];
 
-
 export const Stbs: FunctionComponent = (props) => {  
-  
+
+  const [datasource, setDatasource] = useState(props.datasource);
+
+  useEffect(() => {
+    setDatasource(props.datasource)
+  });
+
+  let apiCall = async (url) =>
+  {
+      let response = await fetch(url,{
+                mode: 'same-origin', // no-cors, *cors, same-origin
+                cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Accept': '*/*',
+                    'Accept-Language': 'en-GB,en;q=0.5',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Connection': 'keep-alive',
+                    'Pragma': 'no-cache',
+                    'Cache-Control': 'no-cache'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+      let data = await response.text()
+      return {
+          response,
+          data
+      }
+  }
+
   let renderCell = function (cellData, col) {
     let style = {width: col.width || this.props.columnWidth};
     let data = <Text>{cellData}</Text> 
     switch (col.title) {
-        case 'NAVIGATE':
-            data =  <TouchableOpacity style = {stylesCommon.ButtonInnerContainerHalfScreen} onPress={()=>{
+        case 'NAVIGATE': 
+            data =  <TouchableOpacity style = {stylesCommon.ButtonInnerContainerHalfScreen} onPress={ async ()=>{
+                let startResp = await apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
+                console.log("STBS_LIST", startResp) 
                 props.navigation.navigate(PAGES.STB.name, {
-                    data: cellData,
                     stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
                 })
-            }}> 
-                <Icon name={PAGES.STB.icon}  />
+            }}>  
+                <Icon name={PAGES.STB.icon}  /> 
             </ TouchableOpacity >
-            break;
+            break;  
     } 
     return (
       <View key={col.dataIndex} style={[styles.cell, styles.dataViewContent, style]}>
@@ -51,14 +82,15 @@ export const Stbs: FunctionComponent = (props) => {
     )
   }
 
-  return (       
-     <View style={styles.MainContainer}>
-    <ScrollView>
-      <View style={styles.container}>
-        <Table renderCell={renderCell} height={320} columnWidth={60} columns={columns} dataSource={props.datasource} />
-      </View>
-    </ScrollView>
-  </View>) 
+  return (        
+     <View >
+               <STB />
+        <ScrollView>
+          <View style={styles.container}>
+            <Table renderCell={renderCell} height={320} columnWidth={60} columns={columns} dataSource={datasource} />
+          </View> 
+        </ScrollView>
+      </View>) 
 };
 
 const styles = StyleSheet.create({
@@ -98,5 +130,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
 });
-
-export default Stbs;

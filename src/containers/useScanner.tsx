@@ -17,72 +17,54 @@ export let useScanner = () => {
     var stbs = []
 
     useEffect(
-        () => { 
+         () => { 
             if (scanner.length === 0) {
-                DeviceInfo.getMacAddress().then(mac => {
-                    let status = getDeviceNetworkStatus(mac)
+                DeviceInfo.getMacAddress().then(async mac => {
+                    console.log("DEVICE MAC",mac)
+                    await getDeviceNetworkStatus(mac)
                 });
-            }
-        },  
+            } 
+        },
         [scanner],
       );
 
-    async function getDeviceNetworkStatus(mac) { 
+    async function getDeviceNetworkStatus(mac) {  
         try { 
             NetworkInfo.getIPV4Address().then(ip => {
-                local_ip = ip;
-                NetworkInfo.getBroadcast().then(address => {
-                    local_broadcast = address;
-                    SubnetmaskModule.getSubnet((sb) => {
-                        local_netmask = sb;
-                        subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
-                        firstHost = ipaddr.IPv4.networkAddressFromCIDR(local_ip + "/" + subconv);
-                        lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(local_ip + "/" + subconv);
-                        firstHostHex = sip.convertIPtoHex(firstHost);
-                        lastHostHex = sip.convertIPtoHex(lastHost);
-                        ipRange = sip.getIPRange(firstHostHex,lastHostHex);
-                        ipRange = ipRange.slice(1); // Remove the first ip in the array
-                        // Resolve all the calculated values 
-                        scanNet({local_ip: local_ip, 
-                                local_broadcast: local_broadcast, 
-                                local_netmask: local_netmask, 
-                                subnet_conv: subconv, 
-                                first_host: firstHost, 
-                                last_host: lastHost,
-                                first_host_hex: firstHostHex, 
-                                last_host_hex: lastHostHex, 
-                                ip_range: ipRange 
-                            },mac);
-                    });
-                }).catch((err)=>{
-                    console.log('[SMSC][NETSCAN] ERROR', err) 
-                });
+                let local_ip = ip; 
+                console.log("LOCAL IP",ip)
+                let local_netmask = "255.255.255.0";
+                let subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
+                let firstHost = ipaddr.IPv4.networkAddressFromCIDR(local_ip + "/" + subconv);
+                let lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(local_ip + "/" + subconv);
+                let firstHostHex = sip.convertIPtoHex(firstHost);
+                let lastHostHex = sip.convertIPtoHex(lastHost);
+                let ipRange = (sip.getIPRange(firstHostHex,lastHostHex)).slice(1);
+                console.log("RANGE",ipRange.length)
+                scanNet({ip_range: ipRange },mac);
             });
-
-            return 'w'; 
         } catch (err) {
             console.warn(err);  
         }
     }
 
     async function scanNet(setup,mac) { 
-
-        let timeout = 750
-
+        let timeout = 2000
         for (let i = 0; i < setup["ip_range"].length; i++) {
-
+          
             let status_code_success = 200
             let ip = setup["ip_range"][i]
+  
             let port = "8800"
             let endpoint_state = `http://${ip}:${port}/GET%20MEDIA%20STATUS%20tv`
-            
+
             var xhr = new XMLHttpRequest(); // We need timeout capabilities
             xhr.open("GET", endpoint_state, true);
             xhr.withCredentials = true;
             xhr.timeout = timeout;
-            xhr.responseType = "json";
+            xhr.responseType = "text";
   
-            xhr.onload = async function(e) {  
+            xhr.onload = async function(e) {
 
                 console.log("Detected STB", ip, xhr) 
                 let rpass = Math.floor((Math.random() * 100000) + 1)
@@ -99,49 +81,60 @@ export let useScanner = () => {
     
                 console.log(resgister,password,model,startStart,stateResp)
  
-                if (stateResp.response.status == status_code_success)
+                if (stateResp && stateResp.response.status == status_code_success)
                 { 
-                    let data = stateResp.data.split(" ")
-                    let status = parseInt(data[0])
-                    let config = data[1] && JSON.parse(data[1])
+                     
+                    let data = stateResp.data.split(/\d\d\d\s/) 
+                    let status = parseInt(stateResp.data.substr(0,3))
+                    let config = data[1] && JSON.parse(data[1]) 
+                    console.log("Pushing", ip,status,config) 
                     if ( status==status_code_success && config ) {  
+                        
                         config.ip = ip
                         config.clone = config
                         stbs.push(config)
-                        setScanner(stbs)
+                        setScanner(stbs) 
                     }
                 } 
                 
-            }
+            }  
             xhr.ontimeout = function (e) { 
-                // console.log("Server scan timeout")
-            };
+                 // console.log(e) 
+            }; 
+            xhr.onerror = function (e) { 
+                //console.log(e) 
+            }; 
             xhr.send(); 
         }
     }
  
     async function apiCall(url)
     { 
-        let response = await fetch(url,{
-            mode: 'same-origin', // no-cors, *cors, same-origin
-            cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: 'same-origin', // include, *same-origin, omit
-            headers: {
-                'Accept': '*/*',
-                'Accept-Language': 'en-GB,en;q=0.5',
-                'Accept-Encoding': 'gzip, deflate',
-                'X-Requested-With': 'XMLHttpRequest',
-                'Connection': 'keep-alive',
-                'Pragma': 'no-cache',
-                'Cache-Control': 'no-cache'
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        });
-        let data = await response.text()
-        // console.log(url,data)
-        return {
-            response,
-            data
+        try {
+            let response = await fetch(url,{
+                mode: 'same-origin', // no-cors, *cors, same-origin
+                cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Accept': '*/*',
+                    'Accept-Language': 'en-GB,en;q=0.5',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Connection': 'keep-alive',
+                    'Pragma': 'no-cache',
+                    'Cache-Control': 'no-cache'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+            let data = await response.text()
+            // console.log(url,data)
+            return {
+                response,
+                data
+            } 
+        } catch (error) {
+            // console.log(error)
+            return false;
         }
     }
 
