@@ -14,9 +14,9 @@ import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
     this.stream = this.navigation.getParam('stream', 'no-data-stream');
     this.playerref = React.createRef()
     this.ready = false
-    //this.state = { isShowingText: false };
+    this.state = { stream: "" };
   }
- 
+   
   onBuffer(e) { 
     console.log("onBuffer",e)  
   }  
@@ -41,9 +41,7 @@ import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
   }
   componentDidMount(props){
     console.log("componentDidMount",props)
-    // setTimeout((() => {
-    //   this.setState({ isShowingText: true })
-    // }).bind(this), 2000);
+    this.setState({ stream: this.stream })
 
   }
   componentWillUpdate(props){
@@ -61,7 +59,7 @@ import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
     console.log("RENDER PLAYER", this.stream)
     return (
       <Video source={{
-          uri: this.stream,
+          uri: this.state.stream,
           headers: {
             'Accept': '*/*',
             'Accept-Language': 'en-GB,en;q=0.5',

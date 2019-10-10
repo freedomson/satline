@@ -84,7 +84,6 @@ export const Stbs: FunctionComponent = (props) => {
 
   return (        
      <View >
-               <STB />
         <ScrollView>
           <View style={styles.container}>
             <Table renderCell={renderCell} height={320} columnWidth={60} columns={columns} dataSource={datasource} />
