@@ -1,4 +1,4 @@
-export const APP_TITLE = "Paseeo";
+export const APP_TITLE = "Satline";
 export const APP_SLOGAN = "We are all one!";
 export const APP_SEPARATOR = ":";
 export const APP_SMS_TEMPLATE = {
@@ -73,5 +73,5 @@ export const PAGES = {
     TEMPLATE:   {name:'Settings',   icon: 'settings'},
     HELP:       {name:'Help Me',    icon: 'help'},
     HOME:       {name:'Home',       icon: 'menu'},
-    STB:        {name:'STB',        icon: 'movie'},
+    STB:        {name:'Player',     icon: 'movie'},
 }

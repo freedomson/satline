@@ -120,6 +120,7 @@ const StackNavigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       title: `${(navigation.state.routes[(navigation.state.index)].key)} . ${APP_TITLE}`.toLocaleLowerCase(),
       headerLeftContainerStyle: styles.NavigatorLeftIcon,
+      header: null,
       headerLeft: ( 
         <Icon
         size={36}
