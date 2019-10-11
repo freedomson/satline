@@ -7,6 +7,8 @@ import styles  from "../config/styles";
 import { Stbs } from "../tables/stbs"
 
 import { useScanner } from "../containers/useScanner";
+import Orientation from 'react-native-orientation-locker';  
+
 
 export const Home: FunctionComponent = (props) => {  
   
@@ -16,7 +18,7 @@ export const Home: FunctionComponent = (props) => {
     console.log('[SMSC][HOME] WillFocus'); // callback message
 
   }
-  // console.log(scanner)
+  // Orientation.lockToPortrait();
   return (
       <ImageBackground
         source={require("../../assets/coverbox.jpg")}

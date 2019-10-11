@@ -27,6 +27,7 @@
     "react-native-gesture-handler": "^1.4.1",
     "react-native-hooks": "^0.0.6",
     "react-native-network-info": "^5.1.0",
+    "react-native-orientation-locker": "^1.1.6",
     "react-native-shimmer": "^0.5.0",
     "react-native-simple-table": "^0.0.3",
     "react-native-vector-icons": "^6.3.0",

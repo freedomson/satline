@@ -155,6 +155,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-orientation-locker')
     implementation("androidx.fragment:fragment:1.0.0")
     implementation("androidx.legacy:legacy-support-core-ui:1.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")

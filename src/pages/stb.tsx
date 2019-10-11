@@ -1,20 +1,16 @@
 
-import React, { FunctionComponent  } from 'react'
-import { StyleSheet } from "react-native";
+import React from 'react'
 import Video from 'react-native-video';
-import { usePlayer } from "../containers/usePlayer";
 import { Assets } from "../config/assets";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
-
-//export const Stb: FunctionComponent =  (props) => { 
+import Orientation from 'react-native-orientation-locker';
+import { Dimensions } from "react-native";
  export default class Stb extends React.Component { 
 
   constructor(props) {
     super(props);
-    this.navigation = props.navigation; 
-    this.stream = this.navigation.getParam('stream', 'no-data-stream');
     this.playerref = React.createRef()
-    this.ready = false
+    this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.state = { 
         stream: "",
         width: DEVICE_WIDTH,
@@ -26,20 +22,14 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
     console.log("onBuffer",e)  
   }  
   onError(e) { 
-    console.log("onError",e) 
-    //console.log(this.playerref.current)
+    console.log("onError",e)
   }
   onLoadStart(e) {
     console.log("onLoadStart",e)
   }
   onLoad(response) {
     console.log("onLoad",response)
-    this.setState({
-      width: DEVICE_WIDTH,
-      height: DEVICE_HEIGHT,
-      stream: this.state.stream,
-      aspecRatio : DEVICE_WIDTH/DEVICE_HEIGHT
-    });
+    this._onOrientationDidChange(null)
   }
   onReadyForDisplay(e) {
     console.log("onReadyForDisplay",e)
@@ -49,10 +39,13 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
   } 
   componentWillReceiveProps(props){
     console.log("componentWillReceiveProps",props)
+    this.setState({stream: props.navigation.getParam('stream', 'no-data-stream')})
   }
   componentDidMount(props){
     console.log("componentDidMount",props)
     this.setState({stream: this.stream})
+//  Orientation.unlockAllOrientations()
+    Orientation.addOrientationListener(this._onOrientationDidChange.bind(this));
   }
   componentWillUpdate(props){
     console.log("componentWillUpdate",props)
@@ -64,9 +57,26 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
     console.log("shouldComponentUpdate",props)
     return true
   } 
-  
+  componentWillUnmount(props) {
+    Orientation.removeOrientationListener(this._onOrientationDidChange);
+    console.log("componentWillUnmount",props)
+  }
+
+  _onOrientationDidChange(orientation){
+    setTimeout((() => {
+      const { height, width } = Dimensions.get("window");
+      this.setState({
+        width: width,
+        height: height,
+        stream: this.state.stream,
+        aspecRatio : width/height
+      });
+    }).bind(this), 250);
+    console.log("Orientation change") 
+  }
+
   render() { 
-    console.log("RENDER PLAYER", this.stream)
+    console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
       <Video source={{
           uri: this.state.stream,
