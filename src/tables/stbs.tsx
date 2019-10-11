@@ -1,16 +1,14 @@
 
-import React, { FunctionComponent, useEffect, useState, useLayoutEffect  } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Linking, ScrollView, View, Text, ImageBackground } from "react-native";
 import Table from 'react-native-simple-table'
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
-import stylesCommon from "../config/styles";
 import { Icon } from "react-native-elements";
 import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
-// import STB from "../pages/stb";
  
 const columns = [
-  {
+  { 
     title: 'STB',
     dataIndex: 'ip',
     width: DEVICE_WIDTH/3
@@ -64,21 +62,22 @@ export const Stbs: FunctionComponent = (props) => {
     let data = <Text>{cellData}</Text> 
     switch (col.title) {
         case 'NAVIGATE': 
-            data =  <TouchableOpacity style = {stylesCommon.ButtonInnerContainerHalfScreen} onPress={ async ()=>{
+            data =  <TouchableOpacity style = {styles.ButtonInnerContainerHalfScreen} onPress={ async ()=>{
                 let startResp = await apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
                 console.log("STBS_LIST", startResp) 
                 props.navigation.navigate(PAGES.STB.name, {
                     stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
                 })
             }}>  
-                <Icon name={PAGES.STB.icon}  /> 
+               <Icon name={PAGES.STB.icon} color='#333333' raised={true} reverse={true} iconStyle={[styles.icon_med]} />
             </ TouchableOpacity >
             break;  
     } 
+    
     return (
       <View key={col.dataIndex} style={[styles.cell, styles.dataViewContent, style]}>
         {data}
-      </View>
+      </View> 
     )
   }
 
@@ -93,6 +92,12 @@ export const Stbs: FunctionComponent = (props) => {
 };
 
 const styles = StyleSheet.create({
+  icon_med: {
+    width: 35,
+    height: 35,
+    fontSize: 35,
+    textAlign: "center"
+  },
   container: {
   },
   contentContainer: {
@@ -102,12 +107,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   headerItem: {
-    minHeight: 30,
+    minHeight: 30, 
     backgroundColor: '#efefef',
     borderRightWidth: 1,
     borderRightColor: '#dfdfdf',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    fontSize: 45,
+    fontWeight: 'bold',
   },
   dataView: {
     flexGrow: 1,
@@ -126,6 +133,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderRightColor: '#dfdfdf',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: 5
   }
 });

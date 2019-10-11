@@ -30,7 +30,7 @@ export const About: FunctionComponent = () => {
         <Text style = {styles.LegendTitle}>
         Application Cover
         </Text>
-        <Text style = {styles.LegendText}>
+        <Text style = {styles.LegendText}> 
         {`Photo by `}
         <Text style = {styles.Link} onPress={() => Linking.openURL('https://unsplash.com/photos/A5FaLf5d8nw?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText')}>
         Adam Gong

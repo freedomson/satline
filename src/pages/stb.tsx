@@ -16,6 +16,7 @@ import { Dimensions } from "react-native";
         width: DEVICE_WIDTH,
         heigth: DEVICE_HEIGHT
       };
+    Orientation.unlockAllOrientations()
   }
 
   onBuffer(e) { 
@@ -38,10 +39,12 @@ import { Dimensions } from "react-native";
     console.log("onReady",e)
   } 
   componentWillReceiveProps(props){
+    Orientation.unlockAllOrientations()
     console.log("componentWillReceiveProps",props)
     this.setState({stream: props.navigation.getParam('stream', 'no-data-stream')})
   }
   componentDidMount(props){
+    Orientation.unlockAllOrientations()
     console.log("componentDidMount",props)
     this.setState({stream: this.stream})
 //  Orientation.unlockAllOrientations()

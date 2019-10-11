@@ -73,5 +73,5 @@ export const PAGES = {
     TEMPLATE:   {name:'Settings',   icon: 'settings'},
     HELP:       {name:'Help Me',    icon: 'help'},
     HOME:       {name:'Home',       icon: 'menu'},
-    STB:        {name:'Player',     icon: 'movie'},
+    STB:        {name:'Player',     icon: 'camera-roll'}, 
 }

@@ -14,7 +14,7 @@ var styles = StyleSheet.create({
 
     Lettering: {
         textAlign: 'center',
-        fontSize: 15
+        fontSize: 45
     },
 
     Branding: {

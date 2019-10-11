@@ -1,6 +1,6 @@
 # Paseeo Android App
 
-Download APK paseeo from Android Strore at:
+Download APK satline from Android Strore at:
 
  ![](paseeo.png)
 

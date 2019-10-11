@@ -1,14 +1,13 @@
 
 import React, {  FunctionComponent } from "react";
-import { View, ImageBackground, ScrollView, StyleSheet } from "react-native";
+import { ImageBackground, ScrollView, Text } from "react-native";
 import { NavigationEvents } from "react-navigation";
-import styles  from "../config/styles";
-
 import { Stbs } from "../tables/stbs"
-
 import { useScanner } from "../containers/useScanner";
-import Orientation from 'react-native-orientation-locker';  
-
+import Shimmer from 'react-native-shimmer';
+import styles from "../config/styles";
+import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
+import Orientation from 'react-native-orientation-locker';
 
 export const Home: FunctionComponent = (props) => {  
   
@@ -16,9 +15,9 @@ export const Home: FunctionComponent = (props) => {
 
   const  NavigationsonWillFocus = ()=>{
     console.log('[SMSC][HOME] WillFocus'); // callback message
-
+    Orientation.lockToPortrait()
   }
-  // Orientation.lockToPortrait();
+  Orientation.lockToPortrait()
   return (
       <ImageBackground
         source={require("../../assets/coverbox.jpg")}
@@ -28,7 +27,11 @@ export const Home: FunctionComponent = (props) => {
           ,styles.BackgroundImage)}>
 
       <ScrollView>
-        
+ 
+      <Shimmer style={styles.Branding} direction={"up"} duration={500}>
+        <Text style={styles.Lettering}>{APP_TITLE}</Text>
+      </Shimmer>
+
       <Stbs navigation={props.navigation} datasource={scanner} />
 
       </ScrollView>
