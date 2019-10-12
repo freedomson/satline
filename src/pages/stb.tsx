@@ -75,7 +75,7 @@ import { Dimensions } from "react-native";
         aspecRatio : width/height
       });
     }).bind(this), 250);
-    console.log("Orientation change") 
+    console.log("Orientation change")  
   }
 
   render() { 

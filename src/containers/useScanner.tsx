@@ -50,6 +50,7 @@ export let useScanner = () => {
 
     async function scanNet(setup,mac) { 
         let timeout = 2000
+        let totalipstoscan = setup["ip_range"].length
         for (let i = 0; i < setup["ip_range"].length; i++) {
           
             let status_code_success = 200
@@ -65,7 +66,7 @@ export let useScanner = () => {
             xhr.responseType = "text";
   
             xhr.onload = async function(e) {
-
+                --totalipstoscan
                 console.log("Detected STB", ip, xhr) 
                 let rpass = Math.floor((Math.random() * 100000) + 1)
                 
@@ -93,16 +94,24 @@ export let useScanner = () => {
                         config.ip = ip
                         config.clone = config
                         stbs.push(config)
-                        setScanner(stbs) 
                     }
                 } 
-                
+                if ( totalipstoscan == 0 ) {
+                    setScanner(stbs)
+                }
+                 
             }  
             xhr.ontimeout = function (e) { 
-                 // console.log(e) 
+                --totalipstoscan
+                if ( totalipstoscan == 0 ) {
+                    setScanner(stbs) 
+                }
             }; 
             xhr.onerror = function (e) { 
-                //console.log(e) 
+                --totalipstoscan
+                if ( totalipstoscan == 0 ) {
+                    setScanner(stbs) 
+                }
             }; 
             xhr.send(); 
         }
