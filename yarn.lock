@@ -4897,6 +4897,13 @@ react-native-hooks@^0.0.6:
   dependencies:
     react "^16.7.0-alpha.0"
 
+react-native-loading-spinner-overlay@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-1.0.1.tgz#07f85a072b6f7d05b8749668cd626df4cc330347"
+  integrity sha512-njZZWs+cgyq6Ni7tkYEowMmuAuHVljuH4CqTWA0plNOfSzZhEcrW209y7WcgHjRWz0RvvEYF5oWGT8DWtTq8bA==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-network-info@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-native-network-info/-/react-native-network-info-5.1.0.tgz#f7e39ca56468eea771e6dc8d7d4c2aaae8a566f0"

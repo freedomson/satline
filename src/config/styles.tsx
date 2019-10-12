@@ -109,7 +109,12 @@ var styles = StyleSheet.create({
       borderRadius: 5,
       backgroundColor : colors.inpt_background,
       color: colors.inpt_color
-    }
+    },
+
+    spinnerTextStyle: {
+      color: '#FFF'
+    },
+
 });
 
 export default styles;
