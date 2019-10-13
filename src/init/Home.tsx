@@ -13,7 +13,7 @@ import styles from "../config/styles";
 export const Home: FunctionComponent = (props) => {  
   
   let scanner = useScanner();
- 
+
   const  NavigationsonWillFocus = ()=>{
     console.log('[SMSC][HOME] WillFocus'); // callback message
     Orientation.lockToPortrait()
@@ -28,16 +28,14 @@ export const Home: FunctionComponent = (props) => {
           ,styles.BackgroundImage)}>
 
       <ScrollView> 
-         
+
       <Loader loader={!(!!scanner.length)}></Loader> 
 
       <Shimmer style={styles.Branding} direction={"up"} duration={500}>
         <Text style={styles.Lettering}>{APP_TITLE}</Text>
       </Shimmer>
 
-      <Loader state={!!scanner.length} /> 
- 
-      <Stbs navigation={props.navigation} datasource={scanner} />
+      {!!scanner.length && <Stbs navigation={props.navigation} datasource={scanner} />}
 
       </ScrollView>
         <NavigationEvents

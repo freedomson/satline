@@ -63,8 +63,8 @@ export const Stbs: FunctionComponent = (props) => {
     switch (col.title) {
         case 'NAVIGATE': 
             data =  <TouchableOpacity style = {styles.ButtonInnerContainerHalfScreen} onPress={ async ()=>{
-                let startResp = await apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
-                console.log("STBS_LIST", startResp) 
+                apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
+                // console.log("STBS_LIST", startResp) 
                 props.navigation.navigate(PAGES.STB.name, {
                     stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
                 })

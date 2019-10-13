@@ -4,7 +4,9 @@ import Video from 'react-native-video';
 import { Assets } from "../config/assets";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
 import Orientation from 'react-native-orientation-locker';
-import { Dimensions } from "react-native";
+import { ImageBackground, Dimensions } from "react-native";
+import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
+import styles from "../config/styles";
  export default class Stb extends React.Component { 
 
   constructor(props) {
@@ -12,9 +14,7 @@ import { Dimensions } from "react-native";
     this.playerref = React.createRef()
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.state = { 
-        stream: "",
-        width: DEVICE_WIDTH,
-        heigth: DEVICE_HEIGHT
+        stream: "" 
       };
     Orientation.unlockAllOrientations()
   }
@@ -30,7 +30,7 @@ import { Dimensions } from "react-native";
   }
   onLoad(response) {
     console.log("onLoad",response)
-    this._onOrientationDidChange(null)
+    this._reconfigureScreen(null)
   }
   onReadyForDisplay(e) {
     console.log("onReadyForDisplay",e)
@@ -47,8 +47,8 @@ import { Dimensions } from "react-native";
     Orientation.unlockAllOrientations()
     console.log("componentDidMount",props)
     this.setState({stream: this.stream})
-//  Orientation.unlockAllOrientations()
-    Orientation.addOrientationListener(this._onOrientationDidChange.bind(this));
+//  Orientation.unlockAllOrientations() 
+    Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
   }
   componentWillUpdate(props){
     console.log("componentWillUpdate",props)
@@ -61,11 +61,11 @@ import { Dimensions } from "react-native";
     return true
   } 
   componentWillUnmount(props) {
-    Orientation.removeOrientationListener(this._onOrientationDidChange);
+    Orientation.removeOrientationListener(this._reconfigureScreen);
     console.log("componentWillUnmount",props)
   }
 
-  _onOrientationDidChange(orientation){
+  _reconfigureScreen(orientation){
     setTimeout((() => {
       const { height, width } = Dimensions.get("window");
       this.setState({
@@ -75,12 +75,18 @@ import { Dimensions } from "react-native";
         aspecRatio : width/height
       });
     }).bind(this), 250);
-    console.log("Orientation change")  
+    console.log("_reconfigureScreen")  
   }
 
   render() { 
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
+            <ImageBackground
+        source={require("../../assets/loader.jpg")}
+        style={Object.assign({  
+          resizeMode: 'stretch'
+          }
+          ,styles.BackgroundImage)}>
       <Video source={{
           uri: this.state.stream,
           headers: {
@@ -96,15 +102,15 @@ import { Dimensions } from "react-native";
         }}   // Can be a URL or a local file.
         ref={this.playerref}
         controls={true}
-        playInBackground={true}
-        playWhenInactive={true}
-        fullscreenAutorotate={true} 
-        fullscreen={true}  
+        playInBackground={false}
+        playWhenInactive={false}
+        fullscreenAutorotate={false} 
+        fullscreen={false}  
         paused={false}
         resizeMode={"stretch"} 
         hideShutterView={true}
         id={"video"}
-        posterResizeMode={"stretch"}
+        //posterResizeMode={"stretch"}
         minLoadRetryCount={20}    
         bufferConfig={{    
           minBufferMs: 15000,  
@@ -112,19 +118,20 @@ import { Dimensions } from "react-native";
           bufferForPlaybackMs: 2500,
           bufferForPlaybackAfterRebufferMs: 5000
         }}
-        onReady={this.onReady}
-        onReadyForDisplay={this.onReadyForDisplay}
+        onReady={this.onReady.bind(this)}
+        onReadyForDisplay={this.onReadyForDisplay.bind(this)}
         onLoad={this.onLoad.bind(this)}
-        onLoadStart={this.onLoadStart}
-        onBuffer={this.onBuffer}
+        onLoadStart={this.onLoadStart.bind(this)}
+        onBuffer={this.onBuffer.bind(this)}
         onError={this.onError.bind(this)}
         style={{
           aspectRatio: this.state.aspectRatio,
           width: this.state.width,
           height: this.state.height
         }}
-        poster={Assets.loader}
-         />  
+        //poster={Assets.loader}
+         />
+      </ImageBackground>
     )}
   }
 
