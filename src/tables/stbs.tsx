@@ -64,12 +64,12 @@ export const Stbs: FunctionComponent = (props) => {
         case 'NAVIGATE': 
             data =  <TouchableOpacity style = {styles.ButtonInnerContainerHalfScreen} onPress={ async ()=>{
                 apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
-                // console.log("STBS_LIST", startResp) 
                 props.navigation.navigate(PAGES.STB.name, {
                     stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
                 })
-            }}>  
-               <Icon name={PAGES.STB.icon} color='#333333' raised={true} reverse={true} iconStyle={[styles.icon_med]} />
+            }}>
+            <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
+               
             </ TouchableOpacity >
             break;  
     } 

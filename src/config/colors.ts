@@ -1,5 +1,5 @@
 let colors = {
-    app_background: "#DFDFDF",
+    app_background: "#000000",
     app_foreground: "#FFFFFF",
     app_link: "blue",
     app_on: "green",

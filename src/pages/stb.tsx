@@ -1,20 +1,24 @@
 
 import React from 'react'
 import Video from 'react-native-video';
-import { Assets } from "../config/assets";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
 import Orientation from 'react-native-orientation-locker';
-import { ImageBackground, Dimensions } from "react-native";
-import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
+import { View, ImageBackground, Dimensions } from "react-native";
+import { PAGES } from "../config/app";
 import styles from "../config/styles";
+import {Loader} from '../containers/Loader';
+import colors from "../config/colors";
  export default class Stb extends React.Component { 
 
   constructor(props) {
     super(props);
     this.playerref = React.createRef()
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
+    const { height, width } = Dimensions.get("window");
     this.state = { 
-        stream: "" 
+        stream: "",
+        loader: true,
+        height: height,
+        width: width
       };
     Orientation.unlockAllOrientations()
   }
@@ -23,31 +27,40 @@ import styles from "../config/styles";
     console.log("onBuffer",e)  
   }  
   onError(e) { 
-    console.log("onError",e)
+    console.log("onError",e) 
+    this.setState({loader: false})
+    this.props.navigation.navigate(PAGES.HOME.name, {
+        toastMessage: "Error loading stream!\nPlease try again."
+    })
   }
   onLoadStart(e) {
     console.log("onLoadStart",e)
   }
-  onLoad(response) {
+  onLoad(response) {  
     console.log("onLoad",response)
-    this._reconfigureScreen(null)
+    this._reconfigureScreen(null,true,false)
   }
   onReadyForDisplay(e) {
-    console.log("onReadyForDisplay",e)
+    console.log("onReadyForDisplay",e)  
   }
   onReady(e) {
-    console.log("onReady",e)
+    console.log("onReady",e) 
   } 
   componentWillReceiveProps(props){
     Orientation.unlockAllOrientations()
     console.log("componentWillReceiveProps",props)
-    this.setState({stream: props.navigation.getParam('stream', 'no-data-stream')})
+    this.setState({
+      loader: true,
+      stream: props.navigation.getParam('stream', '')
+      })
   }
   componentDidMount(props){
     Orientation.unlockAllOrientations()
     console.log("componentDidMount",props)
-    this.setState({stream: this.stream})
-//  Orientation.unlockAllOrientations() 
+    this.setState({
+      loader: true,
+      stream: this.stream
+      })
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
   }
   componentWillUpdate(props){
@@ -65,28 +78,27 @@ import styles from "../config/styles";
     console.log("componentWillUnmount",props)
   }
 
-  _reconfigureScreen(orientation){
-    setTimeout((() => {
-      const { height, width } = Dimensions.get("window");
-      this.setState({
-        width: width,
-        height: height,
-        stream: this.state.stream,
-        aspecRatio : width/height
-      });
-    }).bind(this), 250);
-    console.log("_reconfigureScreen")  
+  _reconfigureScreen(orientation,update,loader){
+      setTimeout((() => {
+         if (this.props.navigation.isFocused() && update) {
+            const { height, width } = Dimensions.get("window");
+            this.setState({
+              width: width,
+              height: height,
+              stream: this.state.stream,
+              aspecRatio : width/height,
+              loader: (loader!==false)
+            });
+            console.log("_reconfigureScreen") 
+         } 
+      }).bind(this), 250); 
   }
 
   render() { 
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
-            <ImageBackground
-        source={require("../../assets/loader.jpg")}
-        style={Object.assign({  
-          resizeMode: 'stretch'
-          }
-          ,styles.BackgroundImage)}>
+    <View style={styles.Page}>
+      <Loader loader={this.state.loader}></Loader> 
       <Video source={{
           uri: this.state.stream,
           headers: {
@@ -127,11 +139,12 @@ import styles from "../config/styles";
         style={{
           aspectRatio: this.state.aspectRatio,
           width: this.state.width,
-          height: this.state.height
+          height: this.state.height, 
+          backgroundColor: colors.app_background 
         }}
         //poster={Assets.loader}
          />
-      </ImageBackground>
+      </View>
     )}
   }
 

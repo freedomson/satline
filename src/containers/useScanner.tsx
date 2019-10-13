@@ -17,7 +17,7 @@ export let useScanner = () => {
     var stbs = []
 
     useEffect(
-         () => { 
+         () => {
             if (scanner.length === 0) {
                 DeviceInfo.getMacAddress().then(async mac => {
                     console.log("DEVICE MAC",mac)
@@ -25,7 +25,7 @@ export let useScanner = () => {
                 });
             } 
         },
-        [scanner],
+        [scanner.length],
       );
 
     async function getDeviceNetworkStatus(mac) {  
@@ -49,7 +49,7 @@ export let useScanner = () => {
     }
 
     async function scanNet(setup,mac) { 
-        let timeout = 2000
+        let timeout = 5000
         let totalipstoscan = setup["ip_range"].length
         for (let i = 0; i < setup["ip_range"].length; i++) {
           
@@ -108,6 +108,12 @@ export let useScanner = () => {
                 }
             }; 
             xhr.onerror = function (e) { 
+                --totalipstoscan
+                if ( totalipstoscan == 0 ) {
+                    setScanner(stbs) 
+                }
+            }; 
+            xhr.onabort = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
                     setScanner(stbs) 

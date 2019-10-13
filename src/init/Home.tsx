@@ -1,6 +1,6 @@
 
 import React, {  FunctionComponent } from "react";
-import { ImageBackground, ScrollView, Text } from "react-native";
+import { ImageBackground, ScrollView, Text , ToastAndroid} from "react-native";
 import { NavigationEvents } from "react-navigation";
 import { Stbs } from "../tables/stbs"
 import { useScanner } from "../containers/useScanner";
@@ -18,13 +18,20 @@ export const Home: FunctionComponent = (props) => {
     console.log('[SMSC][HOME] WillFocus'); // callback message
     Orientation.lockToPortrait()
   }
-  Orientation.lockToPortrait()
+
+  Orientation.lockToPortrait() 
+ 
+  let toastMessage = props.navigation.getParam('toastMessage', '')
+  if (toastMessage) {
+    ToastAndroid.showWithGravity(toastMessage, ToastAndroid.LONG, ToastAndroid.CENTER)
+  }
+
   return ( 
       <ImageBackground
         source={require("../../assets/coverbox.jpg")}
         style={Object.assign({ 
           resizeMode: 'stretch'
-          }
+          } 
           ,styles.BackgroundImage)}>
 
       <ScrollView> 

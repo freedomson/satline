@@ -17,10 +17,6 @@ import Stb from '../pages/stb';
 
 const LOCAL_PAGES = {
   [PAGES.HOME.name]: Home,
-  [PAGES.TEMPLATE.name]: Template,
-  [PAGES.STATUS.name]: Status,
-  [PAGES.HELP.name]: Help,
-  [PAGES.ABOUT.name]: About,  
   [PAGES.STB.name]: Stb
 }
 
@@ -48,49 +44,6 @@ const DrawerNavigator = createDrawerNavigator({
           source={require("../../icon.png")}
         />
       )
-    }),
-  },
-  [PAGES.TEMPLATE.name]: {
-    screen: LOCAL_PAGES[PAGES.TEMPLATE.name],
-    path: `${PAGES.TEMPLATE.name.toLocaleLowerCase}/:name`,
-    navigationOptions: ({ navigation }) => ({
-      title: PAGES.TEMPLATE.name,
-      drawerIcon: (
-        <Icon
-        name={PAGES.TEMPLATE.icon}  />)
-    }),
-  },
-  [PAGES.STATUS.name]: {
-    screen: LOCAL_PAGES[PAGES.STATUS.name],
-    path: `${PAGES.STATUS.name.toLocaleLowerCase}/:name`,
-    navigationOptions: ({ navigation }) => ({
-      title: PAGES.STATUS.name,
-      drawerIcon: (
-        <Icon
-        // onPress={()=>{navigation.dispatch(DrawerActions.openDrawer())}}
-        name={PAGES.STATUS.icon}  />)
-    }),
-  },
-  [PAGES.HELP.name]: {
-    screen: LOCAL_PAGES[PAGES.HELP.name],
-    path: `${PAGES.HELP.name.toLocaleLowerCase}/:name`,
-    navigationOptions: ({ navigation }) => ({
-      title: PAGES.HELP.name,
-      drawerIcon: (
-        <Icon
-        //onPress={()=>{navigation.dispatch(DrawerActions.openDrawer())}}
-        name={PAGES.HELP.icon}  />)
-    }),
-  },
-  [PAGES.ABOUT.name]: {
-    screen:  LOCAL_PAGES[PAGES.ABOUT.name],
-    path: `${PAGES.ABOUT.name.toLocaleLowerCase}/:name`,
-    navigationOptions: ({ navigation }) => ({
-      title: PAGES.ABOUT.name,
-      drawerIcon: (
-        <Icon 
-        //onPress={()=>{navigation.dispatch(DrawerActions.openDrawer())}}
-        name={PAGES.ABOUT.icon} />)
     }),
   },
   [PAGES.STB.name]: {
