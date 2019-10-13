@@ -14,6 +14,7 @@ import colors from "../config/colors";
     this.playerref = React.createRef()
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     const { height, width } = Dimensions.get("window");
+    this.playing = false
     this.state = { 
         stream: "",
         loader: true,
@@ -36,9 +37,10 @@ import colors from "../config/colors";
   onLoadStart(e) {
     console.log("onLoadStart",e)
   }
-  onLoad(response) {  
+  onLoad(response) {
     console.log("onLoad",response)
-    this._reconfigureScreen(null,true,false)
+     this.playing = true
+    this._reconfigureScreen(null)
   }
   onReadyForDisplay(e) {
     console.log("onReadyForDisplay",e)  
@@ -49,6 +51,7 @@ import colors from "../config/colors";
   componentWillReceiveProps(props){
     Orientation.unlockAllOrientations()
     console.log("componentWillReceiveProps",props)
+    this.playing = false
     this.setState({
       loader: true,
       stream: props.navigation.getParam('stream', '')
@@ -70,7 +73,7 @@ import colors from "../config/colors";
     console.log("componentDidUpdate",props)
   }
   shouldComponentUpdate(props){
-    console.log("shouldComponentUpdate",props)
+    console.log("shouldComponentUpdate",props) 
     return true
   } 
   componentWillUnmount(props) {
@@ -78,18 +81,18 @@ import colors from "../config/colors";
     console.log("componentWillUnmount",props)
   }
 
-  _reconfigureScreen(orientation,update,loader){
+  _reconfigureScreen(orientation){
       setTimeout((() => {
-         if (this.props.navigation.isFocused() && update) {
+         if (this.props.navigation.isFocused()) {
             const { height, width } = Dimensions.get("window");
             this.setState({
               width: width,
               height: height,
               stream: this.state.stream,
               aspecRatio : width/height,
-              loader: (loader!==false)
+              loader: (!this.playing)
             });
-            console.log("_reconfigureScreen") 
+            console.log("_reconfigureScreen")  
          } 
       }).bind(this), 250); 
   }

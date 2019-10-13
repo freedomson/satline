@@ -1,7 +1,6 @@
 
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Linking, ScrollView, View, Text, ImageBackground } from "react-native";
+import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Table from 'react-native-simple-table'
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
@@ -61,16 +60,27 @@ export const Stbs: FunctionComponent = (props) => {
     let style = {width: col.width || this.props.columnWidth};
     let data = <Text>{cellData}</Text> 
     switch (col.title) {
+
         case 'NAVIGATE': 
-            data =  <TouchableOpacity style = {styles.ButtonInnerContainerHalfScreen} onPress={ async ()=>{
-                apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
-                props.navigation.navigate(PAGES.STB.name, {
-                    stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
-                })
-            }}>
-            <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
-               
-            </ TouchableOpacity >
+            data =  
+            <View style={{ flexDirection: 'row' }}> 
+              <TouchableOpacity onPress={ async ()=>{
+                  //apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
+                  Linking.openURL(`http://${cellData.ip}:8800`); 
+              }}>
+              <Icon name={"web"} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
+                
+              </ TouchableOpacity >
+              <TouchableOpacity  onPress={ async ()=>{
+                  //apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
+                  props.navigation.navigate(PAGES.STB.name, {
+                      stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
+                  })
+              }}>
+              <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
+                
+              </ TouchableOpacity >
+            </View>
             break;  
     } 
     
