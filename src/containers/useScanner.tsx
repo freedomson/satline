@@ -13,20 +13,39 @@ import DeviceInfo from 'react-native-device-info';
 
 export let useScanner = () => {
 
-    const [scanner, setScanner] = useState([]);
+    const [scanner, setScanner] = useState({
+        stbs: [],
+        scan: scan,
+        scanning: false
+    });
     var stbs = []
 
     useEffect(
          () => {
-            if (scanner.length === 0) {
-                DeviceInfo.getMacAddress().then(async mac => {
-                    console.log("DEVICE MAC",mac)
-                    await getDeviceNetworkStatus(mac)
-                });
-            } 
         },
-        [scanner.length],
+        [scanner.scanning],
       );
+ 
+    function scan(ip) {
+        stbs = []
+        setScanner({
+            stbs: stbs,
+            scan: scan,
+            scanning: true
+        });
+        DeviceInfo.getMacAddress().then(async mac => {
+            console.log("DEVICE MAC",mac)
+            await getDeviceNetworkStatus(mac)
+        });
+    }
+
+    function updateStbs(stbs){
+        setScanner({
+            stbs: stbs,
+            scan: scan,
+            scanning: false
+        })
+    }
 
     async function getDeviceNetworkStatus(mac) {  
         try { 
@@ -78,10 +97,12 @@ export let useScanner = () => {
 
                 let startStart = await apiCall(`http://${ip}:${port}/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
 
+                let portal = await apiCall(`http://${ip}:8800`)
+
                 let stateResp = await apiCall(endpoint_state)
     
-                console.log(resgister,password,model,startStart,stateResp)
- 
+                console.log(resgister,password,model,startStart,stateResp,portal)
+  
                 if (stateResp && stateResp.response.status == status_code_success)
                 { 
                      
@@ -97,26 +118,26 @@ export let useScanner = () => {
                     }
                 } 
                 if ( totalipstoscan == 0 ) {
-                    setScanner(stbs)
+                    updateStbs(stbs)
                 }
                  
             }  
             xhr.ontimeout = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
-                    setScanner(stbs) 
+                    updateStbs(stbs) 
                 }
             }; 
             xhr.onerror = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
-                    setScanner(stbs) 
+                    updateStbs(stbs) 
                 }
             }; 
             xhr.onabort = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
-                    setScanner(stbs) 
+                    updateStbs(stbs) 
                 }
             }; 
             xhr.send(); 

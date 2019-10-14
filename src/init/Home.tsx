@@ -9,10 +9,12 @@ import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
 import Orientation from 'react-native-orientation-locker';
 import {Loader} from '../containers/Loader';
 import styles from "../config/styles";
+import Router from "../forms/router"
 
 export const Home: FunctionComponent = (props) => {  
   
   let scanner = useScanner();
+  let searching = false
 
   const  NavigationsonWillFocus = ()=>{
     console.log('[SMSC][HOME] WillFocus'); // callback message
@@ -36,13 +38,15 @@ export const Home: FunctionComponent = (props) => {
 
       <ScrollView> 
 
-      <Loader loader={!(!!scanner.length)}></Loader> 
+      <Loader loader={scanner.scanning}></Loader>
 
       <Shimmer style={styles.Branding} direction={"up"} duration={500}>
-        <Text style={styles.Lettering}>{APP_TITLE}</Text>
+        <Text style={styles.Lettering}>{APP_TITLE}</Text> 
       </Shimmer>
 
-      {!!scanner.length && <Stbs navigation={props.navigation} datasource={scanner} />}
+      <Router scanner={scanner}></Router> 
+  
+      {!scanner.scanning && !! scanner.stbs.length && <Stbs navigation={props.navigation} datasource={scanner.stbs} />}
 
       </ScrollView>
         <NavigationEvents

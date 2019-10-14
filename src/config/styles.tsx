@@ -45,74 +45,45 @@ var styles = StyleSheet.create({
       marginBottom:10,
     },
   
-    ButtonInnerContainerFullScreen: {
+    ButtonRouter: {
+      marginLeft:5,
       alignItems: 'stretch',
-      width: DEVICE_WIDTH
-    },
-
-    ButtonInnerContainerHalfScreen: {
-      alignItems: 'stretch',
-      width: DEVICE_WIDTH/2
-    },
-    ActionButton: {
-      marginLeft:10, 
-      marginRight:10,
-      padding: 10,
+      width: DEVICE_WIDTH/5-10, 
+      borderColor: colors.app_foreground,
+      borderStyle: "solid", 
+      borderWidth: 2,
+      color: colors.app_background,  
       borderRadius: 5,
-      textAlign: 'center',
-      backgroundColor: colors.btn_background,
-      color: colors.btn_text
+      backgroundColor: colors.inpt_background,
+      fontSize: 20
     },
 
-    On: {
-      color: colors.app_on
+    ButtonAction: {
+      marginLeft:5,
+      alignItems: 'stretch',
+      width: DEVICE_WIDTH/5-10, 
+      borderColor: colors.app_foreground,
+      borderStyle: "solid", 
+      borderWidth: 2,
+      color: colors.app_foreground,
+      borderRadius: 5,
+      backgroundColor: colors.btn_background
     },
 
-    Off: {
-      color: colors.app_off
+    ButtonIcon:{
+      fontSize: 40,
+      paddingTop: 5
     },
-
-    InputTitle: {
-      color: 'black', 
-      fontWeight: '900',
-      marginLeft:10,
-      paddingBottom: 5
-    },
-
-    LegendDescription: {
+    formTitle: {
       marginLeft:10,
       marginRight:10,
       paddingBottom: 5,
-      fontSize: 15
-    },
-  
-    LegendTitle: {
-      marginLeft:10,
-      marginRight:10,
-      fontWeight: 'bold',
-      fontSize: 20
-    },
-  
-    LegendText: {
-      marginLeft:10,
-      marginRight:10,
-      fontSize: 15,
-      paddingBottom: 5
-    },
-    
-    TextInputStyleClass: {
-      textAlign: 'center',
-      borderWidth: 1,
-      borderColor: colors.app_border,
-      margin:10,
-      marginTop:0,
-      borderRadius: 5,
-      backgroundColor : colors.inpt_background,
-      color: colors.inpt_color
+      fontSize: 20,
+      color: colors.app_background
     },
 
     spinnerTextStyle: {
-      color: '#FFF'
+      color: colors.app_foreground
     },
 
 });
