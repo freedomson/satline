@@ -20,7 +20,7 @@ export const Home: FunctionComponent = (props) => {
     Orientation.lockToPortrait()
   }
 
-  Orientation.lockToPortrait()  
+  Orientation.lockToPortrait()
  
   let toastMessage = props.navigation.getParam('toastMessage', '')
   if (toastMessage&& !scanner.scanning) {
@@ -36,8 +36,8 @@ export const Home: FunctionComponent = (props) => {
           ,styles.BackgroundImage)}>
 
       <ScrollView> 
-
-      <Loader loader={scanner.scanning}></Loader>
+ 
+      <Loader loader={scanner.scanning && !!! scanner.stbs.length}></Loader>
 
       <Shimmer style={styles.Branding} direction={"up"} duration={500}>
         <Text style={styles.Lettering}>{APP_TITLE}</Text> 
