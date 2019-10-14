@@ -28,11 +28,12 @@ import colors from "../config/colors";
     console.log("onBuffer",e)  
   }  
   onError(e) { 
-    console.log("onError",e) 
+    console.log("onError",e)
     this.setState({loader: false})
-    this.props.navigation.navigate(PAGES.HOME.name, {
-        toastMessage: "Error loading stream!\nPlease try again."
-    })
+    if (this.props.navigation.isFocused())
+      this.props.navigation.navigate(PAGES.HOME.name, {
+          toastMessage: "Error loading stream!\nPlease try again."
+      })
   }
   onLoadStart(e) {
     console.log("onLoadStart",e)
