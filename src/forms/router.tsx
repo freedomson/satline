@@ -24,7 +24,10 @@ export const Router: FunctionComponent = (props) => {
             ,router4._lastNativeText || router4._getText()
             ].map((val)=>{return val.replace(/[^0-9]/g, '')}) 
         setRouter(nr)
-        console.log(nr)
+        router1.setNativeProps({text: nr[0]})
+        router2.setNativeProps({text: nr[1]})
+        router3.setNativeProps({text: nr[2]})
+        router4.setNativeProps({text: nr[3]})
     }
 
     const getRouter = async (reset=false) => {
