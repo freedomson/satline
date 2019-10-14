@@ -55,7 +55,8 @@ var styles = StyleSheet.create({
       color: colors.app_background,  
       borderRadius: 5,
       backgroundColor: colors.inpt_background,
-      fontSize: 20
+      fontSize: 20,
+      textAlign: "center"
     },
 
     ButtonAction: {

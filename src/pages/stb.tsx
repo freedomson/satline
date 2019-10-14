@@ -87,7 +87,7 @@ import colors from "../config/colors";
             const { height, width } = Dimensions.get("window");
             this.setState({
               width: width,
-              height: height,
+              height: height-10,
               stream: this.state.stream,
               aspecRatio : width/height,
               loader: (!this.playing)

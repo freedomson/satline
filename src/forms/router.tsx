@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { useEffect, FunctionComponent, useState } from 'react';
 import { Platform
   , StyleSheet
   , View
@@ -14,39 +14,41 @@ import { Icon } from "react-native-elements";
 
 export const Router: FunctionComponent = (props) => { 
 
-    const getRouter = async (reset=false) => {
-      try {
-        const router1 = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER1);
-        const router2 = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER2);
-        const router3 = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER3);
-        const router4 = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER4);
-        return {
-            router1,router2,router3,router4
-        }
-      } catch (error) { 
-        // Error retrieving data
-        console.log("Error getting data", error)
-      }
+    const defaultRouter =  ["192","168","1","1"]
+
+    const onChanged = function(text){
+        let nr = [
+             router1._lastNativeText || router1._getText()
+            ,router2._lastNativeText || router2._getText()
+            ,router3._lastNativeText || router3._getText()
+            ,router4._lastNativeText || router4._getText()
+            ].map((val)=>{return val.replace(/[^0-9]/g, '')}) 
+        setRouter(nr)
+        console.log(nr)
     }
 
-    const [template, setTemplate] = useState( () => {
-      return getRouter()
-    });
+    const getRouter = async (reset=false) => {
+      try {
+        let router = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER);
+        let r = JSON.parse(router)
+        console.log("setting router mem", r)
+        setRouter(r)
+      } catch (error) { 
+        // Error retrieving data
+         console.log("setting router def",defaultRouter)
+         setRouter(defaultRouter)
+         return
+      }
+    }
+  
+    const [router, setRouter] = useState(async ()=>{
+        let r = await getRouter()
+        return
+    }); 
 
-    const onSave = async () => {
-        this.props.scanner.scan()
-    //   if (!template) {
-    //     onReset()
-    //     return;
-    //   }
-    //   try {
-    //     await AsyncStorage.setItem(APP_DATA_KEYS.SMS_TEMPLATE, JSON.stringify(template));
-    //     ToastAndroid.show('Saved!', ToastAndroid.SHORT);
-    //     console.log("[SMSC][TEMPLATE] length", new Blob([template.template]).size)
-    //   } catch (error) {
-    //     // Error saving data
-    //     console.log("Error saving data", error)
-    //   }
+    const onSearch = async () => {  
+        props.scanner.scan()
+         await AsyncStorage.setItem(APP_DATA_KEYS.ROUTER, JSON.stringify(router));
     };
 
     return (
@@ -54,29 +56,41 @@ export const Router: FunctionComponent = (props) => {
             <Text style={styles.formTitle}>Router IP</Text>
             <View style={styles.ButtonContainer}>
                 <TextInput style={styles.ButtonRouter}
-                value={"192"}
-                editable
-                maxLength={40}
+                ref={r => router1 = r}
+                onEndEditing={onChanged.bind(this)}
+                keyboardType={"number-pad"}
+                defaultValue={router[0]}
+                editable={true}
+                maxLength={3}
                 />
                 <TextInput style={styles.ButtonRouter}
-                value={"168"}
-                editable
-                maxLength={40}
-                />
+                ref={r => router2 = r}
+                onEndEditing={onChanged.bind(this)}
+                keyboardType={"number-pad"}
+                defaultValue={router[1]}
+                editable={true}
+                maxLength={3}
+                /> 
                 <TextInput style={styles.ButtonRouter}
-                value={"1"}
-                editable
-                maxLength={40}
-                />
+                ref={r => router3 = r}
+                onEndEditing={onChanged.bind(this)}
+                keyboardType={"number-pad"}
+                defaultValue={router[2]}
+                editable={true}
+                maxLength={3}
+                />  
                 <TextInput style={styles.ButtonRouter}
-                value={"1"}
-                editable
-                maxLength={40}
+                ref={r => router4 = r}
+                onEndEditing={onChanged.bind(this)}
+                keyboardType={"number-pad"}
+                defaultValue={router[3]} 
+                editable={true}
+                maxLength={3} 
                 />
               <TouchableOpacity
                 style={styles.ButtonAction}
-                onPress={ (()=>{ 
-                  props.scanner.scan()
+                onPress={ (()=>{
+                  onSearch() 
               })}>
                 <Icon name={"search"} raised={false} reverse={false} iconStyle={[styles.ButtonIcon]} />
               </ TouchableOpacity >

@@ -14,17 +14,16 @@ import Router from "../forms/router"
 export const Home: FunctionComponent = (props) => {  
   
   let scanner = useScanner();
-  let searching = false
 
   const  NavigationsonWillFocus = ()=>{
     console.log('[SMSC][HOME] WillFocus'); // callback message
     Orientation.lockToPortrait()
   }
 
-  Orientation.lockToPortrait() 
+  Orientation.lockToPortrait()  
  
   let toastMessage = props.navigation.getParam('toastMessage', '')
-  if (toastMessage) {
+  if (toastMessage&& !scanner.scanning) {
     ToastAndroid.showWithGravity(toastMessage, ToastAndroid.LONG, ToastAndroid.CENTER)
   }
 

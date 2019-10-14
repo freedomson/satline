@@ -97,12 +97,12 @@ export let useScanner = () => {
 
                 let startStart = await apiCall(`http://${ip}:${port}/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
 
-                let portal = await apiCall(`http://${ip}:8800`)
-
                 let stateResp = await apiCall(endpoint_state)
+
+                let portal = await apiCall(`http://${ip}:8800`)
     
                 console.log(resgister,password,model,startStart,stateResp,portal)
-  
+
                 if (stateResp && stateResp.response.status == status_code_success)
                 { 
                      
