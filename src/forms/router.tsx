@@ -35,7 +35,7 @@ export const Router: FunctionComponent = (props) => {
         let router = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER);
         let r = JSON.parse(router)
         console.log("setting router mem", r)
-        setRouter(r)
+         r ? setRouter(r) : setRouter(defaultRouter)
       } catch (error) { 
         // Error retrieving data
          console.log("setting router def",defaultRouter)
@@ -45,8 +45,8 @@ export const Router: FunctionComponent = (props) => {
     }
   
     const [router, setRouter] = useState(async ()=>{
-        let r = await getRouter()
-        return
+        let r = await getRouter() 
+        return r
     }); 
 
     const onSearch = async () => {  
@@ -57,7 +57,7 @@ export const Router: FunctionComponent = (props) => {
     return (
         <View>
             <Text style={styles.formTitle}>Router IP</Text>
-            <View style={styles.ButtonContainer}>
+            {router && <View style={styles.ButtonContainer}>
                 <TextInput style={styles.ButtonRouter}
                 ref={r => router1 = r}
                 onEndEditing={onChanged.bind(this)}
@@ -97,7 +97,7 @@ export const Router: FunctionComponent = (props) => {
               })}>
                 <Icon name={"search"} raised={false} reverse={false} iconStyle={[styles.ButtonIcon]} />
               </ TouchableOpacity >
-            </View>
+            </View>}
        </View>
 
 
