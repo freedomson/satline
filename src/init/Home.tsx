@@ -35,9 +35,9 @@ export const Home: FunctionComponent = (props) => {
           } 
           ,styles.BackgroundImage)}>
 
-      <ScrollView> 
+      <ScrollView>
  
-      <Loader loader={scanner.scanning && !!! scanner.stbs.length}></Loader>
+      <Loader loader={scanner.scanning}></Loader>
 
       <Shimmer style={styles.Branding} direction={"up"} duration={500}>
         <Text style={styles.Lettering}>{APP_TITLE}</Text> 
