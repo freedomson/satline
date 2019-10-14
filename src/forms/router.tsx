@@ -51,7 +51,7 @@ export const Router: FunctionComponent = (props) => {
 
     const onSearch = async () => {  
         props.scanner.scan()
-         await AsyncStorage.setItem(APP_DATA_KEYS.ROUTER, JSON.stringify(router));
+        await AsyncStorage.setItem(APP_DATA_KEYS.ROUTER, JSON.stringify(router));
     };
 
     return (
