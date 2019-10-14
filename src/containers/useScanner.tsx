@@ -40,6 +40,7 @@ export let useScanner = () => {
     }
 
     function updateStbs(stbs){
+        stbs = []
         setScanner({
             stbs: stbs,
             scan: scan,
