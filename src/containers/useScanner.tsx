@@ -28,18 +28,17 @@ export let useScanner = () => {
  
     function scan(ip) {
         stbs = []
-        setScanner({
-            stbs: stbs,
-            scan: scan,
-            scanning: true
-        });
+        setScanner({stbs: stbs,scan: scan,scanning: true});
         DeviceInfo.getMacAddress().then(async mac => {
             console.log("DEVICE MAC",mac)
-            await getDeviceNetworkStatus(mac)
+            await getDeviceNetworkStatus(mac,ip)
         });
     }
 
-    function updateStbs(stbs){
+    function updateStbs(stbs,stage){
+        console.log("Updating STBS",stage,stbs)
+        if (!stbs.length)
+            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noboxfound, ToastAndroid.LONG, ToastAndroid.CENTER)
         setScanner({
             stbs: stbs,
             scan: scan,
@@ -47,21 +46,18 @@ export let useScanner = () => {
         })
     }
 
-    async function getDeviceNetworkStatus(mac) {  
+    async function getDeviceNetworkStatus(mac,ip) {  
         try { 
-            NetworkInfo.getIPV4Address().then(ip => {
-                let local_ip = ip; 
-                console.log("LOCAL IP",ip)
-                let local_netmask = "255.255.255.0";
-                let subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
-                let firstHost = ipaddr.IPv4.networkAddressFromCIDR(local_ip + "/" + subconv);
-                let lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(local_ip + "/" + subconv);
-                let firstHostHex = sip.convertIPtoHex(firstHost);
-                let lastHostHex = sip.convertIPtoHex(lastHost);
-                let ipRange = (sip.getIPRange(firstHostHex,lastHostHex)).slice(1);
-                console.log("RANGE",ipRange.length)
-                scanNet({ip_range: ipRange },mac);
-            });
+            console.log("Router IP",ip)
+            let local_netmask = "255.255.255.0";
+            let subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
+            let firstHost = ipaddr.IPv4.networkAddressFromCIDR(ip + "/" + subconv);
+            let lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(ip + "/" + subconv);
+            let firstHostHex = sip.convertIPtoHex(firstHost);
+            let lastHostHex = sip.convertIPtoHex(lastHost);
+            let ipRange = (sip.getIPRange(firstHostHex,lastHostHex)).slice(1);
+            console.log("RANGE",ipRange.length)
+            scanNet({ip_range: ipRange },mac);
         } catch (err) {
             console.warn(err);  
         }
@@ -99,45 +95,43 @@ export let useScanner = () => {
 
                 let stateResp = await apiCall(endpoint_state)
 
-                let portal = await apiCall(`http://${ip}:8800`)
-    
-                console.log(resgister,password,model,startStart,stateResp,portal)
-
+                // console.log(resgister,password,model,startStart,stateResp)
                 if (stateResp && stateResp.response.status == status_code_success)
-                { 
-                     
+                {
                     let data = stateResp.data.split(/\d\d\d\s/) 
                     let status = parseInt(stateResp.data.substr(0,3))
                     let config = data[1] && JSON.parse(data[1]) 
-                    console.log("Pushing", ip,status,config) 
-                    if ( status==status_code_success && config ) {  
-                        
+                    if ( status == status_code_success && config ) {
+
+                        console.log("Pushing", config) 
                         config.ip = ip
+                        config.ipcell2 = ip
                         config.clone = config
                         stbs.push(config)
+
                     }
                 } 
                 if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs)
+                    updateStbs(stbs,"onload")
                 }
                  
             }  
             xhr.ontimeout = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs) 
+                    updateStbs(stbs,"ontimeout") 
                 }
             }; 
             xhr.onerror = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs) 
+                    updateStbs(stbs,"onerror") 
                 }
             }; 
             xhr.onabort = function (e) { 
                 --totalipstoscan
                 if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs) 
+                    updateStbs(stbs,"onabort") 
                 }
             }; 
             xhr.send(); 

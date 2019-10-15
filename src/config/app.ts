@@ -32,7 +32,8 @@ export const TRANSLATIONS = {
             notAuthorized: `Permissions not granted.`,
             dailyEvents: `Today's events!`,
             noDailyEvents: `Enjoy your free time.`,
-            loading: `Loading...`
+            loading: `Loading...`,
+            noboxfound: `No box found!`
         },
         template : {
             label_whatsapp: "Whatsapp",

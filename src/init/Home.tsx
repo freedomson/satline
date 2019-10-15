@@ -12,6 +12,8 @@ import styles from "../config/styles";
 import Router from "../forms/router"
 
 export const Home: FunctionComponent = (props) => {  
+
+  Orientation.lockToPortrait()
   
   let scanner = useScanner();
 
@@ -19,8 +21,6 @@ export const Home: FunctionComponent = (props) => {
     console.log('[SMSC][HOME] WillFocus'); // callback message
     Orientation.lockToPortrait()
   }
-
-  Orientation.lockToPortrait()
  
   let toastMessage = props.navigation.getParam('toastMessage', '')
   if (toastMessage&& !scanner.scanning) {
@@ -36,7 +36,7 @@ export const Home: FunctionComponent = (props) => {
           ,styles.BackgroundImage)}>
 
       <ScrollView>
- 
+  
       <Loader loader={scanner.scanning}></Loader>
 
       <Shimmer style={styles.Branding} direction={"up"} duration={500}>

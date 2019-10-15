@@ -8,17 +8,17 @@ import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
  
 const columns = [
   { 
-    title: 'STB',
+    title: 'Box IP address',
     dataIndex: 'ip',
     width: DEVICE_WIDTH/3
   },
   {
-    title: 'CHANNEL',
-    dataIndex: 'progNo',
+    title: 'Portal',
+    dataIndex: 'ipcell2',
     width: DEVICE_WIDTH/3
   },
   {
-    title: 'NAVIGATE',
+    title: 'Player',
     dataIndex: 'clone',
     width: DEVICE_WIDTH/3
   }
@@ -61,24 +61,26 @@ export const Stbs: FunctionComponent = (props) => {
     let data = <Text>{cellData}</Text> 
     switch (col.title) {
 
-        case 'NAVIGATE': 
-            data =  
+        case 'Portal': 
+            data =   
             <View style={{ flexDirection: 'row' }}> 
               <TouchableOpacity onPress={ async ()=>{
-                  //apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
-                  Linking.openURL(`http://${cellData.ip}:8800`); 
+                  Linking.openURL(`http://${ipcell2}:8800`); 
               }}>
               <Icon name={"web"} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
-                
               </ TouchableOpacity >
+            </View>
+            break;  
+
+        case 'Player': 
+            data =  
+            <View style={{ flexDirection: 'row' }}> 
               <TouchableOpacity  onPress={ async ()=>{
-                  //apiCall(`http://${cellData.ip}:8800/SET%20CHANNEL%20${cellData.progNo}%201%200%20`)
                   props.navigation.navigate(PAGES.STB.name, {
                       stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
                   })
               }}>
               <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
-                
               </ TouchableOpacity >
             </View>
             break;  
