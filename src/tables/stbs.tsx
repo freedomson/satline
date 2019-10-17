@@ -65,7 +65,7 @@ export const Stbs: FunctionComponent = (props) => {
             data =   
             <View style={{ flexDirection: 'row' }}> 
               <TouchableOpacity onPress={ async ()=>{
-                  Linking.openURL(`http://${ipcell2}:8800`); 
+                  Linking.openURL(`http://${cellData}:8800`); 
               }}>
               <Icon name={"web"} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
               </ TouchableOpacity >
