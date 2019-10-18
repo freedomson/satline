@@ -2,7 +2,7 @@
 import React from 'react'
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
-import { View, ImageBackground, Dimensions } from "react-native";
+import { View, StatusBar, Dimensions } from "react-native";
 import { PAGES } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
@@ -11,17 +11,23 @@ import colors from "../config/colors";
 
   constructor(props) {
     super(props);
-    this.playerref = React.createRef()
+    this.playerref = React.createRef() 
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
-    const { height, width } = Dimensions.get("window");
     this.playing = false
+    let dimensions = this.calculateDimensions()
     this.state = { 
         stream: "",
         loader: true,
-        height: height,
-        width: width
+        height: dimensions.height,
+        width: dimensions.width
       };
     Orientation.unlockAllOrientations()
+  }
+
+  calculateDimensions() {
+    let { height, width } = Dimensions.get("window");
+    let finalHeight = height-StatusBar.currentHeight
+    return {"width":width,"height":finalHeight}
   }
 
   onBuffer(e) { 
@@ -85,12 +91,12 @@ import colors from "../config/colors";
   _reconfigureScreen(orientation){
       setTimeout((() => {
          if (this.props.navigation.isFocused()) {
-            const { height, width } = Dimensions.get("window");
+            let dimensions = this.calculateDimensions()
             this.setState({
-              width: width,
-              height: height-10,
-              stream: this.state.stream,
-              aspecRatio : width/height,
+              width: dimensions.width,
+              height: dimensions.height,
+              stream: this.state.stream, 
+              aspecRatio : dimensions.width/dimensions.height,
               loader: (!this.playing)
             });
             console.log("_reconfigureScreen")  
@@ -118,8 +124,8 @@ import colors from "../config/colors";
         }}   // Can be a URL or a local file.
         ref={this.playerref}
         controls={true}
-        playInBackground={false}
-        playWhenInactive={false}
+        playInBackground={true}
+        playWhenInactive={true}
         fullscreenAutorotate={false} 
         fullscreen={false}  
         paused={false}
@@ -129,8 +135,8 @@ import colors from "../config/colors";
         //posterResizeMode={"stretch"}
         minLoadRetryCount={20}    
         bufferConfig={{    
-          minBufferMs: 15000,  
-          maxBufferMs: 50000,
+          minBufferMs: 1500,  
+          maxBufferMs: 5000,
           bufferForPlaybackMs: 2500,
           bufferForPlaybackAfterRebufferMs: 5000
         }}
