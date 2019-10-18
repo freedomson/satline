@@ -5,16 +5,17 @@ import { NavigationEvents } from "react-navigation";
 import { Stbs } from "../tables/stbs"
 import { useScanner } from "../containers/useScanner";
 import Shimmer from 'react-native-shimmer';
-import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
+import { APP_TITLE } from "../config/app";
 import Orientation from 'react-native-orientation-locker';
 import {Loader} from '../containers/Loader';
 import styles from "../config/styles";
 import Router from "../forms/router"
 
+
 export const Home: FunctionComponent = (props) => {  
 
+
   Orientation.lockToPortrait()
-  
   let scanner = useScanner();
 
   const  NavigationsonWillFocus = ()=>{
@@ -45,7 +46,7 @@ export const Home: FunctionComponent = (props) => {
 
       <Router scanner={scanner}></Router> 
   
-      {!scanner.scanning && !! scanner.stbs.length && <Stbs navigation={props.navigation} datasource={scanner.stbs} />}
+      <Stbs navigation={props.navigation} datasource={scanner.stbs} />
 
       </ScrollView>
         <NavigationEvents

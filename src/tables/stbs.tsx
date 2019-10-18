@@ -1,10 +1,11 @@
 
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native";
 import Table from 'react-native-simple-table'
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../config/metrics";
+import { DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
-import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
+import { PAGES } from "../config/app"; 
+import { APP_DATA_KEYS } from "../config/app";
  
 const columns = [
   { 
@@ -12,7 +13,7 @@ const columns = [
     dataIndex: 'ipcell1',
     width: DEVICE_WIDTH/3
   },
-  {
+  { 
     title: 'Portal',
     dataIndex: 'ipcell2',
     width: DEVICE_WIDTH/3
@@ -25,11 +26,27 @@ const columns = [
 ];
 
 export const Stbs: FunctionComponent = (props) => {  
-
-  const [datasource, setDatasource] = useState(props.datasource);
-
+ 
+    const [data, setData] = useState( async () => {
+            console.log("useState STBS")
+            if (props.datasource===false) {
+              let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
+              let stbs = JSON.parse(data) 
+              if (stbs){
+                console.log("STBS from meme",stbs)
+                setData(stbs)
+                return
+              }
+            } else { 
+              setData(props.datasource)
+              return
+            }
+         }
+  );
   useEffect(() => {
-    setDatasource(props.datasource)
+    if (props.datasource !==false) {
+      setData(props.datasource)
+    }
   });
 
   let apiCall = async (url) =>
@@ -107,11 +124,12 @@ export const Stbs: FunctionComponent = (props) => {
     )
   }
 
-  return (        
-     <View >
+  return (
+     Array.isArray(data) && data.length > 0 && 
+     <View>
         <ScrollView>
           <View style={styles.container}>
-            <Table renderCell={renderCell} height={320} columnWidth={60} columns={columns} dataSource={datasource} />
+            <Table renderCell={renderCell} height={320} columnWidth={60} columns={columns} dataSource={data} />
           </View> 
         </ScrollView>
       </View>) 

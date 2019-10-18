@@ -14,21 +14,20 @@ import DeviceInfo from 'react-native-device-info';
 export let useScanner = () => {
 
     const [scanner, setScanner] = useState({
-        stbs: [],
+        stbs: false,
         scan: scan,
         scanning: false
     });
     var stbs = []
 
     useEffect(
-         () => {
-        },
+         () => {},
         [scanner.scanning],
       );
  
     function scan(ip) {
         stbs = []
-        setScanner({stbs: stbs,scan: scan,scanning: true});
+        setScanner({stbs: [], scan: scan,scanning: true});
         DeviceInfo.getMacAddress().then(async mac => {
             console.log("DEVICE MAC",mac)
             await getDeviceNetworkStatus(mac,ip)
@@ -37,13 +36,16 @@ export let useScanner = () => {
 
     function updateStbs(stbs,stage){
         console.log("Updating STBS",stage,stbs)
-        if (!stbs.length)
+        if (!stbs.length) {
             ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noboxfound, ToastAndroid.LONG, ToastAndroid.CENTER)
-        setScanner({
+        }
+        let scanner = {
             stbs: stbs,
             scan: scan,
             scanning: false
-        })
+        }
+        setScanner(scanner)
+        AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbs));
     }
 
     async function getDeviceNetworkStatus(mac,ip) {  

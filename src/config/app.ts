@@ -7,7 +7,8 @@ export const APP_SMS_TEMPLATE = {
     template: "Dear {{attendees}}, this is a reminder for {{event}} on {{date}} at {{time}}.\nHappens {{delta}}!\nHave a wonderful day.\n{{location}}"
 };
 export const APP_DATA_KEYS = {
-    ROUTER:'ROUTER'
+    ROUTER:'ROUTER',
+    STBS: 'STBS'
 };
 export const APP_ANDROID_MAP = 'https://www.google.com/maps/place/'
 
