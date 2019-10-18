@@ -59,62 +59,31 @@ export let useScanner = () => {
             console.log("RANGE",ipRange.length)
             scanNet({ip_range: ipRange },mac);
         } catch (err) {
-            console.warn(err);  
+            console.warn(err);
         }
     }
 
     async function scanNet(setup,mac) { 
         let timeout = 5000
         let totalipstoscan = setup["ip_range"].length
-        for (let i = 0; i < setup["ip_range"].length; i++) {
-          
-            let status_code_success = 200
+        let rangeips = setup["ip_range"].length
+        for (let i = 0; i < rangeips; i++) {
             let ip = setup["ip_range"][i]
-  
-            let port = "8800"
-            let endpoint_state = `http://${ip}:${port}/GET%20MEDIA%20STATUS%20tv`
-
-            var xhr = new XMLHttpRequest(); // We need timeout capabilities
-            xhr.open("GET", endpoint_state, true);
+            let xhr = new XMLHttpRequest(); // We need timeout capabilities
+            xhr.open("GET", `http://${ip}:8800/GET%20MEDIA%20STATUS%20tv`, true);
             xhr.withCredentials = true;
-            xhr.timeout = timeout;
+            xhr.timeout = timeout; 
             xhr.responseType = "text";
-  
             xhr.onload = async function(e) {
                 --totalipstoscan
-                console.log("Detected STB", ip, xhr) 
+                console.log("Detected STB", ip, totalipstoscan) 
                 let rpass = Math.floor((Math.random() * 100000) + 1)
-                
-                let resgister = await apiCall(`http://${ip}:${port}/backup/REGISTER?id=${mac}&password=${rpass}`)
+                await apiCall(`http://${ip}:8800/backup/REGISTER?id=${mac}&password=${rpass}`)
+                await apiCall(`http://${ip}:8800/PASSWORD%20%20`) 
+                await apiCall(`http://${ip}:8800/POST%20MOBILE%20MODEL%20%20SATLINE%20000-000`)
+                stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
+                if ( totalipstoscan == 0 ) updateStbs(stbs,"onload")
 
-                let password = await apiCall(`http://${ip}:${port}/PASSWORD%20%20`) 
-
-                let model = await apiCall(`http://${ip}:${port}/POST%20MOBILE%20MODEL%20%20SATLINE%20000-000`)
-
-                let startStart = await apiCall(`http://${ip}:${port}/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
-
-                let stateResp = await apiCall(endpoint_state)
-
-                // console.log(resgister,password,model,startStart,stateResp)
-                if (stateResp && stateResp.response.status == status_code_success)
-                {
-                    let data = stateResp.data.split(/\d\d\d\s/) 
-                    let status = parseInt(stateResp.data.substr(0,3))
-                    let config = data[1] && JSON.parse(data[1]) 
-                    if ( status == status_code_success && config ) {
-
-                        console.log("Pushing", config) 
-                        config.ip = ip
-                        config.ipcell2 = ip
-                        config.clone = config
-                        stbs.push(config)
-
-                    }
-                } 
-                if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs,"onload")
-                }
-                 
             }  
             xhr.ontimeout = function (e) { 
                 --totalipstoscan

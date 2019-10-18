@@ -9,7 +9,7 @@ import { APP_TITLE, APP_SLOGAN, PAGES } from "../config/app";
 const columns = [
   { 
     title: 'Box IP address',
-    dataIndex: 'ip',
+    dataIndex: 'ipcell1',
     width: DEVICE_WIDTH/3
   },
   {
@@ -19,7 +19,7 @@ const columns = [
   },
   {
     title: 'Player',
-    dataIndex: 'clone',
+    dataIndex: 'ipcell3',
     width: DEVICE_WIDTH/3
   }
 ];
@@ -76,9 +76,23 @@ export const Stbs: FunctionComponent = (props) => {
             data =  
             <View style={{ flexDirection: 'row' }}> 
               <TouchableOpacity  onPress={ async ()=>{
-                  props.navigation.navigate(PAGES.STB.name, {
-                      stream: `http://${cellData.ip}:8802/${cellData.progNo}.ts`
-                  })
+                      let status_code_success = 200
+                       let start = await apiCall(`http://${cellData}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
+                      let stateResp = await apiCall(`http://${cellData}:8800/GET%20MEDIA%20STATUS%20tv`)
+                      if (stateResp && stateResp.response.status == status_code_success)
+                      {
+                          let data = stateResp.data.split(/\d\d\d\s/) 
+                          let status = parseInt(stateResp.data.substr(0,3))
+                          let config = data[1] && JSON.parse(data[1]) 
+                          if ( status == status_code_success && config ) {
+                            props.navigation.navigate(PAGES.STB.name, 
+                              {
+                                stream: `http://${cellData}:8802/${config.progNo}.ts`
+                              })
+                          } else {
+
+                          }
+                      } 
               }}>
               <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
               </ TouchableOpacity >
