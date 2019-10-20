@@ -26,6 +26,7 @@ export const Home: FunctionComponent = (props) => {
   let toastMessage = props.navigation.getParam('toastMessage', '')
   if (toastMessage&& !scanner.scanning) {
     ToastAndroid.showWithGravity(toastMessage, ToastAndroid.LONG, ToastAndroid.CENTER)
+    props.navigation.state.params.toastMessage = '' 
   }
 
   return ( 

@@ -5,7 +5,7 @@ import Table from 'react-native-simple-table'
 import { DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
 import { PAGES } from "../config/app"; 
-import { APP_DATA_KEYS } from "../config/app";
+import { APP_DATA_KEYS, TRANSLATIONS } from "../config/app";
  
 const columns = [
   { 
@@ -102,12 +102,15 @@ export const Stbs: FunctionComponent = (props) => {
                           let status = parseInt(stateResp.data.substr(0,3))
                           let config = data[1] && JSON.parse(data[1]) 
                           if ( status == status_code_success && config ) {
+                            await apiCall(`http://${cellData}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
                             props.navigation.navigate(PAGES.STB.name, 
                               {
                                 stream: `http://${cellData}:8802/${config.progNo}.ts`
                               })
                           } else {
-
+                            props.navigation.navigate(PAGES.HOME.name, {
+                                toastMessage: TRANSLATIONS.en.home.streamError
+                            })
                           }
                       } 
               }}>

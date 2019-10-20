@@ -7,6 +7,7 @@ import { PAGES } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
+import { TRANSLATIONS } from "../config/app";
  export default class Stb extends React.Component { 
 
   constructor(props) {
@@ -38,7 +39,7 @@ import colors from "../config/colors";
     this.setState({loader: false})
     if (this.props.navigation.isFocused())
       this.props.navigation.navigate(PAGES.HOME.name, {
-          toastMessage: "Error loading stream!\nPlease try again."
+          toastMessage: TRANSLATIONS.en.home.streamError
       })
   }
   onLoadStart(e) {

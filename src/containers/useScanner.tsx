@@ -37,7 +37,7 @@ export let useScanner = () => {
     function updateStbs(stbs,stage){
         console.log("Updating STBS",stage,stbs)
         if (!stbs.length) {
-            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noboxfound, ToastAndroid.LONG, ToastAndroid.CENTER)
+            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
         }
         let scanner = {
             stbs: stbs,
