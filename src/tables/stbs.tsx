@@ -6,6 +6,7 @@ import { DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
 import { PAGES } from "../config/app"; 
 import { APP_DATA_KEYS, TRANSLATIONS } from "../config/app";
+import {Loader} from '../containers/Loader';
  
 const columns = [
   { 
@@ -49,6 +50,8 @@ export const Stbs: FunctionComponent = (props) => {
     }
   });
 
+  const [loading, setLoading] = useState(false)
+
   let apiCall = async (url) =>
   {
       let response = await fetch(url,{
@@ -80,7 +83,7 @@ export const Stbs: FunctionComponent = (props) => {
 
         case 'Portal': 
             data =   
-            <View style={{ flexDirection: 'row' }}> 
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={ async ()=>{
                   Linking.openURL(`http://${cellData}:8800`); 
               }}>
@@ -93,6 +96,7 @@ export const Stbs: FunctionComponent = (props) => {
             data =  
             <View style={{ flexDirection: 'row' }}> 
               <TouchableOpacity  onPress={ async ()=>{
+                      setLoading(true)
                       let status_code_success = 200
                        let start = await apiCall(`http://${cellData}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
                       let stateResp = await apiCall(`http://${cellData}:8800/GET%20MEDIA%20STATUS%20tv`)
@@ -112,6 +116,7 @@ export const Stbs: FunctionComponent = (props) => {
                                 toastMessage: TRANSLATIONS.en.home.streamError
                             })
                           }
+                          setLoading(false)
                       } 
               }}>
               <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
@@ -130,6 +135,7 @@ export const Stbs: FunctionComponent = (props) => {
   return (
      Array.isArray(data) && data.length > 0 && 
      <View>
+        <Loader loader={loading}></Loader>
         <ScrollView>
           <View style={styles.container}>
             <Table renderCell={renderCell} height={320} columnWidth={60} columns={columns} dataSource={data} />
