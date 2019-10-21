@@ -1,12 +1,6 @@
-import {
-    BackHandler,
-} from 'react-native';
-import React, { useEffect, useState, useLayoutEffect  } from 'react'
-import { DeviceEventEmitter, ToastAndroid, AsyncStorage } from "react-native";
+import { useEffect, useState } from 'react'
+import {ToastAndroid, AsyncStorage } from "react-native";
 import { APP_DATA_KEYS, TRANSLATIONS } from "../config/app";
-
-import { NetworkInfo } from 'react-native-network-info';
-import SubnetmaskModule from 'get-subnet-mask';
 var sip = require ('shift8-ip-func');
 var ipaddr = require('ipaddr.js');
 import DeviceInfo from 'react-native-device-info';
@@ -18,6 +12,7 @@ export let useScanner = () => {
         scan: scan,
         scanning: false
     });
+
     var stbs = []
 
     useEffect(
@@ -25,8 +20,7 @@ export let useScanner = () => {
         [scanner.scanning],
       );
  
-    function scan(ip) {
-        stbs = []
+    async function scan(ip) {
         setScanner({stbs: [], scan: scan,scanning: true});
         DeviceInfo.getMacAddress().then(async mac => {
             console.log("DEVICE MAC",mac)
@@ -34,18 +28,19 @@ export let useScanner = () => {
         });
     }
 
-    function updateStbs(stbs,stage){
-        console.log("Updating STBS",stage,stbs)
-        if (!stbs.length) {
+    async function updateStbs(stbin,stage){
+        console.log("Updating STBS",stage,stbin)
+        stbs = []
+        if (!stbin.length) {
             ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
         }
         let scanner = {
-            stbs: stbs,
+            stbs: stbin,
             scan: scan,
             scanning: false
         }
         setScanner(scanner)
-        AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbs));
+        await AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
     }
 
     async function getDeviceNetworkStatus(mac,ip) {  
