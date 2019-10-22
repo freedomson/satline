@@ -5,9 +5,10 @@ import android.content.IntentFilter;
 import android.provider.CalendarContract;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.sbugert.rnadmob.RNAdMobPackage;
 import org.wonday.orientation.OrientationPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.example.habibi.mynativemodule.MyNativeModulePackage;
 import com.pusherman.networkinfo.RNNetworkInfoPackage;
 import com.brentvatne.react.ReactVideoPackage;
@@ -32,9 +33,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNGestureHandlerPackage(),
+            new RNAdMobPackage(),
             new OrientationPackage(),
             new RNDeviceInfo(),
-            new RNGestureHandlerPackage(),
             new MyNativeModulePackage(),
             new RNNetworkInfoPackage(),
             new ReactVideoPackage(),

@@ -116,8 +116,12 @@ export const Stbs: FunctionComponent = (props) => {
                                 toastMessage: TRANSLATIONS.en.home.streamError
                             })
                           }
-                          setLoading(false)
-                      } 
+                      } else {
+                        props.navigation.navigate(PAGES.HOME.name, {
+                            toastMessage: TRANSLATIONS.en.home.streamError
+                        })
+                      }
+                      setLoading(false)
               }}>
               <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
               </ TouchableOpacity >

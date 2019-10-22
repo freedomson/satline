@@ -10,7 +10,7 @@ import Orientation from 'react-native-orientation-locker';
 import {Loader} from '../containers/Loader';
 import styles from "../config/styles";
 import Router from "../forms/router"
-
+import Banner from '../containers/Banner';
 
 export const Home: FunctionComponent = (props) => {  
 
@@ -29,6 +29,10 @@ export const Home: FunctionComponent = (props) => {
     props.navigation.state.params.toastMessage = '' 
   }
 
+  let bannerError = function(args){
+    console.log("Banner error!",args)
+  }
+
   return ( 
       <ImageBackground
         source={require("../../assets/coverbox.jpg")}
@@ -38,10 +42,10 @@ export const Home: FunctionComponent = (props) => {
           ,styles.BackgroundImage)}>
 
       <ScrollView>
-  
-      <Loader loader={scanner.scanning}></Loader>
 
-      <Shimmer style={styles.Branding} direction={"up"} duration={500}>
+      <Loader loader={scanner.scanning}></Loader> 
+
+      <Shimmer style={styles.Branding} direction={"left"} duration={500}>
         <Text style={styles.Lettering}>{APP_TITLE}</Text> 
       </Shimmer>
 
@@ -49,6 +53,8 @@ export const Home: FunctionComponent = (props) => {
   
       <Stbs navigation={props.navigation} datasource={scanner.stbs} />
 
+      <Banner />
+      
       </ScrollView>
         <NavigationEvents
         onWillFocus={() => { 
