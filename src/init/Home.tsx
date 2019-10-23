@@ -41,25 +41,24 @@ export const Home: FunctionComponent = (props) => {
           } 
           ,styles.BackgroundImage)}>
 
-      <ScrollView>
-
-      <Loader loader={scanner.scanning}></Loader> 
-
+      <Loader loader={scanner.scanning}></Loader>
+      
       <Shimmer style={styles.Branding} direction={"left"} duration={500}>
         <Text style={styles.Lettering}>{APP_TITLE}</Text> 
       </Shimmer>
 
       <Router scanner={scanner}></Router> 
-  
-      <Stbs navigation={props.navigation} datasource={scanner.stbs} />
 
-      <Banner />
-      
+      <ScrollView>
+        <Stbs navigation={props.navigation} datasource={scanner.stbs} />
       </ScrollView>
+      
         <NavigationEvents
         onWillFocus={() => { 
         NavigationsonWillFocus()
         }}/>
+
+        <Banner />
      </ImageBackground>
 
 
