@@ -4,7 +4,7 @@ Download APK satline from Android Strore at:
 
  ![](paseeo.png)
 
-https://play.google.com/store/apps/details?id=com.smscalendar
+https://play.google.com/store/apps/details?id=com.satline
 
 ## Install project 
 

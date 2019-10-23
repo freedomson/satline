@@ -1,4 +1,4 @@
-package com.smscalendar;
+package com.satline;
 
 import android.app.Application;
 import android.content.IntentFilter;

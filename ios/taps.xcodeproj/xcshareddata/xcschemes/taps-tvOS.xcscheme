@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "smscalendar-tvOS.app"
-               BlueprintName = "smscalendar-tvOS"
-               ReferencedContainer = "container:smscalendar.xcodeproj">
+               BuildableName = "satline-tvOS.app"
+               BlueprintName = "satline-tvOS"
+               ReferencedContainer = "container:satline.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "smscalendar-tvOSTests.xctest"
-               BlueprintName = "smscalendar-tvOSTests"
-               ReferencedContainer = "container:smscalendar.xcodeproj">
+               BuildableName = "satline-tvOSTests.xctest"
+               BlueprintName = "satline-tvOSTests"
+               ReferencedContainer = "container:satline.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "smscalendar-tvOSTests.xctest"
-               BlueprintName = "smscalendar-tvOSTests"
-               ReferencedContainer = "container:smscalendar.xcodeproj">
+               BuildableName = "satline-tvOSTests.xctest"
+               BlueprintName = "satline-tvOSTests"
+               ReferencedContainer = "container:satline.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "smscalendar-tvOS.app"
-            BlueprintName = "smscalendar-tvOS"
-            ReferencedContainer = "container:smscalendar.xcodeproj">
+            BuildableName = "satline-tvOS.app"
+            BlueprintName = "satline-tvOS"
+            ReferencedContainer = "container:satline.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "smscalendar-tvOS.app"
-            BlueprintName = "smscalendar-tvOS"
-            ReferencedContainer = "container:smscalendar.xcodeproj">
+            BuildableName = "satline-tvOS.app"
+            BlueprintName = "satline-tvOS"
+            ReferencedContainer = "container:satline.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "smscalendar-tvOS.app"
-            BlueprintName = "smscalendar-tvOS"
-            ReferencedContainer = "container:smscalendar.xcodeproj">
+            BuildableName = "satline-tvOS.app"
+            BlueprintName = "satline-tvOS"
+            ReferencedContainer = "container:satline.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "android": "react-native run-android",
     "tsc": "tsc -b",
-    "xcode": "open ios/smscalendar.xcodeproj",
+    "xcode": "open ios/satline.xcodeproj",
     "test": "jest"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-package com.smscalendar;
+package com.satline;
 
 import android.content.Intent;
 import android.os.Bundle;

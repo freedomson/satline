@@ -73,7 +73,10 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+        entryFile: "index.js",
+        bundleAssetName: "index.android.bundle",
+        bundleInAlpha: true,
+        bundleInBeta: true
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -102,7 +105,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.smscalendar"
+        applicationId "com.satline"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 17

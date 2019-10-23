@@ -34,7 +34,7 @@ export default class Banner extends Component {
         <AdMobBanner
           adSize="smartBanner"
           adUnitID={this.adUnitID}
-          testDevices={["197CB8B138D02DC6DB2CDA34E6CF1826"]} 
+          /* testDevices={["197CB8B138D02DC6DB2CDA34E6CF1826"]} */
           onAdLoaded={this.onAdLoaded}
           onAdOpened={this.onAdOpened}
           onAdClosed={this.onAdClosed}
