@@ -46,6 +46,7 @@ export const Stbs: FunctionComponent = (props) => {
   );
   useEffect(() => {
     if (props.datasource !==false) {
+      console.log("STBS upgrade datasource")
       setData(props.datasource)
     }
   });
@@ -136,7 +137,7 @@ export const Stbs: FunctionComponent = (props) => {
     )
   }
 
-  return (
+  return ( 
      Array.isArray(data) && data.length > 0 && 
      <View>
         <Loader loader={loading}></Loader>

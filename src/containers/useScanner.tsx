@@ -14,6 +14,10 @@ export let useScanner = () => {
     });
 
     var stbs = []
+    var timeout = 0
+    var totalipstoscan = 0
+    var rangeips = []
+    var mac = ""
 
     useEffect(
          () => {},
@@ -24,28 +28,31 @@ export let useScanner = () => {
         setScanner({stbs: [], scan: scan,scanning: true});
         DeviceInfo.getMacAddress().then(async mac => {
             console.log("DEVICE MAC",mac)
-            await getDeviceNetworkStatus(mac,ip)
+            mac = mac
+            await getDeviceNetworkStatus(ip)
         });
     }
 
     async function updateStbs(stbin,stage){
         console.log("Updating STBS",stage,stbin)
         stbs = []
-        if (!stbin.length) {
-            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
-        }
         let scanner = {
             stbs: stbin,
             scan: scan,
             scanning: false
         }
         setScanner(scanner)
-        await AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
+        if (!stbin.length) {
+            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
+        } else {
+            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.boxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
+        }
+        AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
     }
 
-    async function getDeviceNetworkStatus(mac,ip) {  
+    async function getDeviceNetworkStatus(ip) {
         try { 
-            console.log("Router IP",ip)
+            console.log("Router IP",ip,mac)
             let local_netmask = "255.255.255.0";
             let subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
             let firstHost = ipaddr.IPv4.networkAddressFromCIDR(ip + "/" + subconv);
@@ -54,54 +61,59 @@ export let useScanner = () => {
             let lastHostHex = sip.convertIPtoHex(lastHost);
             let ipRange = (sip.getIPRange(firstHostHex,lastHostHex)).slice(1);
             console.log("RANGE",ipRange.length)
-            scanNet({ip_range: ipRange },mac);
+            scanNet({ip_range: ipRange });
         } catch (err) {
             console.warn(err);
         }
     }
 
-    async function scanNet(setup,mac) { 
-        let timeout = 5000
-        let totalipstoscan = setup["ip_range"].length
-        let rangeips = setup["ip_range"].length
-        for (let i = 0; i < rangeips; i++) {
-            let ip = setup["ip_range"][i]
-            let xhr = new XMLHttpRequest(); // We need timeout capabilities
-            xhr.open("GET", `http://${ip}:8800/GET%20MEDIA%20STATUS%20tv`, true);
-            xhr.withCredentials = true;
-            xhr.timeout = timeout; 
-            xhr.responseType = "text";
-            xhr.onload = async function(e) {
-                --totalipstoscan
-                console.log("Detected STB", ip, totalipstoscan) 
-                let rpass = Math.floor((Math.random() * 100000) + 1)
-                await apiCall(`http://${ip}:8800/backup/REGISTER?id=${mac}&password=${rpass}`)
-                await apiCall(`http://${ip}:8800/PASSWORD%20%20`) 
-                await apiCall(`http://${ip}:8800/POST%20MOBILE%20MODEL%20%20SATLINE%20000-000`)
-                stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
-                if ( totalipstoscan == 0 ) updateStbs(stbs,"onload")
-
-            }  
-            xhr.ontimeout = function (e) { 
-                --totalipstoscan
-                if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs,"ontimeout") 
-                }
-            }; 
-            xhr.onerror = function (e) { 
-                --totalipstoscan
-                if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs,"onerror") 
-                }
-            }; 
-            xhr.onabort = function (e) { 
-                --totalipstoscan
-                if ( totalipstoscan == 0 ) {
-                    updateStbs(stbs,"onabort") 
-                }
-            }; 
-            xhr.send(); 
+    async function scanNet(setup) { 
+        timeout = 250
+        totalipstoscan = setup["ip_range"].length
+        rangeips = setup["ip_range"].length
+        for (var i = 0; i < rangeips; i++) {
+            searchBox(setup["ip_range"][i]) 
         }
+    }
+
+    async function searchBox(ip) {
+        let xhr = new XMLHttpRequest(); // We need timeout capabilities
+        xhr.open("GET", `http://${ip}:8800/G`, true);
+        xhr.withCredentials = true;
+        xhr.timeout = timeout; 
+        xhr.responseType = "text";
+        xhr.onload = async function(e) {
+            console.log("Detected STB", ip, totalipstoscan) 
+            let rpass = Math.floor((Math.random() * 100000) + 1)
+            await apiCall(`http://${ip}:8800/backup/REGISTER?id=${mac}&password=${rpass}`)
+            await apiCall(`http://${ip}:8800/PASSWORD%20%20`) 
+            await apiCall(`http://${ip}:8800/POST%20MOBILE%20MODEL%20%20SATLINE%20000-000`)
+            stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
+            --totalipstoscan
+            if ( totalipstoscan == 0 ) updateStbs(stbs,"onload")
+
+        }  
+        xhr.ontimeout = function (e) { 
+            --totalipstoscan
+            if ( totalipstoscan == 0 ) {
+                updateStbs(stbs,"ontimeout") 
+            }
+        };
+        xhr.onerror = function (e) { 
+            --totalipstoscan
+            console.log(totalipstoscan)
+            if ( totalipstoscan == 0 ) {
+                updateStbs(stbs,"onerror") 
+            }
+        }; 
+        xhr.onabort = function (e) { 
+            --totalipstoscan
+            console.log(totalipstoscan)
+            if ( totalipstoscan == 0 ) {
+                updateStbs(stbs,"onabort") 
+            }
+        }; 
+        xhr.send(); 
     }
  
     async function apiCall(url)

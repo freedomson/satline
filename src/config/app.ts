@@ -34,7 +34,8 @@ export const TRANSLATIONS = {
             dailyEvents: `Today's events!`,
             noDailyEvents: `Enjoy your free time.`,
             loading: `Loading...`,
-            noBoxFound: `No box found!`,
+            noBoxFound: `No device found!`,
+            boxFound: `Device found!`,
             streamError: `Error loading stream!\nPlease try again.`
         },
         template : {
