@@ -47,10 +47,11 @@ export const Stbs: FunctionComponent = (props) => {
 
   useEffect(() => {
     if (props.datasource !==false) { 
-      if ( props.datasource.length == 1 ) { 
-        console.log("STBS upgrade datasource", props.datasource[0]['ipcell1'])
-        openPlayer(props.datasource[0]['ipcell1'])
-      }
+      // TODO: Activate when controls available
+      // if ( props.datasource.length == 1 ) { 
+      //   console.log("STBS upgrade datasource", props.datasource[0]['ipcell1'])
+      //   openPlayer(props.datasource[0]['ipcell1'])
+      // }
       setData(props.datasource)
     } 
   },[props.datasource]);

@@ -88,7 +88,7 @@ export let useScanner = () => {
             let rpass = Math.floor((Math.random() * 100000) + 1)
             await apiCall(`http://${ip}:8800/backup/REGISTER?id=${mac}&password=${rpass}`)
             await apiCall(`http://${ip}:8800/PASSWORD%20%20`) 
-            await apiCall(`http://${ip}:8800/POST%20MOBILE%20MODEL%20%20SATLINE%20000-000`)
+            await apiCall(`http://${ip}:8800/POST%20MOBILE%20MODEL%20%20SATLITE%20000-000`)
             stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
             --totalipstoscan
             if ( totalipstoscan == 0 ) updateStbs(stbs,"onload")

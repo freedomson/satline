@@ -1,4 +1,4 @@
-export const APP_TITLE = "Satline";
+export const APP_TITLE = "Satlite";
 export const APP_SLOGAN = "We are all one!";
 export const APP_SEPARATOR = ":";
 export const APP_SMS_TEMPLATE = {
