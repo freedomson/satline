@@ -5,7 +5,7 @@ import Table from 'react-native-simple-table'
 import { DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
 import { PAGES } from "../config/app"; 
-import { APP_DATA_KEYS, TRANSLATIONS } from "../config/app";
+import { APP_DATA_KEYS, REQUEST_OBJ } from "../config/app";
 import {Loader} from '../containers/Loader';
  
 const columns = [
@@ -38,43 +38,62 @@ export const Stbs: FunctionComponent = (props) => {
                 setData(stbs)
                 return
               }
-            } else { 
+            } else {
               setData(props.datasource)
               return
             }
          }
   );
+
   useEffect(() => {
-    if (props.datasource !==false) {
-      console.log("STBS upgrade datasource")
+    if (props.datasource !==false) { 
+      if ( props.datasource.length == 1 ) { 
+        console.log("STBS upgrade datasource", props.datasource[0]['ipcell1'])
+        openPlayer(props.datasource[0]['ipcell1'])
+      }
       setData(props.datasource)
-    }
-  });
+    } 
+  },[props.datasource]);
 
   const [loading, setLoading] = useState(false)
 
   let apiCall = async (url) =>
   {
-      let response = await fetch(url,{
-                mode: 'same-origin', // no-cors, *cors, same-origin
-                cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                    'Accept': '*/*',
-                    'Accept-Language': 'en-GB,en;q=0.5',
-                    'Accept-Encoding': 'gzip, deflate',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Connection': 'keep-alive',
-                    'Pragma': 'no-cache',
-                    'Cache-Control': 'no-cache'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            });
+      let response = await fetch(url, REQUEST_OBJ);
       let data = await response.text()
       return {
           response,
           data
       }
+  }
+
+  let openPlayer = async function(ip) {
+    setLoading(true)
+    let status_code_success = 200
+    let start = await apiCall(`http://${ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
+    let stateResp = await apiCall(`http://${ip}:8800/GET%20MEDIA%20STATUS%20tv`)
+    if (stateResp && stateResp.response.status == status_code_success)
+    {
+        let data = stateResp.data.split(/\d\d\d\s/) 
+        let status = parseInt(stateResp.data.substr(0,3))
+        let config = data[1] && JSON.parse(data[1]) 
+        if ( status == status_code_success && config ) {
+          await apiCall(`http://${ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
+          props.navigation.navigate(PAGES.STB.name, 
+            {
+              stream: `http://${ip}:8802/${config.progNo}.ts`
+            })
+        } else {
+          props.navigation.navigate(PAGES.HOME.name, {
+              toastMessage: TRANSLATIONS.en.home.streamError
+          })
+        }
+    } else {
+      props.navigation.navigate(PAGES.HOME.name, {
+          toastMessage: TRANSLATIONS.en.home.streamError
+      })
+    }
+    setLoading(false)
   }
 
   let renderCell = function (cellData, col) {
@@ -96,35 +115,11 @@ export const Stbs: FunctionComponent = (props) => {
         case 'Player': 
             data =  
             <View style={{ flexDirection: 'row' }}> 
-              <TouchableOpacity  onPress={ async ()=>{
-                      setLoading(true)
-                      let status_code_success = 200
-                       let start = await apiCall(`http://${cellData}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
-                      let stateResp = await apiCall(`http://${cellData}:8800/GET%20MEDIA%20STATUS%20tv`)
-                      if (stateResp && stateResp.response.status == status_code_success)
-                      {
-                          let data = stateResp.data.split(/\d\d\d\s/) 
-                          let status = parseInt(stateResp.data.substr(0,3))
-                          let config = data[1] && JSON.parse(data[1]) 
-                          if ( status == status_code_success && config ) {
-                            await apiCall(`http://${cellData}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
-                            props.navigation.navigate(PAGES.STB.name, 
-                              {
-                                stream: `http://${cellData}:8802/${config.progNo}.ts`
-                              })
-                          } else {
-                            props.navigation.navigate(PAGES.HOME.name, {
-                                toastMessage: TRANSLATIONS.en.home.streamError
-                            })
-                          }
-                      } else {
-                        props.navigation.navigate(PAGES.HOME.name, {
-                            toastMessage: TRANSLATIONS.en.home.streamError
-                        })
-                      }
-                      setLoading(false)
-              }}>
-              <Icon name={PAGES.STB.icon} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
+              <TouchableOpacity  onPress={ async ()=>{ openPlayer(cellData); }}>
+              <Icon 
+              name={PAGES.STB.icon}
+              raised={false} reverse={false}
+              iconStyle={[styles.icon_med]} />
               </ TouchableOpacity >
             </View>
             break;  

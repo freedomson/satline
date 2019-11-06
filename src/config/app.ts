@@ -15,6 +15,23 @@ export const APP_ANDROID_MAP = 'https://www.google.com/maps/place/'
 export const AUTHORIZATION_DENIED = -1;
 export const AUTHORIZATION_GRANTED = 1;
 
+export const REQUEST_HEADEARS = {
+            'Accept': '*/*',
+            'Accept-Language': 'en-GB,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Connection': 'keep-alive',
+            'Pragma': 'no-cache',
+            'Cache-Control': 'no-cache'
+          }
+
+export const REQUEST_OBJ = {
+                mode: 'same-origin', // no-cors, *cors, same-origin
+                cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: REQUEST_HEADEARS,
+            }
+
 // TODO: proper translations
 // Only status page is using this
 export const TRANSLATIONS = {
@@ -34,8 +51,8 @@ export const TRANSLATIONS = {
             dailyEvents: `Today's events!`,
             noDailyEvents: `Enjoy your free time.`,
             loading: `Loading...`,
-            noBoxFound: `No device found!`,
-            boxFound: `Device found!`,
+            noBoxFound: `No device found!\nTry again!`,
+            boxFound: `Devices found!`,
             streamError: `Error loading stream!\nPlease try again.`
         },
         template : {

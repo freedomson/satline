@@ -40,12 +40,13 @@ export const Router: FunctionComponent = (props) => {
         // Error retrieving data
          console.log("setting router def",defaultRouter)
          setRouter(defaultRouter)
-         return
       }
+      return defaultRouter
     }
-  
+
     const [router, setRouter] = useState(async ()=>{
-        let r = await getRouter() 
+        let r = await getRouter()
+        props.scanner.scan(r.join("."))
         return r
     }); 
 

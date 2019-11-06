@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {ToastAndroid, AsyncStorage } from "react-native";
-import { APP_DATA_KEYS, TRANSLATIONS } from "../config/app";
+import { APP_DATA_KEYS, TRANSLATIONS, REQUEST_OBJ } from "../config/app";
 var sip = require ('shift8-ip-func');
 var ipaddr = require('ipaddr.js');
 import DeviceInfo from 'react-native-device-info';
@@ -44,13 +44,14 @@ export let useScanner = () => {
         setScanner(scanner)
         if (!stbin.length) {
             ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
-        } else {
-            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.boxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
         }
         AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
     }
 
     async function getDeviceNetworkStatus(ip) {
+        //  stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
+        //  updateStbs(stbs,"onload")  
+        //  return;
         try { 
             console.log("Router IP",ip,mac)
             let local_netmask = "255.255.255.0";
@@ -119,29 +120,13 @@ export let useScanner = () => {
     async function apiCall(url)
     { 
         try {
-            let response = await fetch(url,{
-                mode: 'same-origin', // no-cors, *cors, same-origin
-                cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                    'Accept': '*/*',
-                    'Accept-Language': 'en-GB,en;q=0.5',
-                    'Accept-Encoding': 'gzip, deflate',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Connection': 'keep-alive',
-                    'Pragma': 'no-cache',
-                    'Cache-Control': 'no-cache'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-            });
+            let response = await fetch(url,REQUEST_OBJ);
             let data = await response.text()
-            // console.log(url,data)
             return {
                 response,
                 data
             } 
         } catch (error) {
-            // console.log(error)
             return false;
         }
     }

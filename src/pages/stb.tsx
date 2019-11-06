@@ -3,11 +3,10 @@ import React from 'react'
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
 import { View, StatusBar, Dimensions } from "react-native";
-import { PAGES } from "../config/app";
+import { REQUEST_HEADEARS, PAGES, TRANSLATIONS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
-import { TRANSLATIONS } from "../config/app";
  export default class Stb extends React.Component { 
 
   constructor(props) {
@@ -22,20 +21,19 @@ import { TRANSLATIONS } from "../config/app";
         height: dimensions.height,
         width: dimensions.width
       };
-    Orientation.unlockAllOrientations()
+      Orientation.lockToLandscapeLeft()
   }
-
   calculateDimensions() {
     let { height, width } = Dimensions.get("window");
     let finalHeight = height-StatusBar.currentHeight
     return {"width":width,"height":finalHeight}
   }
-
   onBuffer(e) { 
     console.log("onBuffer",e)  
-  }  
+  }
   onError(e) { 
     console.log("onError",e)
+    this.playing = false
     this.setState({loader: false})
     if (this.props.navigation.isFocused())
       this.props.navigation.navigate(PAGES.HOME.name, {
@@ -57,7 +55,7 @@ import { TRANSLATIONS } from "../config/app";
     console.log("onReady",e) 
   } 
   componentWillReceiveProps(props){
-    Orientation.unlockAllOrientations()
+    Orientation.lockToLandscapeLeft()
     console.log("componentWillReceiveProps",props)
     this.playing = false
     this.setState({
@@ -66,7 +64,6 @@ import { TRANSLATIONS } from "../config/app";
       })
   }
   componentDidMount(props){
-    Orientation.unlockAllOrientations()
     console.log("componentDidMount",props)
     this.setState({
       loader: true,
@@ -77,20 +74,21 @@ import { TRANSLATIONS } from "../config/app";
   componentWillUpdate(props){
     console.log("componentWillUpdate",props)
   }
-  componentDidUpdate(props){ 
+  componentDidUpdate(props){
+    // Orientation.lockToLandscapeLeft() 
     console.log("componentDidUpdate",props)
-  }
+  } 
   shouldComponentUpdate(props){
     console.log("shouldComponentUpdate",props) 
     return true
   } 
-  componentWillUnmount(props) {
-    Orientation.removeOrientationListener(this._reconfigureScreen);
-    console.log("componentWillUnmount",props)
-  }
+  // componentWillUnmount(props) {
+  //   Orientation.removeOrientationListener(this._reconfigureScreen);
+  //   console.log("componentWillUnmount",props)
+  // }
 
   _reconfigureScreen(orientation){
-      setTimeout((() => {
+      //  setTimeout((() => {
          if (this.props.navigation.isFocused()) {
             let dimensions = this.calculateDimensions()
             this.setState({
@@ -102,7 +100,7 @@ import { TRANSLATIONS } from "../config/app";
             });
             console.log("_reconfigureScreen")  
          } 
-      }).bind(this), 250); 
+      //  }).bind(this), 250); 
   }
 
   render() { 
@@ -112,16 +110,7 @@ import { TRANSLATIONS } from "../config/app";
       <Loader loader={this.state.loader}></Loader> 
       <Video source={{
           uri: this.state.stream,
-          headers: {
-            'Accept': '*/*',
-            'Accept-Language': 'en-GB,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Connection': 'keep-alive',
-            'Pragma': 'no-cache',
-            'Cache-Control': 'no-cache'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          }
+          headers: REQUEST_HEADEARS
         }}   // Can be a URL or a local file.
         ref={this.playerref}
         controls={true}
