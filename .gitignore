@@ -10,3 +10,5 @@ android/build/
 .vscode/
 report*
 yarn-error.log
+private_modules/react-native-admob/android/build
+private_modules/react-native-video/android/build
