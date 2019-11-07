@@ -9,7 +9,7 @@ export const Loader: FunctionComponent = (props) => {
   return (
      <Spinner
           visible={props.loader} 
-          textContent={TRANSLATIONS.en.home.loading}  
+          textContent={""}  
           textStyle={styles.spinnerTextStyle}
         />) 
 };

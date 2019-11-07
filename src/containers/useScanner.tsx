@@ -102,14 +102,12 @@ export let useScanner = () => {
         };
         xhr.onerror = function (e) { 
             --totalipstoscan
-            console.log(totalipstoscan)
             if ( totalipstoscan == 0 ) {
                 updateStbs(stbs,"onerror") 
             }
         }; 
         xhr.onabort = function (e) { 
             --totalipstoscan
-            console.log(totalipstoscan)
             if ( totalipstoscan == 0 ) {
                 updateStbs(stbs,"onabort") 
             }

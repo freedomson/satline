@@ -11,6 +11,7 @@ import colors from "../config/colors";
 
   constructor(props) {
     super(props);
+    Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.playing = false
@@ -18,10 +19,10 @@ import colors from "../config/colors";
     this.state = { 
         stream: "",
         loader: true,
+        width: dimensions.width,
         height: dimensions.height,
-        width: dimensions.width
-      };
-      Orientation.lockToLandscapeLeft()
+        aspecRatio : dimensions.width/dimensions.height
+    };
   }
   calculateDimensions() {
     let { height, width } = Dimensions.get("window");
@@ -45,7 +46,7 @@ import colors from "../config/colors";
   }
   onLoad(response) {
     console.log("onLoad",response)
-     this.playing = true
+    this.playing = true
     this._reconfigureScreen(null)
   }
   onReadyForDisplay(e) {
@@ -65,53 +66,54 @@ import colors from "../config/colors";
   }
   componentDidMount(props){
     console.log("componentDidMount",props)
+    Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
     this.setState({
       loader: true,
       stream: this.stream
-      })
-    Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
+    })
   }
   componentWillUpdate(props){
     console.log("componentWillUpdate",props)
   }
   componentDidUpdate(props){
-    // Orientation.lockToLandscapeLeft() 
     console.log("componentDidUpdate",props)
   } 
   shouldComponentUpdate(props){
-    console.log("shouldComponentUpdate",props) 
+    console.log("shouldComponentUpdate",props)
+    console.log(this.state.stream,props.navigation.state.params.stream)
     return true
   } 
   // componentWillUnmount(props) {
   //   Orientation.removeOrientationListener(this._reconfigureScreen);
   //   console.log("componentWillUnmount",props)
   // }
-
   _reconfigureScreen(orientation){
-      //  setTimeout((() => {
-         if (this.props.navigation.isFocused()) {
-            let dimensions = this.calculateDimensions()
-            this.setState({
-              width: dimensions.width,
-              height: dimensions.height,
-              stream: this.state.stream, 
-              aspecRatio : dimensions.width/dimensions.height,
-              loader: (!this.playing)
-            });
-            console.log("_reconfigureScreen")  
-         } 
-      //  }).bind(this), 250); 
+    if (this.props.navigation.isFocused()) {
+      let dimensions = this.calculateDimensions()
+      let newState = {
+        stream: this.state.stream,
+        loader: (!this.playing),
+        width: dimensions.width,
+        height: dimensions.height,
+        aspecRatio : dimensions.width/dimensions.height
+      }
+      this.setState(newState);
+      console.log("_reconfigureScreen")
+    }
   }
 
   render() { 
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
     <View style={styles.Page}>
-      <Loader loader={this.state.loader}></Loader> 
-      <Video source={{
+      <Loader loader={this.state.loader}></Loader>
+      <Video source={
+        {
           uri: this.state.stream,
           headers: REQUEST_HEADEARS
-        }}   // Can be a URL or a local file.
+        }
+        // require('../../assets/small.mp4')
+        }   // Can be a URL or a local file.
         ref={this.playerref}
         controls={true}
         playInBackground={true}
