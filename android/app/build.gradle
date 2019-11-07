@@ -98,7 +98,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -108,8 +108,8 @@ android {
         applicationId "com.satline"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "3"
+        versionCode 4
+        versionName "4"
         ndk {
            abiFilters "armeabi-v7a","x86", "arm64-v8a", "x86_64"
         }
