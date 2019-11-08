@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Modal, Text, TouchableHighlight, View, Alert, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
-class Control extends Component {
+
+class Controls extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            visible: true
+            visible: false
         };
     }
 
@@ -34,14 +35,6 @@ class Control extends Component {
 
   render() {  
     return (
-        <Modal
-          animationType="slide" 
-          transparent={true}
-          visible={true}
-          onRequestClose={() => {
-             Alert.alert('Modal has been closed.');
-            //this.setModalVisible(this.state.visible,false);
-          }}>
           <View>
               <TouchableHighlight
                 style={[{
@@ -56,36 +49,26 @@ class Control extends Component {
 
               <TouchableHighlight
                 style={[styles.next,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0}
-                underlayColor={"transparent"} 
                 onPress={() => {
                   Alert.alert('Change channel');
                 }}>
-                <Icon name={"navigate-next"} raised={true} reverse={true} />
-              </TouchableHighlight>
+                <Icon name={"navigate-next"} raised={true} reverse={true}} />
+              </TouchableHighlight> 
  
                <TouchableHighlight
                 style={[styles.previous,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0}
-                underlayColor={"transparent"} 
-                onPress={(() => {
-                  // Alert.alert('Change channel');
-                  console.log(this.props)
-                  this.props.stbStateFunction({ 
-                      ...this.props.stbState, 
-                      stream: require('../../assets/small.mp4')
-                  }) 
-                }).bind(this)}>
-                <Icon name={"navigate-before"} raised={true} reverse={true} />
+                onPress={() => {
+                  Alert.alert('Change channel');
+                }}>
+                <Icon name={"navigate-before"} raised={true} reverse={true}} />
               </TouchableHighlight>
 
           </View>
-        </Modal>
     );
   }
 }
 
-export default Control;
+export default Controls;
  
 
 const styles = StyleSheet.create({

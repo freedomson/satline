@@ -11,14 +11,14 @@ import Control from '../containers/Control';
  export default class Stb extends React.Component { 
 
   constructor(props) {
-    super(props);
+    super(props); 
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
-    this.stream = ""// this.props.navigation.getParam('stream', 'no-data-stream')
+    this.stream = require('../../assets/medium.mp4') // this.props.navigation.getParam('stream', 'no-data-stream')
     this.playing = false
     let dimensions = this.calculateDimensions()
     this.state = { 
-        stream: "",
+        stream: require('../../assets/medium.mp4'),
         loader: true,
         width: dimensions.width,
         height: dimensions.height,
@@ -61,8 +61,8 @@ import Control from '../containers/Control';
     console.log("componentWillReceiveProps",props)
     this.playing = false
     this.setState({
-      loader: true,
-      stream: "ddf"//props.navigation.getParam('stream', '')
+      loader: true, 
+      stream: require('../../assets/medium.mp4') //props.navigation.getParam('stream', '')
       })
   }
   componentDidMount(props){
@@ -70,7 +70,7 @@ import Control from '../containers/Control';
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
     this.setState({
       loader: true,
-      stream: "eee"//this.stream
+      stream: this.stream
     })
   }
   componentWillUpdate(props){
@@ -113,7 +113,7 @@ import Control from '../containers/Control';
         //   uri: this.state.stream,
         //   headers: REQUEST_HEADEARS
         // }
-        require('../../assets/small.mp4')
+        this.state.stream
         }   // Can be a URL or a local file.
         ref={this.playerref}
         controls={false}
@@ -147,7 +147,7 @@ import Control from '../containers/Control';
         }}
         //poster={Assets.loader}
          />
-        <Control stbState={this.state}/>
+        <Control stbState={this.state} stbStateFunction={this.setState.bind(this)}/>
       </View>
     )}
   }
