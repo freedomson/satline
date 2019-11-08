@@ -7,13 +7,14 @@ import { REQUEST_HEADEARS, PAGES, TRANSLATIONS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
+import Control from '../containers/Control';
  export default class Stb extends React.Component { 
 
   constructor(props) {
     super(props);
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
-    this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
+    this.stream = ""// this.props.navigation.getParam('stream', 'no-data-stream')
     this.playing = false
     let dimensions = this.calculateDimensions()
     this.state = { 
@@ -61,7 +62,7 @@ import colors from "../config/colors";
     this.playing = false
     this.setState({
       loader: true,
-      stream: props.navigation.getParam('stream', '')
+      stream: "ddf"//props.navigation.getParam('stream', '')
       })
   }
   componentDidMount(props){
@@ -69,18 +70,17 @@ import colors from "../config/colors";
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
     this.setState({
       loader: true,
-      stream: this.stream
+      stream: "eee"//this.stream
     })
   }
   componentWillUpdate(props){
-    console.log("componentWillUpdate",props)
+    console.log("componentWillUpdate","noop")
   }
   componentDidUpdate(props){
-    console.log("componentDidUpdate",props)
+    console.log("componentDidUpdate","noop")
   } 
   shouldComponentUpdate(props){
-    console.log("shouldComponentUpdate",props)
-    console.log(this.state.stream,props.navigation.state.params.stream)
+    console.log("shouldComponentUpdate","noop return true")
     return true
   } 
   // componentWillUnmount(props) {
@@ -107,15 +107,16 @@ import colors from "../config/colors";
     return (
     <View style={styles.Page}>
       <Loader loader={this.state.loader}></Loader>
+
       <Video source={
-        {
-          uri: this.state.stream,
-          headers: REQUEST_HEADEARS
-        }
-        // require('../../assets/small.mp4')
+        // {
+        //   uri: this.state.stream,
+        //   headers: REQUEST_HEADEARS
+        // }
+        require('../../assets/small.mp4')
         }   // Can be a URL or a local file.
         ref={this.playerref}
-        controls={true}
+        controls={false}
         playInBackground={true}
         playWhenInactive={true}
         fullscreenAutorotate={false} 
@@ -146,6 +147,7 @@ import colors from "../config/colors";
         }}
         //poster={Assets.loader}
          />
+        <Control stbState={this.state}/>
       </View>
     )}
   }

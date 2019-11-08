@@ -1,17 +1,4 @@
-# Paseeo Android App
+# Satlite Android App
 
-Download APK satline from Android Strore at:
-
- ![](paseeo.png)
-
-https://play.google.com/store/apps/details?id=com.satline
-
-## Install project 
-
-
-1. Clone project
-2. Cd into project
-3. ```$ yarn install```
-4. ```$ react-native run-android```
-
-License MIT
+# Icons
+https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
