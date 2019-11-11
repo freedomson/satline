@@ -15,6 +15,8 @@ import Control from '../containers/Control';
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
     this.stream = require('../../assets/medium.mp4') // this.props.navigation.getParam('stream', 'no-data-stream')
+    this.ip = "192.168.1.102"//this.props.navigation.getParam('ip', 'no-data-stream')
+    this.config = {}//this.props.navigation.getParam('config', 'no-data-stream')
     this.playing = false
     let dimensions = this.calculateDimensions()
     this.state = { 
@@ -147,7 +149,11 @@ import Control from '../containers/Control';
         }}
         //poster={Assets.loader}
          />
-        <Control stbState={this.state} stbStateFunction={this.setState.bind(this)}/>
+        <Control 
+          ip = {this.ip}
+          config = {this.config}
+          stbState={this.state} 
+          stbStateFunction={this.setState.bind(this)} />
       </View>
     )}
   }

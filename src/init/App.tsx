@@ -63,7 +63,7 @@ const DrawerNavigator = createDrawerNavigator({
   }
 });
 const StackNavigator = createStackNavigator({
-  [PAGES.STB.name]: {
+  [PAGES.HOME.name]: { 
     screen: DrawerNavigator,
     path: `${PAGES.HOME.name.toLocaleLowerCase}/:name`,
     navigationOptions: ({ navigation }) => ({

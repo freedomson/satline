@@ -49,12 +49,12 @@ export const Stbs: FunctionComponent = (props) => {
     if (props.datasource !==false) { 
       // TODO: Activate when controls available
       // if ( props.datasource.length == 1 ) { 
-      //   console.log("STBS upgrade datasource", props.datasource[0]['ipcell1'])
+      //   console.log("STBS upgrade datasource", props.datasource[0]['ipcell1']) 
       //   openPlayer(props.datasource[0]['ipcell1'])
       // }
       setData(props.datasource)
     } 
-  },[props.datasource]);
+  },[props.datasource]); 
 
   const [loading, setLoading] = useState(false)
 
@@ -82,7 +82,9 @@ export const Stbs: FunctionComponent = (props) => {
           await apiCall(`http://${ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
           props.navigation.navigate(PAGES.STB.name, 
             {
-              stream: `http://${ip}:8802/${config.progNo}.ts`
+              stream: `http://${ip}:8802/${config.progNo}.ts`,
+              ip: ip,
+              config: config
             })
         } else {
           props.navigation.navigate(PAGES.HOME.name, {

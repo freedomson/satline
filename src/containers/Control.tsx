@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Modal, Text, TouchableHighlight, View, Alert, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
+import Api from '../server/Api';
 class Control extends Component {
 
     constructor(props) {
@@ -69,8 +70,8 @@ class Control extends Component {
                 activeOpacity={0}
                 underlayColor={"transparent"} 
                 onPress={(() => {
-                  // Alert.alert('Change channel');
                   console.log(this.props)
+                  Api.playNext(this.props.ip)
                   this.props.stbStateFunction({ 
                       ...this.props.stbState, 
                       stream: require('../../assets/small.mp4')

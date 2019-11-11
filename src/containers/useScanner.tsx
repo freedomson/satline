@@ -4,6 +4,7 @@ import { APP_DATA_KEYS, TRANSLATIONS, REQUEST_OBJ } from "../config/app";
 var sip = require ('shift8-ip-func');
 var ipaddr = require('ipaddr.js');
 import DeviceInfo from 'react-native-device-info';
+import Api from '../server/Api';
 
 export let useScanner = () => {
 
@@ -85,11 +86,9 @@ export let useScanner = () => {
         xhr.responseType = "text";
         xhr.onload = async function(e) {
             console.log("Detected STB", ip, totalipstoscan) 
-            let rpass = Math.floor((Math.random() * 100000) + 1)
-            await apiCall(`http://${ip}:8800/backup/REGISTER?id=${mac}&password=${rpass}`)
-            await apiCall(`http://${ip}:8800/PASSWORD%20%20`) 
-            await apiCall(`http://${ip}:8800/POST%20MOBILE%20MODEL%20%20SATLITE%20000-000`)
-            stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
+            let pass = Math.floor((Math.random() * 100000) + 1)
+            let channels = await Api.bootstrap(ip, mac, pass)
+            stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip, "channels":channels})
             --totalipstoscan
             if ( totalipstoscan == 0 ) updateStbs(stbs,"onload")
 
@@ -100,7 +99,7 @@ export let useScanner = () => {
                 updateStbs(stbs,"ontimeout") 
             }
         };
-        xhr.onerror = function (e) { 
+        xhr.onerror = function (e) {  
             --totalipstoscan
             if ( totalipstoscan == 0 ) {
                 updateStbs(stbs,"onerror") 
