@@ -46,7 +46,7 @@ export const Router: FunctionComponent = (props) => {
 
     const [router, setRouter] = useState(async ()=>{
         let r = await getRouter()
-        props.scanner.scan(r.join("."))
+        // props.scanner.scan(r.join("."))
         return r
     }); 
 

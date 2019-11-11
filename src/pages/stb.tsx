@@ -14,17 +14,18 @@ import Control from '../containers/Control';
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
-    this.stream = require('../../assets/medium.mp4') // this.props.navigation.getParam('stream', 'no-data-stream')
-    this.ip = "192.168.1.102"//this.props.navigation.getParam('ip', 'no-data-stream')
-    this.config = {}//this.props.navigation.getParam('config', 'no-data-stream')
+    this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
+    this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
+    this.channels = this.props.navigation.getParam('channels', 'no-data-stream')
     this.playing = false
     let dimensions = this.calculateDimensions()
     this.state = { 
-        stream: require('../../assets/medium.mp4'),
+        stream: "",
         loader: true,
         width: dimensions.width,
         height: dimensions.height,
-        aspecRatio : dimensions.width/dimensions.height
+        aspecRatio : dimensions.width/dimensions.height,
+        channels: this.channels
     };
   }
   calculateDimensions() {
@@ -38,11 +39,11 @@ import Control from '../containers/Control';
   onError(e) { 
     console.log("onError",e)
     this.playing = false
-    this.setState({loader: false})
-    if (this.props.navigation.isFocused())
-      this.props.navigation.navigate(PAGES.HOME.name, {
-          toastMessage: TRANSLATIONS.en.home.streamError
-      })
+    this.setState({loader: false, channels: this.state.channels})
+    // if (this.props.navigation.isFocused())
+    //   this.props.navigation.navigate(PAGES.HOME.name, {
+    //       toastMessage: TRANSLATIONS.en.home.streamError
+    //   })
   }
   onLoadStart(e) {
     console.log("onLoadStart",e)
@@ -64,7 +65,8 @@ import Control from '../containers/Control';
     this.playing = false
     this.setState({
       loader: true, 
-      stream: require('../../assets/medium.mp4') //props.navigation.getParam('stream', '')
+      stream: props.navigation.getParam('stream', ''),
+      channels: props.navigation.getParam('channels', '')
       })
   }
   componentDidMount(props){
@@ -72,7 +74,8 @@ import Control from '../containers/Control';
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
     this.setState({
       loader: true,
-      stream: this.stream
+      stream: this.stream,
+      channels: this.channels
     })
   }
   componentWillUpdate(props){
@@ -97,7 +100,8 @@ import Control from '../containers/Control';
         loader: (!this.playing),
         width: dimensions.width,
         height: dimensions.height,
-        aspecRatio : dimensions.width/dimensions.height
+        aspecRatio : dimensions.width/dimensions.height,
+        channels: this.state.channels
       }
       this.setState(newState);
       console.log("_reconfigureScreen")
@@ -111,11 +115,11 @@ import Control from '../containers/Control';
       <Loader loader={this.state.loader}></Loader>
 
       <Video source={
-        // {
-        //   uri: this.state.stream,
-        //   headers: REQUEST_HEADEARS
-        // }
-        this.state.stream
+        {
+          uri: this.state.stream,
+          headers: REQUEST_HEADEARS
+        }
+        // this.state.stream
         }   // Can be a URL or a local file.
         ref={this.playerref}
         controls={false}
@@ -151,7 +155,8 @@ import Control from '../containers/Control';
          />
         <Control 
           ip = {this.ip}
-          config = {this.config}
+          navigation = {this.props.navigation}
+          channels = {this.channels}
           stbState={this.state} 
           stbStateFunction={this.setState.bind(this)} />
       </View>

@@ -2,15 +2,19 @@ import React, {Component} from 'react';
 import {Modal, Text, TouchableHighlight, View, Alert, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
 import Api from '../server/Api';
+import { PAGES } from "../config/app"; 
 class Control extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            visible: true
+            visible: false
         };
     }
 
+  componentWillReceiveProps(props){
+    console.log("CONTROL_componentWillReceiveProps",this.props)
+  }
 
   setModalVisible(visible) {
     console.log("CONTROL_setModalVisible",this.state)
@@ -36,12 +40,13 @@ class Control extends Component {
   render() {  
     return (
         <Modal
-          animationType="slide" 
+          animationType="none" 
           transparent={true}
           visible={true}
           onRequestClose={() => {
-             Alert.alert('Modal has been closed.');
-            //this.setModalVisible(this.state.visible,false);
+            // Alert.alert('Modal has been closed.');
+            // this.setModalVisible(false);
+            this.props.navigation.goBack();
           }}>
           <View>
               <TouchableHighlight
@@ -69,13 +74,31 @@ class Control extends Component {
                 style={[styles.previous,{opacity: this.state.visible ? 1 : 0}]} 
                 activeOpacity={0}
                 underlayColor={"transparent"} 
-                onPress={(() => {
-                  console.log(this.props)
-                  Api.playNext(this.props.ip)
-                  this.props.stbStateFunction({ 
-                      ...this.props.stbState, 
-                      stream: require('../../assets/small.mp4')
-                  }) 
+                onPress={(async () => {
+                  let setup = await Api.playPrevious(this.props.ip,this.props.channels)
+                  console.log(setup)
+                  // this.props.stbStateFunction({ 
+                  //     ...this.props.stbState, 
+                  //     stream: "",
+                  //     channels: setup.channels
+                  // }) 
+                  this.props.navigation.navigate(PAGES.STB.name, 
+                  {
+                    stream: "",
+                    ip: this.props.ip,
+                    channels: setup.channels
+                  })
+                  setTimeout((() => {
+                    this.props.navigation.navigate(PAGES.STB.name, 
+                    {
+                      stream: setup.url,
+                      ip: this.props.ip,
+                      channels: setup.channels
+                    })
+                  }).bind(this), 250);
+
+
+
                 }).bind(this)}>
                 <Icon name={"navigate-before"} raised={true} reverse={true} />
               </TouchableHighlight>

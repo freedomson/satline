@@ -6,7 +6,9 @@ let endpoints = {
     status      : "http://{ip}:8800/GET%20MEDIA%20STATUS%20tv",
     control     : "http://{ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D",
     list        : "http://{ip}:8800/GET%20NOWORNEXT%20EPG%20%7B%20%22count%22%20%3A%20%22100000%22%2C%20%22group%22%20%3A%206%2C%20%22epgNowOrNextFlag%22%20%3A%20%221%22%2C%20%22startIdx%22%20%3A%20%220%22%20%7D",
-    start       : "http://{ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D"
+    start       : "http://{ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D",
+    set         : "http://{ip}:8800/SET%20CHANNEL%20{progNo}%201%200%20",
+    play        : "http://{ip}:8802/{progNo}.ts"
 }
 
 let wsos = {
@@ -31,7 +33,7 @@ let wsos = {
 
         let config = await wsos.processStatus(ip) 
         let listResp = await wsos.apiCall(list) 
-        let channels = await wsos.processChannels(listResp, config) 
+        let channels = await wsos.processChannels(listResp, config, ip) 
 
         return channels;
        
@@ -51,7 +53,7 @@ let wsos = {
         }
         return config;
     },
-    processChannels: async (response, config)=> { 
+    processChannels: async (response, config, ip)=> { 
         var currentIdx;
         var currentChannel;
         var channels;
@@ -71,31 +73,33 @@ let wsos = {
         return {
             currentIdx,
             currentChannel,
-            channels
+            channels,
+            ip
         }
     },
-    playNext : async (ip) => {
-        var nextURL = endpoints.next.replace(/\{ip\}/g, ip); 
-        var statusURL = endpoints.status.replace(/\{ip\}/g, ip);
-        var controlURL = endpoints.status.replace(/\{ip\}/g, ip);
-        let nextResp = await wsos.apiCall(nextURL)
-        let statusResp = await wsos.apiCall(statusURL)
-        let stateResp = await wsos.apiCall(statusURL)
-        console.log(nextResp, stateResp,statusResp)
-        if (stateResp && stateResp.response.status == 200)
-        { 
-            let data = stateResp.data.split(/\d\d\d\s/) 
-            let status = parseInt(stateResp.data.substr(0,3))
-            let config = data[1] && JSON.parse(data[1]) 
-            if ( status == 200 && config ) {
-            console.log("CHANGING")
-            await wsos.apiCall(`http://${ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
-            return `http://${ip}:8802/${config.progNo}.ts`
-            }
-        }
-        return false
-    }
+    playPrevious : async (ip,channels) => {
 
+        try {
+            let nidx = channels.currentIdx-1
+            console.log("API_playPrevious",ip,channels,nidx)
+            channels.currentIdx = nidx
+            channels.currentChannel = channels.channels[channels.currentIdx]
+            var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
+            await wsos.apiCall(setURL)
+            let config = await wsos.processStatus(ip)
+            if (config)
+            { 
+                var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
+                return {
+                    url,
+                    channels
+                }
+            }
+
+        } catch (error) {
+            return false
+        }
+    }
 }
 
 export default wsos;

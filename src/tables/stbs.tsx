@@ -5,7 +5,7 @@ import Table from 'react-native-simple-table'
 import { DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
 import { PAGES } from "../config/app"; 
-import { APP_DATA_KEYS, REQUEST_OBJ } from "../config/app";
+import { APP_DATA_KEYS, REQUEST_OBJ, TRANSLATIONS} from "../config/app";
 import {Loader} from '../containers/Loader';
  
 const columns = [
@@ -21,7 +21,7 @@ const columns = [
   },
   {
     title: 'Player',
-    dataIndex: 'ipcell3',
+    dataIndex: 'channels',
     width: DEVICE_WIDTH/3
   }
 ];
@@ -68,23 +68,23 @@ export const Stbs: FunctionComponent = (props) => {
       }
   }
 
-  let openPlayer = async function(ip) {
+  let openPlayer = async function(channels) {
     setLoading(true)
     let status_code_success = 200
-    let start = await apiCall(`http://${ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
-    let stateResp = await apiCall(`http://${ip}:8800/GET%20MEDIA%20STATUS%20tv`)
+    let start = await apiCall(`http://${channels.ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D`)
+    let stateResp = await apiCall(`http://${channels.ip}:8800/GET%20MEDIA%20STATUS%20tv`)
     if (stateResp && stateResp.response.status == status_code_success)
     {
         let data = stateResp.data.split(/\d\d\d\s/) 
         let status = parseInt(stateResp.data.substr(0,3))
         let config = data[1] && JSON.parse(data[1]) 
         if ( status == status_code_success && config ) {
-          await apiCall(`http://${ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
+          await apiCall(`http://${channels.ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
           props.navigation.navigate(PAGES.STB.name, 
             {
-              stream: `http://${ip}:8802/${config.progNo}.ts`,
-              ip: ip,
-              config: config
+              stream: `http://${channels.ip}:8802/${config.progNo}.ts`,
+              ip: channels.ip,
+              channels: channels
             })
         } else {
           props.navigation.navigate(PAGES.HOME.name, {
