@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Text, TouchableHighlight, View, ToastAndroid, StyleSheet} from 'react-native';
+import {Modal, Text, TouchableHighlight, View, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
 import Api from '../server/Api';
 import { PAGES } from "../config/app"; 
@@ -37,26 +37,33 @@ class Control extends Component {
     return true
   }
 
-  loadStream(setup){
+  async loadStream(next){
+
+      this.props.stbStateFunction({ 
+          ...this.props.stbState, 
+          stream: "",
+          loader: true
+      })
+
+      let setup = await Api.jump(this.props.ip,this.props.channels,next)
+
       console.log("Control",setup)
-      timeout= 500
-      // setTimeout(() => {
-      //   this.props.navigation.navigate(PAGES.STB.name, 
-      //   {
-      //     stream: "",
-      //     ip: this.props.ip,
-      //     channels: setup.channels
-      //   })
-      // }, 0);
+
       setTimeout(() => {
-        this.props.navigation.navigate(PAGES.STB.name, 
+       this.props.navigation.navigate(
+        PAGES.STB.name, 
         {
           stream: setup.url,
           ip: this.props.ip,
           channels: setup.channels
         })
-      }, timeout);
+      }, 3000);
 
+      // this.props.stbStateFunction({ 
+      //     ...this.props.stbState, 
+      //     stream: setup.url,
+      //     loader: true
+      // })
   }
 
   render() {  
@@ -73,6 +80,9 @@ class Control extends Component {
           <View>
               <TouchableHighlight
                 style={[{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
                     width:this.props.stbState.width,
                     height:this.props.stbState.height}]} 
                 onPress={() => {
@@ -84,34 +94,22 @@ class Control extends Component {
 
                <TouchableHighlight
                 style={[styles.next,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0}
+                activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.props.stbStateFunction({ 
-                      ...this.props.stbState, 
-                      stream: "",
-                      loader: true
-                  }) 
-                  let setup = await Api.playNext(this.props.ip,this.props.channels)
-                  this.loadStream(setup)
+                  this.loadStream(true)
                 }).bind(this)}>
-                <Icon name={"navigate-next"} raised={true} reverse={true} />
+                <Icon name={"navigate-next"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
  
                <TouchableHighlight
                 style={[styles.previous,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0}
+                activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.props.stbStateFunction({ 
-                      ...this.props.stbState, 
-                      stream: "",
-                      loader: true
-                  }) 
-                  let setup = await Api.playPrevious(this.props.ip,this.props.channels)
-                  this.loadStream(setup)
+                  this.loadStream(false)
                 }).bind(this)}>
-                <Icon name={"navigate-before"} raised={true} reverse={true} />
+                <Icon name={"navigate-before"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
 
           </View>
@@ -124,14 +122,25 @@ export default Control;
  
 
 const styles = StyleSheet.create({
+  icon: {
+      color: "white",
+      backgroundColor: "black",
+      borderRadius: 100,
+      fontSize: 25,
+      fontWeight:"900"
+  },
   next: {
       position: "absolute",
       top: 0,
-      left: 60
+      left: 60,
+      backgroundColor: "#FFF",
+      borderRadius: 100
   },
   previous: {
       position: "absolute",
       top: 0,
-      left: 0
+      left: 0,
+      backgroundColor: "#FFF",
+      borderRadius: 100
   }
 });

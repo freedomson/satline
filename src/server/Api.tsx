@@ -78,43 +78,27 @@ let wsos = {
             ip
         }
     },
-    playNext : async (ip,channels) => {
+    jump : async (ip,channels,next=false) => {
 
         try {
-            let nidx = channels.currentIdx+1
+            let nidx = next ? channels.currentIdx+1 : channels.currentIdx-1
             channels.currentIdx = nidx
-            console.log("lookingchannel",nidx,channels.channels)
-            channels.currentChannel = channels.channels[channels.currentIdx]
-            var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
-            await wsos.apiCall(setURL)
-            let config = await wsos.processStatus(ip)
-            if (config)
-            { 
-                var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
-                return {
-                    url,
-                    channels
-                }
+            try {
+                channels.currentChannel = channels.channels[channels.currentIdx]
+            } catch (error) {
+                console.log(error)
+                channels.currentChannel = next ? channels.channels[0] : channels.channels[channels.channels.length]
             }
-
-        } catch (error) {
-            console.log("API ERROR playNext",error)
-            return false
-        }
-    },
-    playPrevious : async (ip,channels) => {
-
-        try {
-            let nidx = channels.currentIdx-1
-            channels.currentIdx = nidx
-            console.log("lookingchannel",nidx,channels.channels)
             channels.currentChannel = channels.channels[channels.currentIdx]
             var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
+
             await wsos.apiCall(setURL)
             let config = await wsos.processStatus(ip)
+            
             if (config)
             { 
                 var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
+
                 return {
                     url,
                     channels

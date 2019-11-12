@@ -39,7 +39,14 @@ import Control from '../containers/Control';
   onError(e) { 
     console.log("onError",e)
     this.playing = false
-    this.setState({loader: false, channels: this.state.channels})
+    this.setState({
+      loader: false, 
+      channels: this.state.channels
+      })
+    ToastAndroid.showWithGravity(
+      TRANSLATIONS.en.home.streamError, 
+      ToastAndroid.LONG, 
+      ToastAndroid.CENTER)
     // if (this.props.navigation.isFocused())
     //   this.props.navigation.navigate(PAGES.HOME.name, {
     //       toastMessage: TRANSLATIONS.en.home.streamError
@@ -108,27 +115,35 @@ import Control from '../containers/Control';
     }
   }
 
+  getLoader(){
+    if (this.state.stream){
+      try {
+        ToastAndroid.showWithGravity(
+          this.channels.currentChannel.channelName, 
+          ToastAndroid.LONG, 
+          ToastAndroid.CENTER)
+      } catch (error) {
+        console.log("STB no channelName")
+      }
+      return {
+          uri: this.state.stream,
+          headers: REQUEST_HEADEARS
+        }
+    } else {   
+      return {
+          uri: "",
+          headers: REQUEST_HEADEARS
+        }
+    }
+  }
+
   render() { 
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
-    try {
-      ToastAndroid.showWithGravity(
-        this.channels.currentChannel.channelName, 
-        ToastAndroid.LONG, 
-        ToastAndroid.CENTER)
-    } catch (error) {
-      console.log("STB no channelName")
-    }
     return (
     <View style={styles.Page}>
       <Loader loader={this.state.loader}></Loader>
 
-      <Video source={
-        {
-          uri: this.state.stream,
-          headers: REQUEST_HEADEARS
-        }
-        // this.state.stream
-        }   // Can be a URL or a local file.
+      <Video source={this.getLoader()}   // Can be a URL or a local file.
         ref={this.playerref}
         controls={false}
         playInBackground={true}
@@ -164,7 +179,7 @@ import Control from '../containers/Control';
         <Control 
           ip = {this.ip}
           navigation = {this.props.navigation}
-          channels = {this.channels}
+          channels = {this.state.channels}
           stbState={this.state} 
           stbStateFunction={this.setState.bind(this)} />
       </View>
