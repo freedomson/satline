@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Modal, Text, TouchableHighlight, View, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
-import Api from '../server/Api';
-import { PAGES } from "../config/app"; 
 class Control extends Component {
 
     constructor(props) {
@@ -12,9 +10,9 @@ class Control extends Component {
         };
     }
 
-  componentWillReceiveProps(props){
-    console.log("CONTROL_componentWillReceiveProps",this.props)
-  }
+  // componentWillReceiveProps(props){
+  //   console.log("CONTROL_componentWillReceiveProps",this.props)
+  // }
 
   setModalVisible(visible) {
     console.log("CONTROL_setModalVisible",this.state)
@@ -23,48 +21,19 @@ class Control extends Component {
         }); 
   }
  
-  componentDidMount(props){
-    console.log("CONTROL_componentDidMount",this.state)
-  }
-  componentWillUpdate(props){
-    console.log("CONTROL_componentWillUpdate",this.state)
-  }
-  componentDidUpdate(props){
-    console.log("CONTROL_componentDidUpdate",this.state)
-  }  
-  shouldComponentUpdate(props){
-    console.log("CONTROL_shouldComponentUpdate",this.state)
-    return true
-  }
-
-  async loadStream(next){
-
-      this.props.stbStateFunction({ 
-          ...this.props.stbState, 
-          stream: "",
-          loader: true
-      })
-
-      let setup = await Api.jump(this.props.ip,this.props.channels,next)
-
-      console.log("Control",setup)
-
-      setTimeout(() => {
-       this.props.navigation.navigate(
-        PAGES.STB.name, 
-        {
-          stream: setup.url,
-          ip: this.props.ip,
-          channels: setup.channels
-        })
-      }, 3000);
-
-      // this.props.stbStateFunction({ 
-      //     ...this.props.stbState, 
-      //     stream: setup.url,
-      //     loader: true
-      // })
-  }
+  // componentDidMount(props){
+  //   console.log("CONTROL_componentDidMount",this.state)
+  // }
+  // componentWillUpdate(props){
+  //   console.log("CONTROL_componentWillUpdate",this.state)
+  // }
+  // componentDidUpdate(props){
+  //   console.log("CONTROL_componentDidUpdate",this.state)
+  // }  
+  // shouldComponentUpdate(props){
+  //   console.log("CONTROL_shouldComponentUpdate",this.state)
+  //   return true
+  // }
 
   render() {  
     return (
@@ -97,7 +66,7 @@ class Control extends Component {
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.loadStream(true)
+                  this.props.cb(true)
                 }).bind(this)}>
                 <Icon name={"navigate-next"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
@@ -107,7 +76,7 @@ class Control extends Component {
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.loadStream(false)
+                  this.props.cb(false)
                 }).bind(this)}>
                 <Icon name={"navigate-before"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>

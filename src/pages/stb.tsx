@@ -8,6 +8,7 @@ import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
 import Control from '../containers/Control';
+import Api from '../server/Api';
  export default class Stb extends React.Component { 
 
   constructor(props) {
@@ -47,10 +48,6 @@ import Control from '../containers/Control';
       TRANSLATIONS.en.home.streamError, 
       ToastAndroid.LONG, 
       ToastAndroid.CENTER)
-    // if (this.props.navigation.isFocused())
-    //   this.props.navigation.navigate(PAGES.HOME.name, {
-    //       toastMessage: TRANSLATIONS.en.home.streamError
-    //   })
   }
   onLoadStart(e) {
     console.log("onLoadStart",e)
@@ -84,6 +81,7 @@ import Control from '../containers/Control';
       stream: this.stream,
       channels: this.channels
     })
+    this.showChannelName()
   }
   componentWillUpdate(props){
     console.log("componentWillUpdate","noop")
@@ -117,14 +115,6 @@ import Control from '../containers/Control';
 
   getLoader(){
     if (this.state.stream){
-      try {
-        ToastAndroid.showWithGravity(
-          this.channels.currentChannel.channelName, 
-          ToastAndroid.LONG, 
-          ToastAndroid.CENTER)
-      } catch (error) {
-        console.log("STB no channelName")
-      }
       return {
           uri: this.state.stream,
           headers: REQUEST_HEADEARS
@@ -134,6 +124,49 @@ import Control from '../containers/Control';
           uri: "",
           headers: REQUEST_HEADEARS
         }
+    }
+  }
+
+  async reloadPlayer(next){
+
+    this.showChannelName()
+
+    this.setState({ 
+        ...this.state, 
+        stream: "",
+        loader: true
+    })
+
+    let setup = await Api.jump(this.ip,this.channels,next)
+
+    console.log("Control",setup)
+
+    setTimeout(() => {
+      this.setState({ 
+          ...this.state, 
+          stream: setup.url,
+          loader: true,
+          ip: this.ip,
+          channels: setup.channels
+      })
+      // this.props.navigation.navigate(
+      // PAGES.STB.name, 
+      // {
+      //   stream: setup.url,
+      //   ip: this.ip,
+      //   channels: setup.channels
+      // })
+    }, 5000);
+  }
+
+  showChannelName(){
+    try {
+      ToastAndroid.showWithGravity(
+        this.channels.currentChannel.channelName, 
+        ToastAndroid.LONG, 
+        ToastAndroid.CENTER)
+    } catch (error) {
+      console.log("STB no channelName")
     }
   }
 
@@ -176,12 +209,7 @@ import Control from '../containers/Control';
         }}
         //poster={Assets.loader}
          />
-        <Control 
-          ip = {this.ip}
-          navigation = {this.props.navigation}
-          channels = {this.state.channels}
-          stbState={this.state} 
-          stbStateFunction={this.setState.bind(this)} />
+        <Control stbState={this.state} cb={this.reloadPlayer.bind(this)} />
       </View>
     )}
   }

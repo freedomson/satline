@@ -51,9 +51,9 @@ export const TRANSLATIONS = {
             dailyEvents: `Today's events!`,
             noDailyEvents: `Enjoy your free time.`,
             loading: `Loading...`,
-            noBoxFound: `No device found!\nTry again!`,
+            noBoxFound: `No device found!`,
             boxFound: `Devices found!`,
-            streamError: `Error loading stream!\nPlease try again.`
+            streamError: `Error loading stream!`
         },
         template : {
             label_whatsapp: "Whatsapp",
