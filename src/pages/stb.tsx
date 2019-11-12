@@ -2,7 +2,7 @@
 import React from 'react'
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
-import { View, StatusBar, Dimensions } from "react-native";
+import { View, StatusBar, Dimensions, ToastAndroid } from "react-native";
 import { REQUEST_HEADEARS, PAGES, TRANSLATIONS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
@@ -110,6 +110,14 @@ import Control from '../containers/Control';
 
   render() { 
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
+    try {
+      ToastAndroid.showWithGravity(
+        this.channels.currentChannel.channelName, 
+        ToastAndroid.LONG, 
+        ToastAndroid.CENTER)
+    } catch (error) {
+      console.log("STB no channelName")
+    }
     return (
     <View style={styles.Page}>
       <Loader loader={this.state.loader}></Loader>

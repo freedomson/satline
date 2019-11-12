@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Text, TouchableHighlight, View, Alert, StyleSheet} from 'react-native';
+import {Modal, Text, TouchableHighlight, View, ToastAndroid, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
 import Api from '../server/Api';
 import { PAGES } from "../config/app"; 
@@ -35,7 +35,29 @@ class Control extends Component {
   shouldComponentUpdate(props){
     console.log("CONTROL_shouldComponentUpdate",this.state)
     return true
-  } 
+  }
+
+  loadStream(setup){
+      console.log("Control",setup)
+      timeout= 500
+      // setTimeout(() => {
+      //   this.props.navigation.navigate(PAGES.STB.name, 
+      //   {
+      //     stream: "",
+      //     ip: this.props.ip,
+      //     channels: setup.channels
+      //   })
+      // }, 0);
+      setTimeout(() => {
+        this.props.navigation.navigate(PAGES.STB.name, 
+        {
+          stream: setup.url,
+          ip: this.props.ip,
+          channels: setup.channels
+        })
+      }, timeout);
+
+  }
 
   render() {  
     return (
@@ -60,13 +82,19 @@ class Control extends Component {
                     <Text></Text>
               </TouchableHighlight>
 
-              <TouchableHighlight
+               <TouchableHighlight
                 style={[styles.next,{opacity: this.state.visible ? 1 : 0}]} 
                 activeOpacity={0}
                 underlayColor={"transparent"} 
-                onPress={() => {
-                  Alert.alert('Change channel');
-                }}>
+                onPress={(async () => {
+                  this.props.stbStateFunction({ 
+                      ...this.props.stbState, 
+                      stream: "",
+                      loader: true
+                  }) 
+                  let setup = await Api.playNext(this.props.ip,this.props.channels)
+                  this.loadStream(setup)
+                }).bind(this)}>
                 <Icon name={"navigate-next"} raised={true} reverse={true} />
               </TouchableHighlight>
  
@@ -75,30 +103,13 @@ class Control extends Component {
                 activeOpacity={0}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
+                  this.props.stbStateFunction({ 
+                      ...this.props.stbState, 
+                      stream: "",
+                      loader: true
+                  }) 
                   let setup = await Api.playPrevious(this.props.ip,this.props.channels)
-                  console.log(setup)
-                  // this.props.stbStateFunction({ 
-                  //     ...this.props.stbState, 
-                  //     stream: "",
-                  //     channels: setup.channels
-                  // }) 
-                  this.props.navigation.navigate(PAGES.STB.name, 
-                  {
-                    stream: "",
-                    ip: this.props.ip,
-                    channels: setup.channels
-                  })
-                  setTimeout((() => {
-                    this.props.navigation.navigate(PAGES.STB.name, 
-                    {
-                      stream: setup.url,
-                      ip: this.props.ip,
-                      channels: setup.channels
-                    })
-                  }).bind(this), 250);
-
-
-
+                  this.loadStream(setup)
                 }).bind(this)}>
                 <Icon name={"navigate-before"} raised={true} reverse={true} />
               </TouchableHighlight>
