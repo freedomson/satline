@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Modal, Text, TouchableHighlight, View, StyleSheet} from 'react-native';
 import { Icon } from "react-native-elements";
+import { REQUEST_HEADEARS, PAGES, TRANSLATIONS } from "../config/app";
+import { NavigationActions, StackActions } from 'react-navigation';
 class Control extends Component {
 
     constructor(props) {
@@ -44,9 +46,11 @@ class Control extends Component {
           transparent={true}
           visible={true}
           onRequestClose={() => {
-            // Alert.alert('Modal has been closed.');
-            // this.setModalVisible(false);
-            this.props.navigation.goBack();
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: PAGES.HOME.name })],
+            });
+            this.props.navigation.dispatch(resetAction);
           }}>
           <View>
               <TouchableHighlight

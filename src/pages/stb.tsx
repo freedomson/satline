@@ -225,6 +225,7 @@ import Api from '../server/Api';
         //poster={Assets.loader}
          />
         <Control 
+          navigation={this.props.navigation}
           playing={this.playing}
           stbState={this.state} 
           cb={this.reloadPlayer.bind(this)} />
