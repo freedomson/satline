@@ -78,10 +78,10 @@ let wsos = {
             ip
         }
     },
-    jump : async (ip,channels,next=false) => {
+    jump : async (ip,channels,add=false) => {
 
         try {
-            let nidx = next ? channels.currentIdx+1 : channels.currentIdx-1
+            let nidx = channels.currentIdx+add
             channels.currentIdx = nidx
             try {
                 channels.currentChannel = channels.channels[channels.currentIdx]

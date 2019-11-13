@@ -15,6 +15,8 @@ import Api from '../server/Api';
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
+    this.retires = 10
+    this.retrycounter = 0
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
     this.channels = this.props.navigation.getParam('channels', 'no-data-stream')
@@ -37,31 +39,38 @@ import Api from '../server/Api';
   onBuffer(e) { 
     console.log("onBuffer",e)  
   }
-  onError(e) { 
+
+  async onError(e) { 
     console.log("onError",e)
     this.playing = false
-    this.setState({
-      loader: false, 
-      channels: this.state.channels
-      })
-    ToastAndroid.showWithGravity(
-      TRANSLATIONS.en.home.streamError, 
-      ToastAndroid.LONG, 
-      ToastAndroid.CENTER)
+    let retrystate = await this.reloadPlayer(0)
+    if (retrystate===false){
+      this.setState({
+        loader: false, 
+        channels: this.state.channels
+        })
+      ToastAndroid.showWithGravity(
+        TRANSLATIONS.en.home.streamError, 
+        ToastAndroid.LONG, 
+        ToastAndroid.CENTER)
+    }
+
   }
+
   onLoadStart(e) {
-    console.log("onLoadStart",e)
+    console.log("onLoadStart noop",e)
   }
   onLoad(response) {
     console.log("onLoad",response)
     this.playing = true
+    
     this._reconfigureScreen(null)
   }
   onReadyForDisplay(e) {
-    console.log("onReadyForDisplay",e)  
+    console.log("onReadyForDisplay noop",e)  
   }
   onReady(e) {
-    console.log("onReady",e) 
+    console.log("onReady noop",e) 
   } 
   componentWillReceiveProps(props){
     Orientation.lockToLandscapeLeft()
@@ -129,6 +138,11 @@ import Api from '../server/Api';
 
   async reloadPlayer(next){
 
+    if (this.retrycounter == this.retries ){
+      this.retrycounter = 0
+      return false
+    }
+
     this.showChannelName()
 
     this.setState({ 
@@ -141,7 +155,7 @@ import Api from '../server/Api';
 
     console.log("Control",setup)
 
-    setTimeout(() => {
+    setTimeout((() => {
       this.setState({ 
           ...this.state, 
           stream: setup.url,
@@ -149,14 +163,11 @@ import Api from '../server/Api';
           ip: this.ip,
           channels: setup.channels
       })
-      // this.props.navigation.navigate(
-      // PAGES.STB.name, 
-      // {
-      //   stream: setup.url,
-      //   ip: this.ip,
-      //   channels: setup.channels
-      // })
-    }, 5000);
+    }).bind(this), 250);
+
+    this.retrycounter++
+    return true
+
   }
 
   showChannelName(){

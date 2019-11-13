@@ -6,7 +6,7 @@ class Control extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: true
         };
     }
 
@@ -66,7 +66,7 @@ class Control extends Component {
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.props.cb(true)
+                  this.props.cb(1)
                 }).bind(this)}>
                 <Icon name={"navigate-next"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
@@ -76,9 +76,19 @@ class Control extends Component {
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.props.cb(false)
+                  this.props.cb(-1)
                 }).bind(this)}>
                 <Icon name={"navigate-before"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
+              </TouchableHighlight>
+
+               <TouchableHighlight
+                style={[styles.refresh,{opacity: this.state.visible ? 1 : 0}]} 
+                activeOpacity={0.5}
+                underlayColor={"transparent"} 
+                onPress={(async () => {
+                  this.props.cb(0)
+                }).bind(this)}>
+                <Icon name={"refresh"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
 
           </View>
@@ -97,6 +107,13 @@ const styles = StyleSheet.create({
       borderRadius: 100,
       fontSize: 25,
       fontWeight:"900"
+  },
+  refresh: {
+      position: "absolute",
+      top: 0,
+      left: 120,
+      backgroundColor: "#FFF",
+      borderRadius: 100
   },
   next: {
       position: "absolute",
