@@ -1,4 +1,5 @@
-import { REQUEST_OBJ } from "../config/app";
+import { REQUEST_OBJ, APP_DATA_KEYS } from "../config/app";
+import { AsyncStorage } from "react-native";
 let endpoints = {
     register    : "http://{ip}:8800/backup/REGISTER?id={mac}&password={pass}",
     password    : "http://{ip}:8800/PASSWORD%20%20",
@@ -99,6 +100,8 @@ let wsos = {
             { 
                 var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
 
+                wsos.saveState(ip, channels)
+
                 return {
                     url,
                     channels
@@ -112,7 +115,16 @@ let wsos = {
                 channels: channels
             }
         }
+    },
+
+    saveState : async (ip, channels) => {
+        let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
+        let stbs = JSON.parse(data) 
+        currentIdx = stbs.findIndex(item => item.ipcell1 == ip);
+        stbs[currentIdx].channels = channels
+        AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbs));
     }
+
 }
 
 export default wsos;
