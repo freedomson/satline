@@ -15,7 +15,7 @@ import Api from '../server/Api';
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
-    this.retires = 10
+    this.retries = 5
     this.retrycounter = 0
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
@@ -58,13 +58,14 @@ import Api from '../server/Api';
   }
 
   onLoadStart(e) {
-    console.log("onLoadStart noop",e)
+    console.log("onLoadStart",e)
   }
   onLoad(response) {
     console.log("onLoad",response)
     this.playing = true
-    
+    this.showChannelName()
     this._reconfigureScreen(null)
+    this.retrycounter = 0
   }
   onReadyForDisplay(e) {
     console.log("onReadyForDisplay noop",e)  
@@ -90,7 +91,6 @@ import Api from '../server/Api';
       stream: this.stream,
       channels: this.channels
     })
-    this.showChannelName()
   }
   componentWillUpdate(props){
     console.log("componentWillUpdate","noop")
@@ -138,12 +138,12 @@ import Api from '../server/Api';
 
   async reloadPlayer(next){
 
-    if (this.retrycounter == this.retries ){
+    console.log(`STB current try is ${this.retrycounter} of ${this.retries}`)
+    if (this.retrycounter >= this.retries ){
       this.retrycounter = 0
+      console.log("STB resetting counter on reloadPlayer")
       return false
     }
-
-    this.showChannelName()
 
     this.setState({ 
         ...this.state, 
@@ -155,15 +155,19 @@ import Api from '../server/Api';
 
     console.log("Control",setup)
 
-    setTimeout((() => {
-      this.setState({ 
-          ...this.state, 
-          stream: setup.url,
-          loader: true,
-          ip: this.ip,
-          channels: setup.channels
-      })
-    }).bind(this), 250);
+    try {
+      setTimeout((() => {
+        this.setState({ 
+            ...this.state, 
+            stream: setup.url,
+            loader: true,
+            ip: this.ip,
+            channels: setup.channels
+        })
+      }).bind(this), 250);
+    } catch (error) {
+      console.log("STB error reading channel")
+    }
 
     this.retrycounter++
     return true
@@ -220,7 +224,10 @@ import Api from '../server/Api';
         }}
         //poster={Assets.loader}
          />
-        <Control stbState={this.state} cb={this.reloadPlayer.bind(this)} />
+        <Control 
+          playing={this.playing}
+          stbState={this.state} 
+          cb={this.reloadPlayer.bind(this)} />
       </View>
     )}
   }

@@ -6,7 +6,7 @@ class Control extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: true
+            visible: false
         };
     }
 
@@ -16,6 +16,7 @@ class Control extends Component {
 
   setModalVisible(visible) {
     console.log("CONTROL_setModalVisible",this.state)
+    if (this.props.stbState.loader) return;
     this.setState({
             visible: visible
         }); 
@@ -30,15 +31,16 @@ class Control extends Component {
   // componentDidUpdate(props){
   //   console.log("CONTROL_componentDidUpdate",this.state)
   // }  
-  // shouldComponentUpdate(props){
-  //   console.log("CONTROL_shouldComponentUpdate",this.state)
-  //   return true
-  // }
+  shouldComponentUpdate(props){
+    if (!props.playing) return false;
+    console.log("CONTROL_shouldComponentUpdate")
+    return true
+  }
 
   render() {  
     return (
         <Modal
-          animationType="none" 
+          animationType="fade" 
           transparent={true}
           visible={true}
           onRequestClose={() => {
