@@ -26,7 +26,7 @@ let wsos = {
         var register = endpoints.register.replace(/\{ip\}/g, ip).replace(/\{mac\}/g, mac).replace(/\{pass\}/g, pass);
         var password = endpoints.password.replace(/\{ip\}/g, ip);
         var model = endpoints.model.replace(/\{ip\}/g, ip);
-        var list = endpoints.listPT.replace(/\{ip\}/g, ip);
+        var list = endpoints.list.replace(/\{ip\}/g, ip);
 
         let registerResp = await wsos.apiCall(register)  
         let passwordResp = await wsos.apiCall(password)
