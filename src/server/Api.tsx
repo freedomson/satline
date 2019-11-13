@@ -107,7 +107,10 @@ let wsos = {
 
         } catch (error) {
             console.log("API ERROR playPrevious",error)
-            return false
+            return {
+                url: "",
+                channels: channels
+            }
         }
     }
 }

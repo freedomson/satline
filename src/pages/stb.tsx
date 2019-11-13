@@ -152,6 +152,12 @@ import Api from '../server/Api';
     })
 
     let setup = await Api.jump(this.ip,this.channels,next)
+    if (!setup.url){
+      console.log("STB error url not found")
+      this.retrycounter++
+      this.onError(e)
+      return true;
+    }
 
     console.log("Control",setup)
 
