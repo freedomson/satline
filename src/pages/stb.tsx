@@ -155,7 +155,7 @@ import Api from '../server/Api';
     if (!setup.url){
       console.log("STB error url not found")
       this.retrycounter++
-      this.onError(e)
+      this.onError(false)
       return true;
     }
 
@@ -230,7 +230,8 @@ import Api from '../server/Api';
         }}
         //poster={Assets.loader}
          />
-        <Control 
+        <Control
+          currentChannel={this.channels.currentChannel}
           navigation={this.props.navigation}
           playing={this.playing}
           stbState={this.state} 

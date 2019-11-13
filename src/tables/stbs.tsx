@@ -10,17 +10,17 @@ import {Loader} from '../containers/Loader';
  
 const columns = [
   { 
-    title: 'Box IP address',
+    title: 'IP',
     dataIndex: 'ipcell1',
     width: DEVICE_WIDTH/3
   },
   { 
-    title: 'Portal',
+    title: 'PORTAL',
     dataIndex: 'ipcell2',
     width: DEVICE_WIDTH/3
   },
   {
-    title: 'Player',
+    title: 'PLAYER',
     dataIndex: 'channels',
     width: DEVICE_WIDTH/3
   }
@@ -104,25 +104,30 @@ export const Stbs: FunctionComponent = (props) => {
     let data = <Text>{cellData}</Text> 
     switch (col.title) {
 
-        case 'Portal': 
+        case 'PORTAL': 
             data =   
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={ async ()=>{
                   Linking.openURL(`http://${cellData}:8800`); 
               }}>
-              <Icon name={"web"} raised={false} reverse={false} iconStyle={[styles.icon_med]} />
+              <Icon
+                name={"web"}
+                raised={true}
+                reverse={true}
+                iconStyle={[styles.icon_med]} />
               </ TouchableOpacity >
             </View>
             break;  
 
-        case 'Player': 
+        case 'PLAYER': 
             data =  
             <View style={{ flexDirection: 'row' }}> 
               <TouchableOpacity  onPress={ async ()=>{ openPlayer(cellData); }}>
               <Icon 
-              name={PAGES.STB.icon}
-              raised={false} reverse={false}
-              iconStyle={[styles.icon_med]} />
+                name={PAGES.STB.icon}
+                raised={true} 
+                reverse={true}
+                iconStyle={[styles.icon_med]} />
               </ TouchableOpacity >
             </View>
             break;  

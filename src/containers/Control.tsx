@@ -52,7 +52,8 @@ class Control extends Component {
             });
             this.props.navigation.dispatch(resetAction);
           }}>
-          <View>
+          <View
+            style={[styles.common]} >
               <TouchableHighlight
                 style={[{
                     position: "absolute",
@@ -68,7 +69,7 @@ class Control extends Component {
               </TouchableHighlight>
 
                <TouchableHighlight
-                style={[styles.next,{opacity: this.state.visible ? 1 : 0}]} 
+                style={[styles.common,styles.next,{opacity: this.state.visible ? 1 : 0}]} 
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
@@ -78,7 +79,7 @@ class Control extends Component {
               </TouchableHighlight>
  
                <TouchableHighlight
-                style={[styles.previous,{opacity: this.state.visible ? 1 : 0}]} 
+                style={[styles.common,styles.previous,{opacity: this.state.visible ? 1 : 0}]} 
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
@@ -88,7 +89,7 @@ class Control extends Component {
               </TouchableHighlight>
 
                <TouchableHighlight
-                style={[styles.refresh,{opacity: this.state.visible ? 1 : 0}]} 
+                style={[styles.common,styles.refresh,{opacity: this.state.visible ? 1 : 0}]} 
                 activeOpacity={0.5}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
@@ -96,6 +97,12 @@ class Control extends Component {
                 }).bind(this)}>
                 <Icon name={"refresh"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
+
+              <Text
+              style={[styles.common,styles.channelName,{
+                width:this.props.stbState.width,
+                opacity: this.state.visible ? 1 : 0}]} 
+              >{this.props.currentChannel.channelName}</Text>
 
           </View>
         </Modal>
@@ -110,29 +117,46 @@ const styles = StyleSheet.create({
   icon: {
       color: "white",
       backgroundColor: "black",
-      borderRadius: 100,
       fontSize: 25,
       fontWeight:"900"
   },
-  refresh: {
+  common: {
+    opacity: 1
+  },
+  channelName: {
       position: "absolute",
       top: 0,
-      left: 120,
+      color: "white",
+      backgroundColor: "black",
+      borderRadius: 0,
+      padding: 5,
+      fontSize: 25,
+      fontWeight:"900",
+      borderBottomWidth: 2,
+      borderBottomColor: "#FFF"
+  },
+  refresh: {
+      position: "absolute",
+      top: 45,
+      left: 130,
       backgroundColor: "#FFF",
-      borderRadius: 100
+      borderBottomLeftRadius: 100,
+      borderBottomRightRadius: 100,
   },
   next: {
       position: "absolute",
-      top: 0,
-      left: 60,
+      top: 45,
+      left: 70,
       backgroundColor: "#FFF",
-      borderRadius: 100
+      borderBottomLeftRadius: 100,
+      borderBottomRightRadius: 100,
   },
   previous: {
       position: "absolute",
-      top: 0,
-      left: 0,
+      top: 45,
+      left: 10,
       backgroundColor: "#FFF",
-      borderRadius: 100
+      borderBottomLeftRadius: 100,
+      borderBottomRightRadius: 100,
   }
 });
