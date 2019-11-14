@@ -7,15 +7,16 @@ import { REQUEST_HEADEARS, PAGES, TRANSLATIONS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
-import Control from '../containers/Control';
+import Control from './Control';
 import Api from '../server/Api';
+import { NavigationActions, StackActions } from 'react-navigation';
  export default class Stb extends React.Component { 
 
   constructor(props) {
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.playerref = React.createRef() 
-    this.retries = 5
+    this.retries = 3
     this.retrycounter = 0
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
@@ -45,16 +46,17 @@ import Api from '../server/Api';
     this.playing = false
     let retrystate = await this.reloadPlayer(0)
     if (retrystate===false){
-      this.setState({
-        loader: false, 
-        channels: this.state.channels
-        })
-      ToastAndroid.showWithGravity(
-        TRANSLATIONS.en.home.streamError, 
-        ToastAndroid.LONG, 
-        ToastAndroid.CENTER)
+      let retrystate = await this.reloadPlayer(1)
+      // this.setState({
+      //   loader: false, 
+      //   channels: this.state.channels
+      //   })
+      // ToastAndroid.showWithGravity(
+      //   TRANSLATIONS.en.home.streamError, 
+      //   ToastAndroid.LONG, 
+      //   ToastAndroid.CENTER)
+      // this.goBack()
     }
-
   }
 
   onLoadStart(e) {
@@ -136,9 +138,10 @@ import Api from '../server/Api';
     }
   }
 
-  async reloadPlayer(next){
+  async reloadPlayer(add){
 
-    console.log(`STB current try is ${this.retrycounter} of ${this.retries}`)
+    console.log(`****\nSTB current try is ${this.retrycounter} of ${this.retries}\n****`)
+
     if (this.retrycounter >= this.retries ){
       this.retrycounter = 0
       console.log("STB resetting counter on reloadPlayer")
@@ -151,8 +154,8 @@ import Api from '../server/Api';
         loader: true
     })
 
-    let setup = await Api.jump(this.ip,this.channels,next)
-    if (!setup.url){
+    let setup = await Api.jump(this.ip,this.channels,add)
+    if (!setup || !setup.url){
       console.log("STB error url not found")
       this.retrycounter++
       this.onError(false)
@@ -189,6 +192,14 @@ import Api from '../server/Api';
     } catch (error) {
       console.log("STB no channelName")
     }
+  }
+
+  goBack(){
+    const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: PAGES.HOME.name })],
+    });
+    this.props.navigation.dispatch(resetAction);
   }
 
   render() { 
@@ -231,6 +242,7 @@ import Api from '../server/Api';
         //poster={Assets.loader}
          />
         <Control
+          goBack={this.goBack.bind(this)}
           currentChannel={this.channels.currentChannel}
           navigation={this.props.navigation}
           playing={this.playing}

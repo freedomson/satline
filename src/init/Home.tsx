@@ -22,12 +22,6 @@ export const Home: FunctionComponent = (props) => {
     console.log('[SMSC][HOME] WillFocus'); // callback message
     Orientation.lockToPortrait()
   }
- 
-  let toastMessage = props.navigation.getParam('toastMessage', '')
-  if (toastMessage&& !scanner.scanning) {
-    ToastAndroid.showWithGravity(toastMessage, ToastAndroid.LONG, ToastAndroid.CENTER)
-    props.navigation.state.params.toastMessage = '' 
-  }
 
   let bannerError = function(args){
     console.log("Banner error!",args)
