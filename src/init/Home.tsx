@@ -23,10 +23,6 @@ export const Home: FunctionComponent = (props) => {
     Orientation.lockToPortrait()
   }
 
-  let bannerError = function(args){
-    console.log("Banner error!",args)
-  }
-
   return ( 
       <ImageBackground
         source={require("../../assets/coverbox.jpg")}

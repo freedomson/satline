@@ -94,30 +94,28 @@ let wsos = {
             channels.currentChannel = channels.channels[channels.currentIdx ]
         }
 
-        console.log("API currentChannel JUMP", add, channels.channels[0])
+        console.log("API currentChannel JUMP"
+            , add
+            , channels.currentIdx
+            , channels.currentChannel.channelName)
 
         var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
-
         await wsos.apiCall(setURL)
+
         let config = await wsos.processStatus(ip)
-        
-        if (config)
+
+        if (config && !config.msg)
         { 
-
-            // // Channel as issues bypass rescursive
-            // if (config.msg) {
-            //     console.log("API Bypassing bad channel...")
-            //     return false
-            // }
-
             var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
-
             wsos.saveState(ip, channels)
-
             return {
                 url,
                 channels
             }
+        } else {
+            // Channel as issues bypass rescursive
+            console.log("API Bypassing bad channel...",add,(add===0)?1:add)
+            return await wsos.jump(ip,channels,(add===0)?1:add)
         }
     },
 

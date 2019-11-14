@@ -16,7 +16,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.timeoutInterval = false
-    this.timeoutIntervals = 15
+    this.timeoutIntervals = 30
     this.timeoutIntervalsCounter = 0
     this.playerref = React.createRef() 
     this.retries = 3
@@ -73,6 +73,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         ToastAndroid.LONG, 
         ToastAndroid.CENTER)
       clearInterval(this.timeoutInterval);
+      this.timeoutIntervalsCounter = this.retrycounter = 0
       this.goBack()
     }
   }
@@ -122,10 +123,10 @@ import { NavigationActions, StackActions } from 'react-navigation';
     console.log("shouldComponentUpdate","noop return true")
     return true
   } 
-  // componentWillUnmount(props) {
-  //   Orientation.removeOrientationListener(this._reconfigureScreen);
-  //   console.log("componentWillUnmount",props)
-  // }
+  componentWillUnmount(props) {
+    Orientation.removeOrientationListener(this._reconfigureScreen);
+    console.log("componentWillUnmount",props)
+  }
   _reconfigureScreen(orientation){
     if (this.props.navigation.isFocused()) {
       let dimensions = this.calculateDimensions()
