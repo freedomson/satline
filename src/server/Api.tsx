@@ -79,40 +79,44 @@ let wsos = {
             ip
         }
     },
-    jump : async (ip,channels,add=false) => {
+    jump : async (ip,channels,add=0) => {
 
-        try {
-            let nidx = channels.currentIdx+add
-            channels.currentIdx = nidx
-            try {
-                channels.currentChannel = channels.channels[channels.currentIdx]
-            } catch (error) {
-                console.log(error)
-                channels.currentChannel = next ? channels.channels[0] : channels.channels[channels.channels.length]
+        let nidx = channels.currentIdx+add
+        channels.currentIdx = nidx
+        channels.currentChannel = channels.channels[channels.currentIdx]
+        if (!channels.currentChannel){
+            if ( add === 0 ) {
+                channels.currentIdx = channels.channels.length
             }
-            channels.currentChannel = channels.channels[channels.currentIdx]
-            var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
-
-            await wsos.apiCall(setURL)
-            let config = await wsos.processStatus(ip)
-            
-            if (config)
-            { 
-                var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
-
-                wsos.saveState(ip, channels)
-
-                return {
-                    url,
-                    channels
-                }
+            else {
+                channels.currentIdx = 0
             }
+            channels.currentChannel = channels.channels[channels.currentIdx ]
+        }
 
-        } catch (error) {
-            console.log("API ERROR playPrevious",error)
+        console.log("API currentChannel JUMP", add, channels.channels[0])
+
+        var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
+
+        await wsos.apiCall(setURL)
+        let config = await wsos.processStatus(ip)
+        
+        if (config)
+        { 
+
+            // // Channel as issues bypass rescursive
+            // if (config.msg) {
+            //     console.log("API Bypassing bad channel...")
+            //     return false
+            // }
+
+            var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
+
+            wsos.saveState(ip, channels)
+
             return {
-                url: "",
-                channels: channels
+                url,
+                channels
             }
         }
     },

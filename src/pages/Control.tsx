@@ -63,7 +63,7 @@ class Control extends Component {
 
                <TouchableHighlight
                 style={[styles.common,styles.next,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0.5}
+                activeOpacity={1}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
                   this.props.cb(1)
@@ -73,7 +73,7 @@ class Control extends Component {
  
                <TouchableHighlight
                 style={[styles.common,styles.previous,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0.5}
+                activeOpacity={1}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
                   this.props.cb(-1)
@@ -83,7 +83,7 @@ class Control extends Component {
 
                <TouchableHighlight
                 style={[styles.common,styles.refresh,{opacity: this.state.visible ? 1 : 0}]} 
-                activeOpacity={0.5}
+                activeOpacity={1}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
                   this.props.cb(0)

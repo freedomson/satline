@@ -15,6 +15,9 @@ import { NavigationActions, StackActions } from 'react-navigation';
   constructor(props) {
     super(props); 
     Orientation.lockToLandscapeLeft()
+    this.timeoutInterval = false
+    this.timeoutIntervals = 15
+    this.timeoutIntervalsCounter = 0
     this.playerref = React.createRef() 
     this.retries = 3
     this.retrycounter = 0
@@ -46,29 +49,44 @@ import { NavigationActions, StackActions } from 'react-navigation';
     this.playing = false
     let retrystate = await this.reloadPlayer(0)
     if (retrystate===false){
-      let retrystate = await this.reloadPlayer(1)
-      // this.setState({
-      //   loader: false, 
-      //   channels: this.state.channels
-      //   })
-      // ToastAndroid.showWithGravity(
-      //   TRANSLATIONS.en.home.streamError, 
-      //   ToastAndroid.LONG, 
-      //   ToastAndroid.CENTER)
-      // this.goBack()
+      await this.reloadPlayer(1)
     }
   }
 
   onLoadStart(e) {
     console.log("onLoadStart",e)
+    if (this.timeoutInterval) clearInterval(this.timeoutInterval);
+    this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
   }
+
+  validateTimeout(){
+    this.timeoutIntervalsCounter++
+    console.log("---EVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
+    if (this.timeoutIntervalsCounter == this.timeoutIntervals){
+      console.log("STB Timeout")
+      this.setState({
+        loader: false, 
+        channels: this.state.channels
+        })
+      ToastAndroid.showWithGravity(
+        TRANSLATIONS.en.home.streamError, 
+        ToastAndroid.LONG, 
+        ToastAndroid.CENTER)
+      clearInterval(this.timeoutInterval);
+      this.goBack()
+    }
+  }
+
   onLoad(response) {
     console.log("onLoad",response)
     this.playing = true
     this.showChannelName()
     this._reconfigureScreen(null)
     this.retrycounter = 0
+    this.timeoutIntervalsCounter = 0
+    clearInterval(this.timeoutInterval);
   }
+
   onReadyForDisplay(e) {
     console.log("onReadyForDisplay noop",e)  
   }
@@ -156,27 +174,21 @@ import { NavigationActions, StackActions } from 'react-navigation';
 
     let setup = await Api.jump(this.ip,this.channels,add)
     if (!setup || !setup.url){
-      console.log("STB error url not found")
-      this.retrycounter++
-      this.onError(false)
-      return true;
+      console.log("STB error channel data")
+      return false;
     }
 
-    console.log("Control",setup)
+    console.log("STB reloadPlayer",setup)
 
-    try {
-      setTimeout((() => {
-        this.setState({ 
-            ...this.state, 
-            stream: setup.url,
-            loader: true,
-            ip: this.ip,
-            channels: setup.channels
-        })
-      }).bind(this), 250);
-    } catch (error) {
-      console.log("STB error reading channel")
-    }
+    setTimeout((() => {
+      this.setState({ 
+          ...this.state, 
+          stream: setup.url,
+          loader: true,
+          ip: this.ip,
+          channels: setup.channels
+      })
+    }).bind(this), 250);
 
     this.retrycounter++
     return true
