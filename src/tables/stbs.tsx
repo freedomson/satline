@@ -82,7 +82,6 @@ export const Stbs: FunctionComponent = (props) => {
           await apiCall(`http://${channels.ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
           props.navigation.navigate(PAGES.STB.name, 
             {
-              stream: `http://${channels.ip}:8802/${config.progNo}.ts`,
               ip: channels.ip,
               channels: channels
             })

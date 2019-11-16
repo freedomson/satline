@@ -15,32 +15,33 @@ import { NavigationActions, StackActions } from 'react-navigation';
   constructor(props) {
     super(props); 
     Orientation.lockToLandscapeLeft()
-    this.timeoutInterval = false
-    this.timeoutIntervals = 10
-    this.timeoutIntervalsCounter = 0
-    this.playerref = React.createRef()
-    this.controlref = React.createRef()
-    this.retries = 100
-    this.retrycounter = 0
-    this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
-    this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
-    this.channels = this.props.navigation.getParam('channels', 'no-data-stream')
-    this.playing = false
-    let dimensions = this.getDimensions()
+    this.timeoutInterval                  = false
+    this.timeoutIntervals                 = 30
+    this.timeoutIntervalsCounter          = 0
+    this.playerref                        = React.createRef()
+    this.controlref                       = React.createRef()
+    this.retries                          = 10
+    this.retrycounter                     = 0
+    this.stream                           = ""
+    this.channels                         = this.props.navigation.getParam('channels', 'no-data-stream')
+    this.playing                          = false
+    let dimensions                        = this.getDimensions()
     this.state = { 
-        stream: "",
-        loader: true,
-        width: dimensions.width,
-        height: dimensions.height,
-        aspecRatio : dimensions.width/dimensions.height,
-        channels: this.channels
+        stream      : "",
+        loader      : true,
+        width       : dimensions.width,
+        height      : dimensions.height,
+        aspecRatio  : dimensions.width/dimensions.height,
+        channels    : this.channels
     };
   }
+
   getDimensions() {
     let { height, width } = Dimensions.get("window");
     let finalHeight = height-StatusBar.currentHeight
     return {"width":width,"height":finalHeight}
   }
+
   onBuffer(e) { 
     console.log("onBuffer",e)  
   }
@@ -48,24 +49,29 @@ import { NavigationActions, StackActions } from 'react-navigation';
   async onError(e) { 
     console.log("onError",e)
     this.playing = false
-    let retrystate = await this.reloadPlayer(-1)
-    // if (retrystate===false){
-    //   await this.reloadPlayer(-2)
-    // }
+    await this.reloadPlayer(-1)
   }
 
   onLoadStart(e) {
-    console.log("onLoadStart",e)
-    if (this.timeoutInterval) clearInterval(this.timeoutInterval);
-    this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
+    console.log("onLoadStart","noop")
+  }
+
+  onLoad(response) {
+    console.log("onLoad",response)
+    this.playing = true
+    this.showChannelName()
+    this._reconfigureScreen(null)
+    this.timeout = true
+    clearInterval(this.timeoutInterval);
   }
 
   validateTimeout(){
     this.timeoutIntervalsCounter++
-    console.log("---EVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
+    console.log("---\n\nEVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
     if (this.timeoutIntervalsCounter == this.timeoutIntervals){
-      console.log("STB Timeout")
+      console.log("STB\n\nTimeout")
       this.setState({
+        ...this.state,
         loader: false, 
         channels: this.state.channels
         })
@@ -74,54 +80,37 @@ import { NavigationActions, StackActions } from 'react-navigation';
         ToastAndroid.LONG, 
         ToastAndroid.CENTER)
       clearInterval(this.timeoutInterval);
-      this.timeoutIntervalsCounter = this.retrycounter = 0
-      // this.goBack()
+      this.timeoutIntervalsCounter = 0
+      this.timeout = true
     }
-  }
-
-  onLoad(response) {
-    console.log("onLoad",response)
-    this.playing = true
-    this.showChannelName()
-    this._reconfigureScreen(null)
-    this.retrycounter = 0
-    this.timeoutIntervalsCounter = 0
-    clearInterval(this.timeoutInterval);
   }
 
   onReadyForDisplay(e) {
     console.log("onReadyForDisplay noop",e)  
   }
+
   onReady(e) {
     console.log("onReady noop",e) 
   } 
-  componentWillReceiveProps(props){
+
+  async componentWillReceiveProps(props){
     Orientation.lockToLandscapeLeft()
     console.log("componentWillReceiveProps",props)
-    this.playing = false
-    this.setState({
-      loader: true, 
-      stream: props.navigation.getParam('stream', ''),
-      channels: props.navigation.getParam('channels', '')
-      })
+    this.playing    = false
+    this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
+    this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
+    Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
+    await this.reloadPlayer(this.channels.currentIdx)
   }
-  async componentDidMount(props){
 
+  async componentDidMount(props){
     // let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
     // let stbs = JSON.parse(data) 
-
-    this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
-    this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
-    this.channels = this.props.navigation.getParam('channels', 'no-data-stream')
-
     console.log("STB componentDidMount")
-
+    this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
+    this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
-    this.setState({
-      loader: true,
-      stream: this.stream,
-      channels: this.channels
-    })
+    await this.reloadPlayer(this.channels.currentIdx)
   }
 
   componentWillUpdate(props){
@@ -136,12 +125,14 @@ import { NavigationActions, StackActions } from 'react-navigation';
   } 
   componentWillUnmount(props) {
     Orientation.removeOrientationListener(this._reconfigureScreen);
+    clearInterval(this.timeoutInterval);
     console.log("STB componentWillUnmount",props)
   }
   _reconfigureScreen(orientation){
     if (this.props.navigation.isFocused()) {
       let dimensions = this.getDimensions()
       let newState = {
+        ...this.state,
         stream: this.state.stream,
         loader: (!this.playing),
         width: dimensions.width,
@@ -173,20 +164,20 @@ import { NavigationActions, StackActions } from 'react-navigation';
     switch (idx) {
       // Reload the same
       case -1:
-        idx = this.channels.currentIdx
-        break;
-      case -2:
-        idx = this.channels.currentIdx+1
+        idx = this.state.channels.currentIdx
         break;
       default:
+        this.retrycounter = 0
+        if (this.timeoutInterval) clearInterval(this.timeoutInterval);
+        this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
+        this.timeout = false
         break;
     }
 
     console.log(`****\nSTB current try is ${this.retrycounter} of ${this.retries}\n****`)
 
-    if (this.retrycounter >= this.retries ){
-      this.retrycounter = 0
-      console.log("STB resetting counter on reloadPlayer")
+    if (this.retrycounter >= this.retries || this.timeout ){
+      console.log("STB no more retries or timedout")
       return false
     }
 

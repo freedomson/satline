@@ -10,8 +10,8 @@ class Control extends Component {
             search: "",
             channels: props.channels,
             currentChannelIdx: props.currentChannelIdx,
-            height: props.stbState.width,
-            width: props.stbState.height
+            height: props.stbState.height,
+            width: props.stbState.width
         };
     }
 
@@ -20,7 +20,8 @@ class Control extends Component {
     this.setState({
             ...this.state,
             channels: (this.state.search ? this.searchFilterFunction(this.state.search): this.props.channels),
-            currentChannelIdx: props.currentChannelIdx
+            currentChannelIdx: this.props.currentChannelIdx,
+            width: this.props.getDimensions().width
         }); 
   }
 
@@ -71,14 +72,24 @@ class Control extends Component {
   render() {  
     return (
          <Modal
-          animationType="fade" 
+          animationType="none" 
           transparent={true}
           visible={true}
           onRequestClose={() => {
             this.props.goBack()
           }}>
           <View
-            style={[styles.common]} >
+            style={[styles.common,
+                    {
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    width:this.state.width,
+                    height:this.state.height,
+                    backgroundColor: "transparent"
+                    }
+            ]} >
 
               <TouchableHighlight
                 style={[{
@@ -130,7 +141,7 @@ class Control extends Component {
                 activeOpacity={this.state.currentChannelIdx}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.props.cb(0)
+                  this.props.cb(this.state.currentChannelIdx)
                 }).bind(this)}>
                 <Icon name={"refresh"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
