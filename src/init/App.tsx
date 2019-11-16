@@ -61,11 +61,11 @@ const DrawerNavigator = createDrawerNavigator({
   contentOptions: {
     activeTintColor: '#e91e63',
   }
-});
+}); 
 const StackNavigator = createStackNavigator({
   [PAGES.HOME.name]: { 
     screen: DrawerNavigator,
-    path: `${PAGES.HOME.name.toLocaleLowerCase}/:name`,
+    path: `${PAGES.STB.name.toLocaleLowerCase}/:name`,
     navigationOptions: ({ navigation }) => ({
       title: `${(navigation.state.routes[(navigation.state.index)].key)} . ${APP_TITLE}`.toLocaleLowerCase(),
       headerLeftContainerStyle: styles.NavigatorLeftIcon,

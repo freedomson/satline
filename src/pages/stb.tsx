@@ -2,8 +2,8 @@
 import React from 'react'
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
-import { View, StatusBar, Dimensions, ToastAndroid } from "react-native";
-import { REQUEST_HEADEARS, PAGES, TRANSLATIONS } from "../config/app";
+import { View, StatusBar, Dimensions, ToastAndroid, ActivityIndicator } from "react-native";
+import { REQUEST_HEADEARS, PAGES, TRANSLATIONS, APP_DATA_KEYS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
@@ -16,16 +16,17 @@ import { NavigationActions, StackActions } from 'react-navigation';
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.timeoutInterval = false
-    this.timeoutIntervals = 30
+    this.timeoutIntervals = 10
     this.timeoutIntervalsCounter = 0
-    this.playerref = React.createRef() 
-    this.retries = 3
+    this.playerref = React.createRef()
+    this.controlref = React.createRef()
+    this.retries = 100
     this.retrycounter = 0
     this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
     this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
     this.channels = this.props.navigation.getParam('channels', 'no-data-stream')
     this.playing = false
-    let dimensions = this.calculateDimensions()
+    let dimensions = this.getDimensions()
     this.state = { 
         stream: "",
         loader: true,
@@ -35,7 +36,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         channels: this.channels
     };
   }
-  calculateDimensions() {
+  getDimensions() {
     let { height, width } = Dimensions.get("window");
     let finalHeight = height-StatusBar.currentHeight
     return {"width":width,"height":finalHeight}
@@ -47,10 +48,10 @@ import { NavigationActions, StackActions } from 'react-navigation';
   async onError(e) { 
     console.log("onError",e)
     this.playing = false
-    let retrystate = await this.reloadPlayer(0)
-    if (retrystate===false){
-      await this.reloadPlayer(1)
-    }
+    let retrystate = await this.reloadPlayer(-1)
+    // if (retrystate===false){
+    //   await this.reloadPlayer(-2)
+    // }
   }
 
   onLoadStart(e) {
@@ -74,7 +75,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         ToastAndroid.CENTER)
       clearInterval(this.timeoutInterval);
       this.timeoutIntervalsCounter = this.retrycounter = 0
-      this.goBack()
+      // this.goBack()
     }
   }
 
@@ -104,8 +105,17 @@ import { NavigationActions, StackActions } from 'react-navigation';
       channels: props.navigation.getParam('channels', '')
       })
   }
-  componentDidMount(props){
-    console.log("componentDidMount",props)
+  async componentDidMount(props){
+
+    // let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
+    // let stbs = JSON.parse(data) 
+
+    this.stream = this.props.navigation.getParam('stream', 'no-data-stream')
+    this.ip = this.props.navigation.getParam('ip', 'no-data-stream')
+    this.channels = this.props.navigation.getParam('channels', 'no-data-stream')
+
+    console.log("STB componentDidMount")
+
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
     this.setState({
       loader: true,
@@ -113,23 +123,24 @@ import { NavigationActions, StackActions } from 'react-navigation';
       channels: this.channels
     })
   }
+
   componentWillUpdate(props){
-    console.log("componentWillUpdate","noop")
+    console.log("STB componentWillUpdate", "noop")
   }
   componentDidUpdate(props){
-    console.log("componentDidUpdate","noop")
+    console.log("STB componentDidUpdate","noop")
   } 
   shouldComponentUpdate(props){
-    console.log("shouldComponentUpdate","noop return true")
+    console.log("STB shouldComponentUpdate","noop return true")
     return true
   } 
   componentWillUnmount(props) {
     Orientation.removeOrientationListener(this._reconfigureScreen);
-    console.log("componentWillUnmount",props)
+    console.log("STB componentWillUnmount",props)
   }
   _reconfigureScreen(orientation){
     if (this.props.navigation.isFocused()) {
-      let dimensions = this.calculateDimensions()
+      let dimensions = this.getDimensions()
       let newState = {
         stream: this.state.stream,
         loader: (!this.playing),
@@ -139,7 +150,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         channels: this.state.channels
       }
       this.setState(newState);
-      console.log("_reconfigureScreen")
+      console.log("STB _reconfigureScreen")
     }
   }
 
@@ -157,7 +168,19 @@ import { NavigationActions, StackActions } from 'react-navigation';
     }
   }
 
-  async reloadPlayer(add){
+  async reloadPlayer(idx){
+
+    switch (idx) {
+      // Reload the same
+      case -1:
+        idx = this.channels.currentIdx
+        break;
+      case -2:
+        idx = this.channels.currentIdx+1
+        break;
+      default:
+        break;
+    }
 
     console.log(`****\nSTB current try is ${this.retrycounter} of ${this.retries}\n****`)
 
@@ -173,7 +196,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         loader: true
     })
 
-    let setup = await Api.jump(this.ip,this.channels,add)
+    let setup = await Api.change(this.ip,this.channels,idx)
     if (!setup || !setup.url){
       console.log("STB error channel data")
       return false;
@@ -219,7 +242,15 @@ import { NavigationActions, StackActions } from 'react-navigation';
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
     <View style={styles.Page}>
-      <Loader loader={this.state.loader}></Loader>
+
+      {this.state.loader && 
+        <View style={{
+          paddingTop:this.getDimensions().height/2
+        }}>
+          < ActivityIndicator
+          size="large" 
+          color="#FFFFFF" />
+        </View>}
 
       <Video source={this.getLoader()}   // Can be a URL or a local file.
         ref={this.playerref}
@@ -255,11 +286,15 @@ import { NavigationActions, StackActions } from 'react-navigation';
         //poster={Assets.loader}
          />
         <Control
+          ref={this.controlref}
           goBack={this.goBack.bind(this)}
           currentChannel={this.channels.currentChannel}
+          currentChannelIdx={this.channels.currentIdx}
+          channels={this.channels.channels}
           navigation={this.props.navigation}
           playing={this.playing}
-          stbState={this.state} 
+          stbState={this.state}
+          getDimensions={this.getDimensions}
           cb={this.reloadPlayer.bind(this)} />
       </View>
     )}

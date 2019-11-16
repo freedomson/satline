@@ -79,6 +79,45 @@ let wsos = {
             ip
         }
     },
+
+    change : async (ip,channels,idx) => {
+        channels.currentIdx = idx
+        channels.currentChannel = channels.channels[idx]
+        if (!channels.currentChannel){
+            if ( idx === 0 ) {
+                channels.currentIdx = channels.channels.length
+            }
+            else {
+                channels.currentIdx = 0
+            }
+            channels.currentChannel = channels.channels[channels.currentIdx ]
+        }
+
+        console.log("API currentChannel CHANGE"
+            , idx
+            , channels.currentIdx
+            , channels.currentChannel.channelName)
+
+        var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
+        await wsos.apiCall(setURL)
+
+        let config = await wsos.processStatus(ip)
+
+        if (config && !config.msg)
+        { 
+            var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
+            wsos.saveState(ip, channels)
+            return {
+                url,
+                channels
+            }
+        } else {
+            // Channel as issues bypass rescursive
+            console.log("API CHANGE bypassing bad channel...",idx,(idx===0)?1:idx)
+            return await wsos.jump(ip,channels,(idx===0)?1:idx)
+        }
+    },
+
     jump : async (ip,channels,add=0) => {
 
         let nidx = channels.currentIdx+add
