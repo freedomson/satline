@@ -30,7 +30,7 @@ export default class Banner extends Component {
 
   render() {
     return (
-      <View>  
+      <View style={{position: "absolute", bottom: 0}}>  
         <AdMobBanner
           adSize="smartBanner"
           adUnitID={this.adUnitID}

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Text, Modal, View, TouchableHighlight, StyleSheet, FlatList} from "react-native";
 import { Icon, SearchBar } from "react-native-elements";
+import Interstitial from '../containers/Interstitial';
 class Control extends Component {
 
     constructor(props) {
@@ -207,8 +208,9 @@ class Control extends Component {
               }}
             />
             }
-
+ 
           </View>
+          <Interstitial />
         </Modal>
     );
   }

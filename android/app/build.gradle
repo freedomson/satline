@@ -108,8 +108,8 @@ android {
         applicationId "com.satline"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "8"
+        versionCode 9
+        versionName "9"
         ndk {
            abiFilters "armeabi-v7a","x86", "arm64-v8a", "x86_64"
         }
