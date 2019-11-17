@@ -5,6 +5,7 @@ class Control extends Component {
 
     constructor(props) {
         super(props);
+        this.flatListRef = React.createRef()
         this.state = {
             visible: true,
             search: "",
@@ -33,7 +34,23 @@ class Control extends Component {
 
   shouldComponentUpdate(props){
     console.log("CONTROL_shouldComponentUpdate",props, this.state)
-    // if (!props.playing) return false;
+
+    const selected = this.state.channels.filter(item => {
+      const itemData = `${item.channelName.toUpperCase()}${item.progNo}${item.channelNo}`;
+      const needle = `${props.currentChannel.channelName.toUpperCase()}${props.currentChannel.progNo}${props.currentChannel.channelNo}`;
+      return itemData.indexOf(needle) > -1;
+    });
+
+    let cidx = this.state.channels.indexOf(selected[0])
+    if (cidx!==-1){
+      if (this.flatListRef)
+        this.flatListRef.scrollToIndex({
+          animated: true,
+          index: cidx,
+          viewOffset: 0,
+          viewPosition: 0
+        })
+    }
     return true
   }
 
@@ -154,6 +171,7 @@ class Control extends Component {
 
             { this.state.visible && 
             <FlatList
+              ref={(ref) => { this.flatListRef = ref; }}
               ItemSeparatorComponent={this.renderListSeparator}
               style={[styles.list,
               {
@@ -162,7 +180,6 @@ class Control extends Component {
               }
               ]}
               data={this.state.channels}
-              // initialScrollIndex={this.state.currentChannelIdx}
               keyExtractor={(item: object, index: number) => item.channelNo}
               getItemLayout={(data, index) => (
                 {length: 40, offset: 40 * index, index}

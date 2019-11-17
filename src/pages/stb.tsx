@@ -16,11 +16,11 @@ import { NavigationActions, StackActions } from 'react-navigation';
     super(props); 
     Orientation.lockToLandscapeLeft()
     this.timeoutInterval                  = false
-    this.timeoutIntervals                 = 30
+    this.timeoutIntervals                 = 20
     this.timeoutIntervalsCounter          = 0
     this.playerref                        = React.createRef()
     this.controlref                       = React.createRef()
-    this.retries                          = 10
+    this.retries                          = 100
     this.retrycounter                     = 0
     this.stream                           = ""
     this.channels                         = this.props.navigation.getParam('channels', 'no-data-stream')
@@ -62,28 +62,31 @@ import { NavigationActions, StackActions } from 'react-navigation';
     this.playing = true
     this.showChannelName()
     this._reconfigureScreen(null)
-    this.timeout = true
-    clearInterval(this.timeoutInterval);
+    this.clearTimeout(true)
   }
 
   validateTimeout(){
     this.timeoutIntervalsCounter++
     console.log("---\n\nEVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
     if (this.timeoutIntervalsCounter == this.timeoutIntervals){
-      console.log("STB\n\nTimeout")
-      this.setState({
-        ...this.state,
-        loader: false, 
-        channels: this.state.channels
-        })
-      ToastAndroid.showWithGravity(
-        TRANSLATIONS.en.home.streamError, 
-        ToastAndroid.LONG, 
-        ToastAndroid.CENTER)
+      this.clearTimeout()
+    }
+  }
+
+  clearTimeout(onload=false){
+      if (!onload){
+        this.setState({
+          ...this.state,
+          loader: false
+          })
+        ToastAndroid.showWithGravity(
+          TRANSLATIONS.en.home.streamError, 
+          ToastAndroid.LONG, 
+          ToastAndroid.CENTER)
+      }
       clearInterval(this.timeoutInterval);
       this.timeoutIntervalsCounter = 0
       this.timeout = true
-    }
   }
 
   onReadyForDisplay(e) {
@@ -129,7 +132,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
   componentWillUnmount() {
     Orientation.removeOrientationListener(this._reconfigureScreen);
     Orientation.removeOrientationListener(this._orientationDidChange);
-    clearInterval(this.timeoutInterval);
+    this.clearTimeout()
     console.log("STB componentWillUnmount")
   }
 
@@ -193,8 +196,9 @@ import { NavigationActions, StackActions } from 'react-navigation';
     console.log(`****\nSTB reloading ${this.retrycounter} of ${this.retries}\n****`)
 
     if (this.retrycounter >= this.retries || this.timeout ){
-      console.log("STB no more retries or timedout")
-      return false
+      console.log(`STB no more retries (${(this.retrycounter >= this.retries)}) or timedout (${this.timeout})`)
+      this.clearTimeout()
+      return
     }
 
     this.setState({ 
@@ -213,7 +217,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
           ToastAndroid.CENTER)
       }
       this.retrycounter++
-      return false;
+      return
     }
 
     console.log("STB reloadPlayer",setup)
@@ -229,7 +233,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
     }).bind(this), 250);
 
     this.retrycounter++
-    return true
+    return
 
   }
 
@@ -304,8 +308,8 @@ import { NavigationActions, StackActions } from 'react-navigation';
           <Control
             ref={this.controlref}
             goBack={this.goBack.bind(this)}
-            currentChannel={this.channels.currentChannel}
-            channels={this.channels.channels}
+            currentChannel={this.state.channels.currentChannel}
+            channels={this.state.channels.channels}
             navigation={this.props.navigation}
             playing={this.playing}
             stbState={this.state}
