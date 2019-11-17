@@ -10,8 +10,8 @@ class Control extends Component {
             search: "",
             channels: props.channels,
             currentChannelIdx: props.currentChannelIdx,
-            height: props.stbState.height,
-            width: props.stbState.width
+            height: props.getDimensions().height,
+            width: props.getDimensions().width
         };
     }
 
@@ -19,9 +19,8 @@ class Control extends Component {
     console.log("CONTROL_componentWillReceiveProps",props)
     this.setState({
             ...this.state,
-            channels: (this.state.search ? this.searchFilterFunction(this.state.search): this.props.channels),
-            currentChannelIdx: this.props.currentChannelIdx,
-            width: this.props.getDimensions().width
+            channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels),
+            currentChannelIdx: props.currentChannelIdx
         }); 
   }
 

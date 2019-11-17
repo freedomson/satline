@@ -113,48 +113,12 @@ let wsos = {
             }
         } else {
             // Channel as issues bypass rescursive
-            console.log("API CHANGE bypassing bad channel...",idx,(idx===0)?1:idx)
-            return await wsos.jump(ip,channels,(idx===0)?1:idx)
-        }
-    },
-
-    jump : async (ip,channels,add=0) => {
-
-        let nidx = channels.currentIdx+add
-        channels.currentIdx = nidx
-        channels.currentChannel = channels.channels[channels.currentIdx]
-        if (!channels.currentChannel){
-            if ( add === 0 ) {
-                channels.currentIdx = channels.channels.length
-            }
-            else {
-                channels.currentIdx = 0
-            }
-            channels.currentChannel = channels.channels[channels.currentIdx ]
-        }
-
-        console.log("API currentChannel JUMP"
-            , add
-            , channels.currentIdx
-            , channels.currentChannel.channelName)
-
-        var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
-        await wsos.apiCall(setURL)
-
-        let config = await wsos.processStatus(ip)
-
-        if (config && !config.msg)
-        { 
-            var url  = endpoints.play.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, config.progNo);
-            wsos.saveState(ip, channels)
+            console.log("API bad channel...")
             return {
-                url,
-                channels
+                url:"",
+                channels:"",
+                msg: config.msg
             }
-        } else {
-            // Channel as issues bypass rescursive
-            console.log("API Bypassing bad channel...",add,(add===0)?1:add)
-            return await wsos.jump(ip,channels,(add===0)?1:add)
         }
     },
 

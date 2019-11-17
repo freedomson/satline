@@ -32,7 +32,8 @@ import { NavigationActions, StackActions } from 'react-navigation';
         width       : dimensions.width,
         height      : dimensions.height,
         aspecRatio  : dimensions.width/dimensions.height,
-        channels    : this.channels
+        channels    : this.channels,
+        showControls: false
     };
   }
 
@@ -110,6 +111,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
     this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
     this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
+    Orientation.addOrientationListener(this._orientationDidChange.bind(this));
     await this.reloadPlayer(this.channels.currentIdx)
   }
 
@@ -122,12 +124,27 @@ import { NavigationActions, StackActions } from 'react-navigation';
   shouldComponentUpdate(props){
     console.log("STB shouldComponentUpdate","noop return true")
     return true
-  } 
-  componentWillUnmount(props) {
-    Orientation.removeOrientationListener(this._reconfigureScreen);
-    clearInterval(this.timeoutInterval);
-    console.log("STB componentWillUnmount",props)
   }
+
+  componentWillUnmount() {
+    Orientation.removeOrientationListener(this._reconfigureScreen);
+    Orientation.removeOrientationListener(this._orientationDidChange);
+    clearInterval(this.timeoutInterval);
+    console.log("STB componentWillUnmount")
+  }
+
+  _orientationDidChange(orientation){
+    console.log("STB _orientationDidChange",orientation)
+    setTimeout(() => {
+      if (orientation.toLowerCase().includes("landscape")) {
+        this.setState({
+          ...this.state,
+          showControls: true
+        });
+      }
+    }, 100);
+  }
+
   _reconfigureScreen(orientation){
     if (this.props.navigation.isFocused()) {
       let dimensions = this.getDimensions()
@@ -141,7 +158,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         channels: this.state.channels
       }
       this.setState(newState);
-      console.log("STB _reconfigureScreen")
+      console.log("STB _reconfigureScreen",orientation)
     }
   }
 
@@ -190,6 +207,13 @@ import { NavigationActions, StackActions } from 'react-navigation';
     let setup = await Api.change(this.ip,this.channels,idx)
     if (!setup || !setup.url){
       console.log("STB error channel data")
+      if (setup.msg) {
+        ToastAndroid.showWithGravity(
+          setup.msg, 
+          ToastAndroid.LONG, 
+          ToastAndroid.CENTER)
+      }
+      this.retrycounter++
       return false;
     }
 
@@ -276,17 +300,20 @@ import { NavigationActions, StackActions } from 'react-navigation';
         }}
         //poster={Assets.loader}
          />
-        <Control
-          ref={this.controlref}
-          goBack={this.goBack.bind(this)}
-          currentChannel={this.channels.currentChannel}
-          currentChannelIdx={this.channels.currentIdx}
-          channels={this.channels.channels}
-          navigation={this.props.navigation}
-          playing={this.playing}
-          stbState={this.state}
-          getDimensions={this.getDimensions}
-          cb={this.reloadPlayer.bind(this)} />
+         {
+          this.state.showControls &&
+          <Control
+            ref={this.controlref}
+            goBack={this.goBack.bind(this)}
+            currentChannel={this.channels.currentChannel}
+            currentChannelIdx={this.channels.currentIdx}
+            channels={this.channels.channels}
+            navigation={this.props.navigation}
+            playing={this.playing}
+            stbState={this.state}
+            getDimensions={this.getDimensions}
+            cb={this.reloadPlayer.bind(this)} />
+        }
       </View>
     )}
   }
