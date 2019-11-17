@@ -27,15 +27,20 @@ class Control extends Component {
 
   setModalVisible(visible) {
     console.log("CONTROL_setModalVisible",this.state)
-    // if (this.props.stbState.loader) return;
     this.setState({
             ...this.state,
-            visible: visible
-        }); 
+            visible: visible,
+            selectedIdx: -1
+        });
   }
 
   shouldComponentUpdate(props){
     console.log("CONTROL_shouldComponentUpdate",props, this.state)
+    setTimeout( () => this.scrollToIndex(props),100);
+    return true
+  }
+
+  scrollToIndex = (props, force=false) => {
 
     const selected = this.state.channels.filter(item => {
       const itemData = `${item.channelName.toUpperCase()}${item.progNo}${item.channelNo}`;
@@ -45,21 +50,27 @@ class Control extends Component {
 
     let cidx = this.state.channels.indexOf(selected[0])
     console.log("CONTROL_shouldComponentUpdate Scrolling",cidx,this.state.selectedIdx)
-    if (cidx!==-1 && this.state.selectedIdx != cidx){
+    if (this.state.selectedIdx != cidx || force ){
+      console.log("Scrolling LEVEL 1")
       if (this.flatListRef) {
+        console.log("Scrolling LEVEL 2")
         this.setState({
           ...this.state,
           selectedIdx: cidx
         });
-        this.flatListRef.scrollToIndex({
-          animated: false,
-          index: cidx,
-          viewOffset: 0,
-          viewPosition: 0
-        })
+        try {
+          console.log("Scrolling LEVEL 3")
+          this.flatListRef.scrollToIndex({
+            animated: false,
+            index: cidx,
+            viewOffset: 0,
+            viewPosition: 0
+          })
+        } catch (error) {
+          console.log("CONTROL_scrollToindex ERROR")
+        }
       }
     }
-    return true
   }
 
   renderListSeparator = () => {
