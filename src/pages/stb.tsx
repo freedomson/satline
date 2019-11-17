@@ -15,12 +15,13 @@ import { NavigationActions, StackActions } from 'react-navigation';
   constructor(props) {
     super(props); 
     Orientation.lockToLandscapeLeft()
+    this.timeout                          = false
     this.timeoutInterval                  = false
-    this.timeoutIntervals                 = 20
+    this.timeoutIntervals                 = 15
     this.timeoutIntervalsCounter          = 0
     this.playerref                        = React.createRef()
     this.controlref                       = React.createRef()
-    this.retries                          = 100
+    this.retries                          = 10
     this.retrycounter                     = 0
     this.stream                           = ""
     this.channels                         = this.props.navigation.getParam('channels', 'no-data-stream')
@@ -68,7 +69,8 @@ import { NavigationActions, StackActions } from 'react-navigation';
   validateTimeout(){
     this.timeoutIntervalsCounter++
     console.log("---\n\nEVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
-    if (this.timeoutIntervalsCounter == this.timeoutIntervals){
+    if (this.timeoutIntervalsCounter == this.timeoutIntervals) {
+      this.clearTimeout()
       this.timeout = true
     }
   }
@@ -87,7 +89,6 @@ import { NavigationActions, StackActions } from 'react-navigation';
       clearInterval(this.timeoutInterval);
       this.retrycounter = 0
       this.timeoutIntervalsCounter = 0
-      this.timeout = false
   }
 
   onReadyForDisplay(e) {
@@ -187,6 +188,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
 
     switch (retry) {
       case false:
+        this.timeout = false
         this.retrycounter = 0
         this.clearTimeout(true)
         this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
