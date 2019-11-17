@@ -11,7 +11,8 @@ class Control extends Component {
             search: "",
             channels: props.channels,
             height: props.getDimensions().height,
-            width: props.getDimensions().width
+            width: props.getDimensions().width,
+            selectedIdx: -1
         };
     }
 
@@ -42,14 +43,19 @@ class Control extends Component {
     });
 
     let cidx = this.state.channels.indexOf(selected[0])
-    if (cidx!==-1){
-      if (this.flatListRef)
+    if (cidx!==-1 && this.state.selectedIdx != cidx){
+      if (this.flatListRef) {
+        this.setState({
+          ...this.state,
+          selectedIdx: cidx
+        });
         this.flatListRef.scrollToIndex({
           animated: true,
           index: cidx,
           viewOffset: 0,
           viewPosition: 0
         })
+      }
     }
     return true
   }

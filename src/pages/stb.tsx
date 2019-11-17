@@ -69,12 +69,12 @@ import { NavigationActions, StackActions } from 'react-navigation';
     this.timeoutIntervalsCounter++
     console.log("---\n\nEVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
     if (this.timeoutIntervalsCounter == this.timeoutIntervals){
-      this.clearTimeout()
+      this.timeout = true
     }
   }
 
-  clearTimeout(onload=false){
-      if (!onload){
+  clearTimeout(shallow=false){
+      if (!shallow){
         this.setState({
           ...this.state,
           loader: false
@@ -85,8 +85,9 @@ import { NavigationActions, StackActions } from 'react-navigation';
           ToastAndroid.CENTER)
       }
       clearInterval(this.timeoutInterval);
+      this.retrycounter = 0
       this.timeoutIntervalsCounter = 0
-      this.timeout = true
+      this.timeout = false
   }
 
   onReadyForDisplay(e) {
@@ -187,9 +188,8 @@ import { NavigationActions, StackActions } from 'react-navigation';
     switch (retry) {
       case false:
         this.retrycounter = 0
-        if (this.timeoutInterval) clearInterval(this.timeoutInterval);
+        this.clearTimeout(true)
         this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
-        this.timeout = false
         break;
     }
 
