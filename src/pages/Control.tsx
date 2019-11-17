@@ -170,6 +170,8 @@ class Control extends Component {
                 }
                 value={this.state.search}
                 containerStyle ={{backgroundColor:"black"}}
+                inputContainerStyle = {{padding:0}}
+                inputStyle = {{ fontSize:14, height:20, lineHeight:20, padding:0, margin:0 }}
                 onChangeText={text => this.searchFilterFunction(text)}
                 autoCorrect={false} 
                 />
