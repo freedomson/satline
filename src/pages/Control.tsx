@@ -51,7 +51,7 @@ class Control extends Component {
           selectedIdx: cidx
         });
         this.flatListRef.scrollToIndex({
-          animated: true,
+          animated: false,
           index: cidx,
           viewOffset: 0,
           viewPosition: 0
