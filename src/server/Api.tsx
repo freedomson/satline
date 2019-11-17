@@ -80,25 +80,12 @@ let wsos = {
         }
     },
 
-    change : async (ip,channels,idx) => {
-        channels.currentIdx = idx
-        channels.currentChannel = channels.channels[idx]
-        if (!channels.currentChannel){
-            if ( idx === 0 ) {
-                channels.currentIdx = channels.channels.length
-            }
-            else {
-                channels.currentIdx = 0
-            }
-            channels.currentChannel = channels.channels[channels.currentIdx ]
-        }
+    change : async (ip,channels,channel) => {
 
-        console.log("API currentChannel CHANGE"
-            , idx
-            , channels.currentIdx
-            , channels.currentChannel.channelName)
+        console.log("API currentChannel CHANGE", channel)
 
-        var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channels.currentChannel.channelNo);
+        channels.currentChannel = channel
+        var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channel.channelNo);
         await wsos.apiCall(setURL)
 
         let config = await wsos.processStatus(ip)
@@ -125,8 +112,8 @@ let wsos = {
     saveState : async (ip, channels) => {
         let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
         let stbs = JSON.parse(data) 
-        currentIdx = stbs.findIndex(item => item.ipcell1 == ip);
-        stbs[currentIdx].channels = channels
+        let stbIdx = stbs.findIndex(item => item.ipcell1 == ip);
+        stbs[stbIdx].channels = channels
         AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbs));
     }
 

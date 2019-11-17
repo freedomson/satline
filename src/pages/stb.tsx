@@ -50,7 +50,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
   async onError(e) { 
     console.log("onError",e)
     this.playing = false
-    await this.reloadPlayer(-1)
+    await this.reloadPlayer(this.state.channels.currentChannel,true)
   }
 
   onLoadStart(e) {
@@ -101,7 +101,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
     this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
     this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
-    await this.reloadPlayer(this.channels.currentIdx)
+    await this.reloadPlayer(this.channels.currentChannel)
   }
 
   async componentDidMount(props){
@@ -112,7 +112,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
     this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
     Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
     Orientation.addOrientationListener(this._orientationDidChange.bind(this));
-    await this.reloadPlayer(this.channels.currentIdx)
+    await this.reloadPlayer(this.channels.currentChannel)
   }
 
   componentWillUpdate(props){
@@ -176,14 +176,13 @@ import { NavigationActions, StackActions } from 'react-navigation';
     }
   }
 
-  async reloadPlayer(idx){
+  async reloadPlayer(channel, retry=false){
 
-    switch (idx) {
-      // Reload the same
-      case -1:
-        idx = this.state.channels.currentIdx
-        break;
-      default:
+    // Refresh
+    if (!channel) channel = this.channels.currentChannel
+
+    switch (retry) {
+      case false:
         this.retrycounter = 0
         if (this.timeoutInterval) clearInterval(this.timeoutInterval);
         this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
@@ -191,7 +190,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         break;
     }
 
-    console.log(`****\nSTB current try is ${this.retrycounter} of ${this.retries}\n****`)
+    console.log(`****\nSTB reloading ${this.retrycounter} of ${this.retries}\n****`)
 
     if (this.retrycounter >= this.retries || this.timeout ){
       console.log("STB no more retries or timedout")
@@ -204,7 +203,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
         loader: true
     })
 
-    let setup = await Api.change(this.ip,this.channels,idx)
+    let setup = await Api.change(this.ip,this.channels,channel)
     if (!setup || !setup.url){
       console.log("STB error channel data")
       if (setup.msg) {
@@ -306,7 +305,6 @@ import { NavigationActions, StackActions } from 'react-navigation';
             ref={this.controlref}
             goBack={this.goBack.bind(this)}
             currentChannel={this.channels.currentChannel}
-            currentChannelIdx={this.channels.currentIdx}
             channels={this.channels.channels}
             navigation={this.props.navigation}
             playing={this.playing}

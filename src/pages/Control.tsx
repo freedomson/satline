@@ -9,7 +9,6 @@ class Control extends Component {
             visible: true,
             search: "",
             channels: props.channels,
-            currentChannelIdx: props.currentChannelIdx,
             height: props.getDimensions().height,
             width: props.getDimensions().width
         };
@@ -19,8 +18,7 @@ class Control extends Component {
     console.log("CONTROL_componentWillReceiveProps",props)
     this.setState({
             ...this.state,
-            channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels),
-            currentChannelIdx: props.currentChannelIdx
+            channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels)
         }); 
   }
 
@@ -110,37 +108,12 @@ class Control extends Component {
                       {this.props.currentChannel.channelName}</Text>
                 }
 
-               { this.state.visible &&
-                  <TouchableHighlight
-                  style={[styles.common,styles.next]} 
-                  activeOpacity={1}
-                  underlayColor={"transparent"} 
-                  onPress={(async () => {
-                  this.props.cb(this.state.currentChannelIdx+1)
-                  }).bind(this)}>
-                  <Icon name={"navigate-next"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
-                  </TouchableHighlight>
-                }
-
-               { this.state.visible &&
-                  <TouchableHighlight
-                  style={[styles.common,styles.previous]} 
-                  activeOpacity={1}
-                  underlayColor={"transparent"} 
-                  onPress={(async () => {
-                  this.props.cb(this.state.currentChannelIdx-1)
-                  }).bind(this)}>
-                  <Icon name={"navigate-before"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
-                  </TouchableHighlight>
-              }
-
               { this.state.visible &&
                <TouchableHighlight
                 style={[styles.common,styles.refresh]} 
-                activeOpacity={this.state.currentChannelIdx}
                 underlayColor={"transparent"} 
                 onPress={(async () => {
-                  this.props.cb(this.state.currentChannelIdx)
+                  this.props.cb(false)
                 }).bind(this)}>
                 <Icon name={"refresh"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
               </TouchableHighlight>
@@ -185,7 +158,7 @@ class Control extends Component {
               style={[styles.list,
               {
                 width:this.state.width/2-50,
-                height:this.state.height-50
+                height:this.state.height-60
               }
               ]}
               data={this.state.channels}
@@ -197,7 +170,7 @@ class Control extends Component {
               renderItem={({item, index, separators}) => {
                 return (
                 <TouchableHighlight
-                  onPress={() => this.props.cb(index)}
+                  onPress={() =>this.props.cb(item)}
                   underlayColor={"#FFF"}
                   onShowUnderlay={separators.highlight}
                   onHideUnderlay={separators.unhighlight}>
@@ -259,7 +232,7 @@ const styles = StyleSheet.create({
   list: {
       position: 'absolute',
       right:0,
-      top: 60,
+      bottom: 0,
       color: "white",
       backgroundColor: 'transparent',
   },
@@ -297,22 +270,6 @@ const styles = StyleSheet.create({
       paddingLeft: 10
   },
   refresh: {
-      position: "absolute",
-      top: 60,
-      left: 140,
-      backgroundColor: "#FFF",
-      borderBottomLeftRadius: 100,
-      borderBottomRightRadius: 100,
-  },
-  next: {
-      position: "absolute",
-      top: 60,
-      left: 70,
-      backgroundColor: "#FFF",
-      borderBottomLeftRadius: 100,
-      borderBottomRightRadius: 100,
-  },
-  previous: {
       position: "absolute",
       top: 60,
       left: 0,
