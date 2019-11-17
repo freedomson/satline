@@ -43,6 +43,7 @@ class Control extends Component {
     });
 
     let cidx = this.state.channels.indexOf(selected[0])
+    console.log("FFFFFFFF",cidx,this.state.selectedIdx)
     if (cidx!==-1 && this.state.selectedIdx != cidx){
       if (this.flatListRef) {
         this.setState({

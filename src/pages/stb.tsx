@@ -133,7 +133,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
   componentWillUnmount() {
     Orientation.removeOrientationListener(this._reconfigureScreen);
     Orientation.removeOrientationListener(this._orientationDidChange);
-    this.clearTimeout()
+    this.clearTimeout(true)
     console.log("STB componentWillUnmount")
   }
 
