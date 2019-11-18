@@ -10,9 +10,55 @@ let endpoints = {
     start       : "http://{ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D",
     set         : "http://{ip}:8800/SET%20CHANNEL%20{progNo}%201%200%20",
     play        : "http://{ip}:8802/{progNo}.ts",
-    listPT      : "http://{ip}:8800/GET%20NOWORNEXT%20EPG%20%7B%20%22count%22%20%3A%20%221000%22%2C%20%22group%22%20%3A%20%222%22%2C%20%22epgNowOrNextFlag%22%20%3A%20%221%22%2C%20%22startIdx%22%20%3A%20%220%22%2C%22satNo%22%20%3A%20%2254%22%20%7D"
+    listPT      : "http://{ip}:8800/GET%20NOWORNEXT%20EPG%20%7B%20%22count%22%20%3A%20%221000%22%2C%20%22group%22%20%3A%20%222%22%2C%20%22epgNowOrNextFlag%22%20%3A%20%221%22%2C%20%22startIdx%22%20%3A%20%220%22%2C%22satNo%22%20%3A%20%2254%22%20%7D",
+    epg         : "http://{ip}:8800/GET%20EPGLIST%20%7B%22startTime%22%3A{starttime}%2C%22startIndex%22%3A0%2C%22endTime%22%3A{endtime}%2C%22serviceId%22%3A{channelServiceId}%2C%22count%22%3A100%2C%22channelTpNo%22%3A{channelTpNo}%7D"
 }
+ 
 let wsos = {
+    parseResponseData: (resp)=> {
+        var out;
+        try{
+            if (resp && resp.response.status == 200)
+            {
+                let data = resp.data.split(/\d\d\d\s/) 
+                let status = parseInt(resp.data.substr(0,3))
+                out  = data[1] && JSON.parse(data[1]) 
+            }
+            return out
+        } catch(e){
+            return []
+        }
+    },
+    populateEPG : async (ip, channels) => {
+        console.log("POPULATE",channels)
+        ch = channels
+        var start = new Date();
+        start.setMinutes(start.getMinutes() - 30); // 1hour
+        start = new Date(start).getTime(); // Date object
+        var end = new Date();
+        end.setMinutes(end.getMinutes() + 120); // 1hour
+        end = new Date(end).getTime(); // Date object
+        ch.forEach(async (item,key) => {
+            var epgURL = endpoints.epg   
+                            .replace(/\{ip\}/g, ip)
+                            .replace(/\{channelServiceId\}/g, item.channelServiceId)
+                            .replace(/\{channelTpNo\}/g, item.channelTpNo)
+                            .replace(/\{starttime\}/g, start.toString().slice(0,-3))
+                            .replace(/\{endtime\}/g, end.toString().slice(0,-3));
+            let epgResp = await wsos.apiCall(epgURL);
+            let data = wsos.parseResponseData(epgResp); 
+            let desc = ""  
+            if (data && data.count > 0 ) {
+                data.data.forEach(item => {
+                    desc += `${item.epgName} ${item.epgDescription}`
+                });
+            }
+            console.log(desc)
+            ch[key].epgList = data
+            ch[key].epgSearch = desc
+        });
+        return ch
+    },
     apiCall : async (url) => {
         let response = await fetch(url, REQUEST_OBJ);
         let data = await response.text()

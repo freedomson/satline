@@ -36,7 +36,7 @@ class Control extends Component {
 
   shouldComponentUpdate(props){
     console.log("CONTROL_shouldComponentUpdate",props, this.state)
-    setTimeout( () => this.scrollToIndex(props),100);
+    this.scrollToIndex(props);
     return true
   }
 

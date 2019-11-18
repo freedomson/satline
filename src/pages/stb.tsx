@@ -147,7 +147,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
           showControls: true
         });
       }
-    }, 100);
+    }, 1000);
   }
 
   _reconfigureScreen(orientation){
