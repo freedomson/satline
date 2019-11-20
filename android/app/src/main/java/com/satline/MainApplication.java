@@ -6,6 +6,7 @@ import android.provider.CalendarContract;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNThreadPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.sbugert.rnadmob.RNAdMobPackage;
 import org.wonday.orientation.OrientationPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNThreadPackage(mReactNativeHost, new AsyncStoragePackage()),
             new AsyncStoragePackage(),
             new RNGestureHandlerPackage(),
             new RNAdMobPackage(),
