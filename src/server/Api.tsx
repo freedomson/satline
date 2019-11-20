@@ -1,5 +1,5 @@
 import { REQUEST_OBJ, APP_DATA_KEYS } from "../config/app";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage'
 let endpoints = {
     register    : "http://{ip}:8800/backup/REGISTER?id={mac}&password={pass}",
     password    : "http://{ip}:8800/PASSWORD%20%20",

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import {ToastAndroid, AsyncStorage } from "react-native";
+import {ToastAndroid } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage'
 import { APP_DATA_KEYS, TRANSLATIONS, REQUEST_OBJ } from "../config/app";
 var sip = require ('shift8-ip-func');
 var ipaddr = require('ipaddr.js');
 import DeviceInfo from 'react-native-device-info';
-import Api from '../server/Api';
+import Api from '../server/Api'; 
 
 export let useScanner = () => {
 

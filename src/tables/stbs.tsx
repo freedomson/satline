@@ -1,16 +1,17 @@
 
 import React, { FunctionComponent, useEffect, useState } from 'react'
-import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from "react-native";
+import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import AsyncStorage from '@react-native-community/async-storage'
 import Table from 'react-native-simple-table'
 import { DEVICE_WIDTH } from "../config/metrics";
 import { Icon } from "react-native-elements";
 import { PAGES } from "../config/app"; 
 import { APP_DATA_KEYS, REQUEST_OBJ, TRANSLATIONS} from "../config/app";
 import {Loader} from '../containers/Loader';
- 
+
 const columns = [
   { 
-    title: 'IP',
+    title: 'IP', 
     dataIndex: 'ipcell1',
     width: DEVICE_WIDTH/3
   },

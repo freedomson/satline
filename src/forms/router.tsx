@@ -5,9 +5,8 @@ import { Platform
   , TextInput
   , TouchableOpacity
   , Button
-  , AsyncStorage
   , Text } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage'
 import { APP_DATA_KEYS, TRANSLATIONS } from "../config/app";
 import styles from "../config/styles";
 import { Icon } from "react-native-elements";
