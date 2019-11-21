@@ -1,5 +1,5 @@
 
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useState } from 'react'
 import Spinner from 'react-native-loading-spinner-overlay';
 import styles from "../config/styles";
 import { TRANSLATIONS } from "../config/app";

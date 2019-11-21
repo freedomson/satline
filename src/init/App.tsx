@@ -79,5 +79,5 @@ const StackNavigator = createStackNavigator({
     }),
   }
 });
-
+console.disableYellowBox = true;
 export default createAppContainer(StackNavigator);

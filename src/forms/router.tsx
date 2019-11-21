@@ -1,4 +1,4 @@
-import React, { useEffect, FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { Platform
   , StyleSheet
   , View

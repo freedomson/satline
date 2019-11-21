@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {ToastAndroid } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage'
 import { APP_DATA_KEYS, TRANSLATIONS, REQUEST_OBJ } from "../config/app";
@@ -20,11 +20,6 @@ export let useScanner = () => {
     var totalipstoscan = 0
     var rangeips = []
     var mac = ""
-
-    useEffect(
-         () => {},
-        [scanner.scanning],
-      );
  
     async function scan(ip) {
         setScanner({stbs: [], scan: scan,scanning: true});

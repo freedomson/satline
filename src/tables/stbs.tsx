@@ -1,5 +1,5 @@
 
-import React, { FunctionComponent, useEffect, useState } from 'react'
+import React, { FunctionComponent, useLayoutEffect, useState } from 'react'
 import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage'
 import Table from 'react-native-simple-table'
@@ -42,17 +42,12 @@ export const Stbs: FunctionComponent = (props) => {
             } else {
               setData(props.datasource)
               return
-            }
+            } 
          }
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (props.datasource !==false) { 
-      // TODO: Activate when controls available
-      // if ( props.datasource.length == 1 ) { 
-      //   console.log("STBS upgrade datasource", props.datasource[0]['ipcell1']) 
-      //   openPlayer(props.datasource[0]['ipcell1'])
-      // }
       setData(props.datasource)
     } 
   },[props.datasource]); 

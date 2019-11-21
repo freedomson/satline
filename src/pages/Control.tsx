@@ -19,13 +19,14 @@ class Control extends Component {
     }
 
   componentDidMount(){
-    const thread = new Thread('./Worker.android.js');
-    // send a message, strings only
-    thread.postMessage('hello');
-    // listen for messages
-    thread.onmessage = (message) => console.log(message);
-    // stop the JS process
-    // thread.terminate();
+    // const thread = new Thread('./Worker.android.js');
+    // // send a message, strings only
+    // let chs = JSON.stringify(this.props.channels)
+    // thread.postMessage(chs);
+    // // listen for messages
+    // thread.onmessage = (message) => console.log(message);
+    // // stop the JS process
+    // // thread.terminate();
   }
 
   componentWillReceiveProps(props){
