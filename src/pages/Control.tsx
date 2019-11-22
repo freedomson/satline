@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Text, Modal, View, TouchableHighlight, StyleSheet, FlatList} from "react-native";
 import { Icon, SearchBar } from "react-native-elements";
 import Interstitial from '../containers/Interstitial';
-import { Thread } from 'react-native-threads';
+
 class Control extends Component {
 
     constructor(props) {
@@ -17,18 +17,6 @@ class Control extends Component {
             selectedIdx: -1
         };
     }
-
-  componentDidMount() {
-    const thread = new Thread('./src/workers/epg.js');
-    // // send a message, strings only
-    thread.postMessage(JSON.stringify(this.props.channelsdata));
-    // // listen for messages
-    thread.onmessage = (message) => {
-      console.log("FUCK FROM MARS",JSON.parse(message))
-    }
-    // stop the JS process
-    // thread.terminate();
-  }
 
   UNSAFE_componentWillReceiveProps(props){
     console.log("CONTROL_componentWillReceiveProps")

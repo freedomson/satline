@@ -9,6 +9,7 @@
     "tsc": "tsc -b",
     "xcode": "open ios/satline.xcodeproj",
     "test": "jest",
+   "bundle-threads-android-dev":"node node_modules/react-native/local-cli/cli.js bundle --dev true --assets-dest ./android/app/src/main/res/ --entry-file ./src/workers/epg.js --platform android --bundle-output ./src/workers/epg.bundle",
     "bundle-threads-android":"node node_modules/react-native/local-cli/cli.js bundle --dev false --assets-dest ./android/app/src/main/res/ --entry-file ./src/workers/epg.js --platform android --bundle-output ./android/app/src/main/assets/threads/src/workers/epg.bundle"
   },
   "dependencies": {

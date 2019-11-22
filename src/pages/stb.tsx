@@ -7,9 +7,10 @@ import { REQUEST_HEADEARS, PAGES, TRANSLATIONS, APP_DATA_KEYS } from "../config/
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
-import Control from './Control';
+import Control from './control';
 import Api from '../server/Api';
 import { NavigationActions, StackActions } from 'react-navigation';
+import Epg from './epg'
  export default class Stb extends React.Component { 
 
   constructor(props) {
@@ -320,6 +321,8 @@ import { NavigationActions, StackActions } from 'react-navigation';
             ip={this.ip}
             cb={this.reloadPlayer.bind(this)} />
         }
+        {/* Bootstrap Epg auto loader */}
+        <Epg channels={this.state.channels} />
       </View>
     )}
   }

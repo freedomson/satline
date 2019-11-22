@@ -35,7 +35,7 @@ export const Stbs: FunctionComponent = (props) => {
               let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
               let stbs = JSON.parse(data) 
               if (stbs){
-                console.log("STBS from meme",stbs)
+                console.log("STBS from meme")
                 // await Api.populateEPG(stbs[1].channels)
                 setData(stbs)
                 return

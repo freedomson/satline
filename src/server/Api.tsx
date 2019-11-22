@@ -49,7 +49,7 @@ let wsos = {
         end = new Date(end).getTime(); // Date object
         await Promise.all(ch.map( async (item,key) => {
             // console.log(item.channelName)
-            // if(item.channelName !="TVCine 1 HD") return
+            if(item.channelName !="TVCine 1 HD") return
             var epgURL = endpoints.epg 
                             .replace(/\{ip\}/g, ip)
                             .replace(/\{channelServiceId\}/g, item.channelServiceId)
@@ -58,7 +58,7 @@ let wsos = {
                             .replace(/\{endtime\}/g, end.toString().slice(0,-3));
             
             let epgResp = await wsos.apiCall(epgURL);
-            let data = wsos.parseResponseData(epgResp); 
+            let data = wsos.parseResponseData(epgResp);
             let desc = ""  
             if (data && data.count > 0 ) {
                 data.data.forEach(item => {  
