@@ -19,13 +19,13 @@ class Control extends Component {
     }
 
   componentDidMount() {
-    const thread = new Thread('./src/server/Worker.android.js');
-    // // send a message, strings only
-    thread.postMessage(JSON.stringify(this.props.channelsdata));
-    // // listen for messages
-    thread.onmessage = (message) => {
-      console.log("FUCK FROM MARS",JSON.parse(message))
-    }
+    // const thread = new Thread('./src/server/Worker.android.js');
+    // // // send a message, strings only
+    // thread.postMessage(JSON.stringify(this.props.channelsdata));
+    // // // listen for messages
+    // thread.onmessage = (message) => {
+    //   console.log("FUCK FROM MARS",JSON.parse(message))
+    // }
     // // stop the JS process
     // // thread.terminate();
   }
