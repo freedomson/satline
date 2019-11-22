@@ -8,7 +8,8 @@
     "android": "react-native run-android",
     "tsc": "tsc -b",
     "xcode": "open ios/satline.xcodeproj",
-    "test": "jest"
+    "test": "jest",
+    "bundle-threads-android":"node node_modules/react-native/local-cli/cli.js bundle --dev false --assets-dest ./android/app/src/main/res/ --entry-file ./src/workers/epg.js --platform android --bundle-output ./android/app/src/main/assets/threads/src/workers/epg.bundle"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
@@ -75,10 +76,5 @@
       "<rootDir>/node_modules/"
     ],
     "cacheDirectory": ".jest/cache"
-  },
-  "rnpm": {
-    "assets": [
-      "./assets/fonts/"
-    ]
   }
 }

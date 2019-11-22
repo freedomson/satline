@@ -19,15 +19,15 @@ class Control extends Component {
     }
 
   componentDidMount() {
-    // const thread = new Thread('./src/server/Worker.android.js');
-    // // // send a message, strings only
-    // thread.postMessage(JSON.stringify(this.props.channelsdata));
-    // // // listen for messages
-    // thread.onmessage = (message) => {
-    //   console.log("FUCK FROM MARS",JSON.parse(message))
-    // }
-    // // stop the JS process
-    // // thread.terminate();
+    const thread = new Thread('./src/workers/epg.js');
+    // // send a message, strings only
+    thread.postMessage(JSON.stringify(this.props.channelsdata));
+    // // listen for messages
+    thread.onmessage = (message) => {
+      console.log("FUCK FROM MARS",JSON.parse(message))
+    }
+    // stop the JS process
+    // thread.terminate();
   }
 
   UNSAFE_componentWillReceiveProps(props){
@@ -39,7 +39,7 @@ class Control extends Component {
   }
 
   setModalVisible(visible) {
-    console.log("CONTROL_setModalVisible",this.state)
+    console.log("CONTROL_setModalVisible")
     this.setState({
             ...this.state,
             visible: visible,
