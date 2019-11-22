@@ -11,7 +11,7 @@ class Control extends Component {
         this.state = {
             visible: true,
             search: "",
-            channels: props.channels,
+            channels: props.channels.channels,
             height: props.getDimensions().height,
             width: props.getDimensions().width,
             selectedIdx: -1
@@ -22,7 +22,7 @@ class Control extends Component {
     console.log("CONTROL_componentWillReceiveProps")
     this.setState({
             ...this.state,
-            channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels)
+            channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels.channels)
         }); 
   }
 
@@ -47,7 +47,7 @@ class Control extends Component {
 
     const selected = this.state.channels.filter(item => {
       const itemData = `${item.channelName.toUpperCase()}${item.progNo}${item.channelNo}`;
-      const needle = `${props.currentChannel.channelName.toUpperCase()}${props.currentChannel.progNo}${props.currentChannel.channelNo}`;
+      const needle = `${props.channels.currentChannel.channelName.toUpperCase()}${props.channels.currentChannel.progNo}${props.channels.currentChannel.channelNo}`;
       return itemData.indexOf(needle) > -1;
     });
 
@@ -90,7 +90,7 @@ class Control extends Component {
   };
 
   searchFilterFunction = text => {
-    const newData = this.props.channels.filter(item => {
+    const newData = this.props.channels.channels.filter(item => {
       const itemData = `${item.channelName.toUpperCase()}`;
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
@@ -144,7 +144,7 @@ class Control extends Component {
                   <Text
                     style={[
                       styles.common,styles.channelName]}>
-                      {this.props.currentChannel.channelName}</Text>
+                      {this.props.channels.currentChannel.channelName}</Text>
                 }
 
               { this.state.visible &&

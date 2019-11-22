@@ -311,9 +311,7 @@ import Epg from './epg'
           <Control
             ref={this.controlref}
             goBack={this.goBack.bind(this)}
-            currentChannel={this.state.channels.currentChannel}
-            channels={this.state.channels.channels}
-            channelsdata={this.state.channels}
+            channels={this.state.channels}
             navigation={this.props.navigation}
             playing={this.playing}
             stbState={this.state}
