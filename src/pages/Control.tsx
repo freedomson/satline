@@ -18,19 +18,20 @@ class Control extends Component {
         };
     }
 
-  componentDidMount(){
-    // const thread = new Thread('./Worker.android.js');
+  componentDidMount() {
+    const thread = new Thread('./src/server/Worker.android.js');
     // // send a message, strings only
-    // let chs = JSON.stringify(this.props.channels)
-    // thread.postMessage(chs);
+    thread.postMessage(JSON.stringify(this.props.channelsdata));
     // // listen for messages
-    // thread.onmessage = (message) => console.log(message);
+    thread.onmessage = (message) => {
+      console.log("FUCK FROM MARS",JSON.parse(message))
+    }
     // // stop the JS process
     // // thread.terminate();
   }
 
-  componentWillReceiveProps(props){
-    console.log("CONTROL_componentWillReceiveProps",props)
+  UNSAFE_componentWillReceiveProps(props){
+    console.log("CONTROL_componentWillReceiveProps")
     this.setState({
             ...this.state,
             channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels)
@@ -46,8 +47,8 @@ class Control extends Component {
         });
   }
 
-  shouldComponentUpdate(props){
-    console.log("CONTROL_shouldComponentUpdate",props, this.state)
+  UNSAFE_componentWillReceiveProps(props){
+    console.log("CONTROL_shouldComponentUpdate")
     setTimeout(() => {
       this.scrollToIndex(props);
     }, 100);

@@ -99,7 +99,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
     console.log("onReady noop",e) 
   } 
 
-  async componentWillReceiveProps(props){
+  async UNSAFE_componentWillReceiveProps(props){
     Orientation.lockToLandscapeLeft()
     console.log("componentWillReceiveProps",props)
     this.playing    = false
@@ -222,7 +222,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
       return
     }
 
-    console.log("STB reloadPlayer",setup)
+    console.log("STB reloadPlayer")
 
     setTimeout((() => {
       this.setState({ 
@@ -312,10 +312,12 @@ import { NavigationActions, StackActions } from 'react-navigation';
             goBack={this.goBack.bind(this)}
             currentChannel={this.state.channels.currentChannel}
             channels={this.state.channels.channels}
+            channelsdata={this.state.channels}
             navigation={this.props.navigation}
             playing={this.playing}
             stbState={this.state}
             getDimensions={this.getDimensions}
+            ip={this.ip}
             cb={this.reloadPlayer.bind(this)} />
         }
       </View>

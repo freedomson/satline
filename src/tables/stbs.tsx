@@ -8,7 +8,7 @@ import { Icon } from "react-native-elements";
 import { PAGES } from "../config/app"; 
 import { APP_DATA_KEYS, REQUEST_OBJ, TRANSLATIONS} from "../config/app";
 import {Loader} from '../containers/Loader';
-
+import Api from '../server/Api';
 const columns = [
   { 
     title: 'IP', 
@@ -36,6 +36,7 @@ export const Stbs: FunctionComponent = (props) => {
               let stbs = JSON.parse(data) 
               if (stbs){
                 console.log("STBS from meme",stbs)
+                // await Api.populateEPG(stbs[1].channels)
                 setData(stbs)
                 return
               }

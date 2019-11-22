@@ -26,7 +26,7 @@ export let useScanner = () => {
         DeviceInfo.getMacAddress().then(async mac => {
             console.log("DEVICE MAC",mac)
             mac = mac
-            await getDeviceNetworkStatus(ip)
+            await getDeviceNetworkStatus(ip,mac)
         });
     }
 
@@ -45,7 +45,7 @@ export let useScanner = () => {
         AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
     }
 
-    async function getDeviceNetworkStatus(ip) {
+    async function getDeviceNetworkStatus(ip,mac) {
         //  stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip})
         //  updateStbs(stbs,"onload")  
         //  return;
@@ -59,7 +59,7 @@ export let useScanner = () => {
             let lastHostHex = sip.convertIPtoHex(lastHost);
             let ipRange = (sip.getIPRange(firstHostHex,lastHostHex)).slice(1);
             console.log("RANGE",ipRange.length)
-            scanNet({ip_range: ipRange });
+            scanNet({ip_range: ipRange, mac: mac });
         } catch (err) {
             console.warn(err);
         }
@@ -70,11 +70,11 @@ export let useScanner = () => {
         totalipstoscan = setup["ip_range"].length
         rangeips = setup["ip_range"].length
         for (var i = 0; i < rangeips; i++) {
-            searchBox(setup["ip_range"][i]) 
+            searchBox(setup["ip_range"][i], setup.mac) 
         }
     }
 
-    async function searchBox(ip) {
+    async function searchBox(ip, mac) {
         let xhr = new XMLHttpRequest(); // We need timeout capabilities
         xhr.open("GET", `http://${ip}:8800/G`, true);
         xhr.withCredentials = true;
@@ -84,7 +84,16 @@ export let useScanner = () => {
             console.log("Detected STB", ip, totalipstoscan) 
             let pass = Math.floor((Math.random() * 100000) + 1)
             let channels = await Api.bootstrap(ip, mac, pass)
-            stbs.push( {"ipcell1":ip,"ipcell2":ip, "ipcell3":ip, "channels":channels})
+            stbs.push({
+                "ipcell1":ip,
+                "ipcell2":ip, 
+                "ipcell3":ip, 
+                "channels":{
+                    ...channels,
+                    mac,
+                    pass,
+                    ip
+                }})
             --totalipstoscan
             if ( totalipstoscan == 0 ) updateStbs(stbs,"onload")
 
