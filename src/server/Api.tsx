@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 let endpoints = {
     register    : "http://{ip}:8800/backup/REGISTER?id={mac}&password={pass}",
     password    : "http://{ip}:8800/PASSWORD%20%20",
-    model       : "http://{ip}:8800/POST%20MOBILE%20MODEL%20%20SATLITE%20000-000",
+    model       : "http://{ip}:8800/POST%20MOBILE%20MODEL%20%20SATLITE_{model}%20000-000",
     status      : "http://{ip}:8800/GET%20MEDIA%20STATUS%20tv",
     control     : "http://{ip}:8800/SET%20STB%20MEDIA%20CTRL%20%7B%22type%22%3A%22tv%22%2C%22action%22%3A%22start%20query%20status%22%7D",
     list        : "http://{ip}:8800/GET%20NOWORNEXT%20EPG%20%7B%20%22count%22%20%3A%20%22100000%22%2C%20%22group%22%20%3A%206%2C%20%22epgNowOrNextFlag%22%20%3A%20%221%22%2C%20%22startIdx%22%20%3A%20%220%22%20%7D",
@@ -41,8 +41,9 @@ let wsos = {
 
         await wsos.bootstrap(ip,mac, pass)
 
+        var now = new Date().getTime().toString().slice(0,-3);
         var start = new Date();
-        start.setMinutes(start.getMinutes() - 30); // 1hour
+        start.setMinutes(start.getMinutes() - 120); // 1hour
         start = new Date(start).getTime(); // Date object
         var end = new Date();
         end.setMinutes(end.getMinutes() + 120); // 1hour
@@ -59,18 +60,24 @@ let wsos = {
             
             let epgResp = await wsos.apiCall(epgURL);
             let data = wsos.parseResponseData(epgResp);
-            let desc = ""  
+            let epgName = ""
+            let epgSearch = ""
             if (data && data.count > 0 ) {
-                data.data.forEach(item => {  
-                    // console.log(item)
-                    let st = new Date(item.epgStartTime * 1e3).toISOString().slice(-13, -5)
-                    let et = new Date(item.epgEndTime * 1e3).toISOString().slice(-13, -5)
-                    desc += `${st} - ${et} ${item.epgName} ${item.epgDescription}\n`
+                data.data.forEach(item => {
+                    if (now > item.epgStartTime && now < item.epgEndTime) {
+                        epgName = item.epgName
+                    }
+                    if ((now > item.epgStartTime && now < item.epgEndTime) || now < item.epgEndTime) {
+                        epgSearch += `${item.epgName} ${item.epgDescription}\n`
+                    }
+                    // let st = new Date(item.epgStartTime * 1e3).toISOString().slice(-13, -5)
+                    // let et = new Date(item.epgEndTime * 1e3).toISOString().slice(-13, -5)
                 });
+                ch[key].epgList = data.data
+                epgName = epgName ? epgName : data.data[0].epgName
             }
-            console.log(desc)
-            ch[key].epgList = data
-            ch[key].epgSearch = desc
+            ch[key].epgName = epgName
+            ch[key].epgSearch = epgSearch
         }));
         return ch
     },
@@ -86,10 +93,10 @@ let wsos = {
 
         var register = endpoints.register.replace(/\{ip\}/g, ip).replace(/\{mac\}/g, mac).replace(/\{pass\}/g, pass);
         var password = endpoints.password.replace(/\{ip\}/g, ip);
-        var model = endpoints.model.replace(/\{ip\}/g, ip);
+        var model = endpoints.model.replace(/\{ip\}/g, ip).replace(/\{model\}/g, pass);
         var list = endpoints.list.replace(/\{ip\}/g, ip);
 
-        let registerResp = await wsos.apiCall(register)  
+        let registerResp = await wsos.apiCall(register)
         let passwordResp = await wsos.apiCall(password)
         let modelResp = await wsos.apiCall(model)
 

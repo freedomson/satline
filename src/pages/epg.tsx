@@ -15,9 +15,11 @@ class Epg extends Component {
         console.log("EPG Posting")
         thread.postMessage(JSON.stringify(this.props.channels));
         // // listen for messages
-        thread.onmessage = (message) => {
-            console.log("EPG Responding -->",JSON.parse(message))
-        }
+        thread.onmessage = ((channels) => {
+            let epgChannelsEnabled = JSON.parse(channels)
+            console.log("EPG Responding -->",epgChannelsEnabled)
+            this.props.onUpdateChannels(epgChannelsEnabled)
+        }).bind(this)
         // stop the JS process
         // thread.terminate();
     }

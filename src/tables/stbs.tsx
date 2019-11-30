@@ -1,6 +1,6 @@
 
 import React, { FunctionComponent, useLayoutEffect, useState } from 'react'
-import { Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { ToastAndroid, Linking, ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from '@react-native-community/async-storage'
 import Table from 'react-native-simple-table'
 import { DEVICE_WIDTH } from "../config/metrics";
@@ -75,6 +75,7 @@ export const Stbs: FunctionComponent = (props) => {
         let data = stateResp.data.split(/\d\d\d\s/) 
         let status = parseInt(stateResp.data.substr(0,3))
         let config = data[1] && JSON.parse(data[1]) 
+              console.log("GGGGGGG19",stateResp)
         if ( status == status_code_success && config ) {
           await apiCall(`http://${channels.ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
           props.navigation.navigate(PAGES.STB.name, 
@@ -83,14 +84,16 @@ export const Stbs: FunctionComponent = (props) => {
               channels: channels
             })
         } else {
-          props.navigation.navigate(PAGES.HOME.name, {
-              toastMessage: TRANSLATIONS.en.home.streamError
-          })
+          ToastAndroid.showWithGravity(
+            TRANSLATIONS.en.home.streamError, 
+            ToastAndroid.LONG, 
+            ToastAndroid.CENTER)
         }
     } else {
-      props.navigation.navigate(PAGES.HOME.name, {
-          toastMessage: TRANSLATIONS.en.home.streamError
-      })
+        ToastAndroid.showWithGravity(
+          TRANSLATIONS.en.home.streamError, 
+          ToastAndroid.LONG, 
+          ToastAndroid.CENTER)
     }
     setLoading(false)
   }

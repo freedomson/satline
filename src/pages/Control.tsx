@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import { Text, Modal, View, TouchableHighlight, StyleSheet, FlatList} from "react-native";
 import { Icon, SearchBar } from "react-native-elements";
 import Interstitial from '../containers/Interstitial';
-
+// @refresh reset
 class Control extends Component {
-
     constructor(props) {
         super(props);
         this.flatListRef = React.createRef()
@@ -18,51 +17,57 @@ class Control extends Component {
         };
     }
 
-  UNSAFE_componentWillReceiveProps(props){
-    console.log("CONTROL_componentWillReceiveProps")
-    this.setState({
-            ...this.state,
-            channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels.channels)
-        }); 
-  }
+  // UNSAFE_componentWillReceiveProps(props){
+  //   console.log("CONTROL_componentWillReceiveProps")
+  //   this.setState({
+  //           ...this.state,
+  //           channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels.channels)
+  //       }); 
+  // }
 
   setModalVisible(visible) {
-    console.log("CONTROL_setModalVisible")
+    console.log("CONTROL_setModalVisible",visible)
     this.setState({
             ...this.state,
             visible: visible,
             selectedIdx: -1
         });
-  }
+    if (visible) {
+      setTimeout((() => {
+              this.scrollToIndex(this.props);
+      }).bind(this),100);
+    }
+  } 
 
   UNSAFE_componentWillReceiveProps(props){
-    console.log("CONTROL_shouldComponentUpdate")
-    setTimeout(() => {
-      this.scrollToIndex(props);
-    }, 100);
+    console.log("CONTROL_shouldComponentUpdate Receive")
+    setTimeout((() => {
+            this.scrollToIndex(props, true);
+    }).bind(this),100);
     return true
   }
 
   scrollToIndex = (props, force=false) => {
 
-    const selected = this.state.channels.filter(item => {
+    const selected = props.channels.channels.filter(item => {
       const itemData = `${item.channelName.toUpperCase()}${item.progNo}${item.channelNo}`;
       const needle = `${props.channels.currentChannel.channelName.toUpperCase()}${props.channels.currentChannel.progNo}${props.channels.currentChannel.channelNo}`;
       return itemData.indexOf(needle) > -1;
     });
 
-    let cidx = this.state.channels.indexOf(selected[0])
+    let cidx = props.channels.channels.indexOf(selected[0])
     console.log("CONTROL_shouldComponentUpdate Scrolling",cidx,this.state.selectedIdx)
     if (this.state.selectedIdx != cidx || force ){
-      console.log("Scrolling LEVEL 1")
-      if (this.flatListRef) {
-        console.log("Scrolling LEVEL 2")
+      console.log("CONTROL_Scrolling LEVEL 1")
+      if (this.flatListRef || force) {
+        console.log("CONTROL_Scrolling LEVEL 2")
         this.setState({
           ...this.state,
+          channels: props.channels.channels,
           selectedIdx: cidx
-        });
-        try {
-          console.log("Scrolling LEVEL 3")
+        });  
+        try { 
+          console.log("CONTROL_Scrolling LEVEL 3")
           this.flatListRef.scrollToIndex({
             animated: false,
             index: cidx,
@@ -134,9 +139,9 @@ class Control extends Component {
                     left: 0,
                     width:this.state.width,
                     height:this.state.height}]} 
-                onPress={() => {
+                onPress={(() => {
                   this.setModalVisible(!this.state.visible);
-                }}>
+                }).bind(this)}>
                 <Text />
               </TouchableHighlight>
 
@@ -217,6 +222,7 @@ class Control extends Component {
                   onHideUnderlay={separators.unhighlight}>
                   <View style={[styles.listitem]}>
                     <Text style={[styles.listitemtext]}>{String(index).padStart(4, '0')} | {item.channelName}</Text>
+                    <Text>{item.epgName}</Text>
                   </View>
                 </TouchableHighlight>)
               }}

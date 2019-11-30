@@ -18,11 +18,11 @@ import Epg from './epg'
     Orientation.lockToLandscapeLeft()
     this.timeout                          = false
     this.timeoutInterval                  = false
-    this.timeoutIntervals                 = 15
+    this.timeoutIntervals                 = 30
     this.timeoutIntervalsCounter          = 0
     this.playerref                        = React.createRef()
     this.controlref                       = React.createRef()
-    this.retries                          = 10
+    this.retries                          = 15
     this.retrycounter                     = 0
     this.stream                           = ""
     this.channels                         = this.props.navigation.getParam('channels', 'no-data-stream')
@@ -43,6 +43,16 @@ import Epg from './epg'
     let { height, width } = Dimensions.get("window");
     let finalHeight = height-StatusBar.currentHeight
     return {"width":width,"height":finalHeight}
+  }
+
+  onUpdateChannels(channels){
+    console.log("STB onUpdateChannels")
+    let tmp_channels = this.state.channels
+    tmp_channels.channels = channels
+    this.setState({
+      ...this.state,
+      channels: tmp_channels
+      })
   }
 
   onBuffer(e) { 
@@ -320,7 +330,7 @@ import Epg from './epg'
             cb={this.reloadPlayer.bind(this)} />
         }
         {/* Bootstrap Epg auto loader */}
-        <Epg channels={this.state.channels} />
+        <Epg onUpdateChannels={this.onUpdateChannels.bind(this)} channels={this.state.channels} />
       </View>
     )}
   }

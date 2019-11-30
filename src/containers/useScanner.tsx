@@ -42,6 +42,7 @@ export let useScanner = () => {
         if (!stbin.length) {
             ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
         }
+        // await Api.populateEPG(stbin[0].channels)
         AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
     }
 
