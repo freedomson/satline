@@ -63,7 +63,7 @@ class Control extends Component {
         console.log("CONTROL_Scrolling LEVEL 2")
         this.setState({
           ...this.state,
-          channels: props.channels.channels,
+          channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels.channels),
           selectedIdx: cidx
         });  
         try { 
@@ -221,8 +221,8 @@ class Control extends Component {
                   onShowUnderlay={separators.highlight}
                   onHideUnderlay={separators.unhighlight}>
                   <View style={[styles.listitem]}>
-                    <Text style={[styles.listitemtext]}>{String(index).padStart(4, '0')} | {item.channelName}</Text>
-                    <Text>{item.epgName}</Text>
+                    <Text style={[styles.listitemtexttitle]}>{String(index).padStart(4, '0')} | {item.channelName}</Text>
+                    <Text style={[styles.listitemtextdesc]}>{item.epgName}</Text>
                   </View>
                 </TouchableHighlight>)
               }}
@@ -260,22 +260,33 @@ const styles = StyleSheet.create({
   listseparator: {
     height: 1,
     backgroundColor: "#CED0CE",
-    marginLeft: 5,
-    marginRight: 5
+    marginLeft: 0,
+    marginRight: 0
   },
   listitem: {
       backgroundColor: 'transparent',
       opacity: 1,
       height: 40
   },
-  listitemtext: {
+  listitemtexttitle: {
       opacity: 1,
-      fontSize: 10,
+      fontSize: 12,
       fontWeight:"900",
       color: "black",
       paddingLeft: 10,
       textAlignVertical: "center",
-      lineHeight: 40
+      lineHeight: 20,
+      height: 20
+  },
+  listitemtextdesc: {
+      opacity: 1,
+      fontSize: 8,
+      fontWeight:"900",
+      color: "black",
+      paddingLeft: 10,
+      textAlignVertical: "center",
+      lineHeight: 15,
+      height: 15
   },
   list: {
       position: 'absolute',
