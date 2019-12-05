@@ -68,7 +68,7 @@ let wsos = {
                         epgName = item.epgName
                     }
                     if ((now > item.epgStartTime && now < item.epgEndTime) || now < item.epgEndTime) {
-                        epgSearch += `${item.epgName} ${item.epgDescription}\n`
+                        epgSearch += `${item.epgName} ${item.epgDescription} `
                     }
                     // let st = new Date(item.epgStartTime * 1e3).toISOString().slice(-13, -5)
                     // let et = new Date(item.epgEndTime * 1e3).toISOString().slice(-13, -5)

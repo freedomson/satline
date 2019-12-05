@@ -13,17 +13,17 @@ const columns = [
   { 
     title: 'IP', 
     dataIndex: 'ipcell1',
-    width: DEVICE_WIDTH/3
+    width: DEVICE_WIDTH/2
   },
   { 
     title: 'PORTAL',
     dataIndex: 'ipcell2',
-    width: DEVICE_WIDTH/3
+    width: DEVICE_WIDTH/4
   },
   {
     title: 'PLAYER',
     dataIndex: 'channels',
-    width: DEVICE_WIDTH/3
+    width: DEVICE_WIDTH/4
   }
 ];
 
@@ -75,7 +75,6 @@ export const Stbs: FunctionComponent = (props) => {
         let data = stateResp.data.split(/\d\d\d\s/) 
         let status = parseInt(stateResp.data.substr(0,3))
         let config = data[1] && JSON.parse(data[1]) 
-              console.log("GGGGGGG19",stateResp)
         if ( status == status_code_success && config ) {
           await apiCall(`http://${channels.ip}:8800/SET%20CHANNEL%20${config.progNo}%201%200%20`)
           props.navigation.navigate(PAGES.STB.name, 

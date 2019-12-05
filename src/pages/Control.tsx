@@ -96,7 +96,7 @@ class Control extends Component {
 
   searchFilterFunction = text => {
     const newData = this.props.channels.channels.filter(item => {
-      const itemData = `${item.channelName.toUpperCase()}`;
+      const itemData = `${item.channelName.toUpperCase()} ${item.epgSearch.toUpperCase()}`;
       const textData = text.toUpperCase();
       return itemData.indexOf(textData) > -1;
     });
