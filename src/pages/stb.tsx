@@ -28,6 +28,7 @@ import Epg from './epg'
     this.channels                         = this.props.navigation.getParam('channels', 'no-data-stream')
     this.playing                          = false
     let dimensions                        = this.getDimensions()
+    this.xhr = new XMLHttpRequest();
     this.state = { 
         stream      : "",
         loader      : true,
@@ -65,12 +66,17 @@ import Epg from './epg'
     await this.reloadPlayer(this.state.channels.currentChannel,true)
   }
 
-  onLoadStart(e) {
-    console.log("onLoadStart","noop")
-  }
+  // onVideoIdle(e) {
+  //   console.log("onVideoIdle","noop")
+  //   this.onError(e)
+  // }
 
-  onLoad(response) {
-    console.log("onLoad",response)
+  // onVideoBuffer(e){
+  //   console.log("onVideoBuffer","noop")
+  // }
+
+  onReadyForDisplay(response) {
+    console.log("onReadyForDisplay",response)
     this.playing = true
     this.showChannelName()
     this._reconfigureScreen(null)
@@ -102,13 +108,14 @@ import Epg from './epg'
       this.timeoutIntervalsCounter = 0
   }
 
-  onReadyForDisplay(e) {
-    console.log("onReadyForDisplay noop",e)  
-  }
+  // onReadyForDisplay(e) {
+  //   console.log("onReadyForDisplay",e)
+  //   this.onLoad(e)
+  // }
 
-  onReady(e) {
-    console.log("onReady noop",e) 
-  } 
+  // onReady(e) {
+  //   console.log("onReady noop",e) 
+  // } 
 
   async UNSAFE_componentWillReceiveProps(props){
     Orientation.lockToLandscapeLeft()
@@ -233,17 +240,43 @@ import Epg from './epg'
       return
     }
 
-    console.log("STB reloadPlayer")
-
-    setTimeout((() => {
-      this.setState({ 
-          ...this.state, 
-          stream: setup.url,
-          loader: true,
-          ip: this.ip,
-          channels: setup.channels
-      })
-    }).bind(this), 250);
+    console.log("STB reloadPlayer",setup.url)
+    let reload = this.reloadPlayer.bind(this)
+    let setState = this.setState.bind(this)
+    let state = this.state
+    let ip = this.ip
+    let xhr = this.xhr
+    xhr.abort() 
+    xhr.open("GET", setup.url, true);
+    xhr.withCredentials = false;
+    xhr.timeout = 500; 
+    xhr.responseType = "text";
+    // xhr.ontimeout =  function(e) {
+    //   console.log("timoeout" )
+    //     xhr.abort()
+    //     reload()
+    // }
+    xhr.onprogress = async function(e) {
+      console.log("onprogress",e,xhr.status )
+      if (xhr.status==200){
+        console.log("onprogress2",e,xhr.responseURL )
+        xhr.abort()
+        setTimeout(() => {
+          xhr.abort() 
+          setState({ 
+              ...state, 
+              stream: setup.url,
+              loader: true,
+              ip: ip,
+              channels: setup.channels
+          })
+        }, 500);
+      } else {
+        xhr.abort()
+        reload()
+      }
+    }
+    xhr.send(); 
 
     this.retrycounter++
     return
@@ -282,40 +315,27 @@ import Epg from './epg'
           size="large" 
           color="#FFFFFF" />
         </View>}
-
+      {!!this.state.stream && 
       <Video source={this.getLoader()}   // Can be a URL or a local file.
         ref={this.playerref}
-        controls={false}
-        playInBackground={true}
-        playWhenInactive={true}
-        fullscreenAutorotate={false} 
-        fullscreen={false}  
-        paused={false}
-        resizeMode={"stretch"} 
-        hideShutterView={true}
         id={"video"}
-        //posterResizeMode={"stretch"}
-        minLoadRetryCount={20}    
-        bufferConfig={{    
-          minBufferMs: 1500,  
-          maxBufferMs: 5000,
-          bufferForPlaybackMs: 2500,
-          bufferForPlaybackAfterRebufferMs: 5000
-        }}
-        onReady={this.onReady.bind(this)}
+        // onVideoIdle={this.onError.bind(this)}
         onReadyForDisplay={this.onReadyForDisplay.bind(this)}
-        onLoad={this.onLoad.bind(this)}
-        onLoadStart={this.onLoadStart.bind(this)}
-        onBuffer={this.onBuffer.bind(this)}
         onError={this.onError.bind(this)}
-        style={{
+        bufferConfig={{
+          minBufferMs: 2000,
+          maxBufferMs: 5000,
+          bufferForPlaybackMs: 1000,
+          bufferForPlaybackAfterRebufferMs: 1000
+        }}
+        style={{ 
           aspectRatio: this.state.aspectRatio,
           width: this.state.width,
           height: this.state.height, 
           backgroundColor: colors.app_background 
         }}
         //poster={Assets.loader}
-         />
+         />}
          {
           this.state.showControls &&
           <Control

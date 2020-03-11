@@ -367,27 +367,32 @@ class ReactExoplayerView extends FrameLayout implements
                 }
                 if (playerNeedsSource && srcUri != null) {
                     ArrayList<MediaSource> mediaSourceList = buildTextSources();
-                    MediaSource videoSource = buildMediaSource(srcUri, extension);
-                    MediaSource mediaSource;
-                    if (mediaSourceList.size() == 0) {
-                        mediaSource = videoSource;
-                    } else {
-                        mediaSourceList.add(0, videoSource);
-                        MediaSource[] textSourceArray = mediaSourceList.toArray(
-                                new MediaSource[mediaSourceList.size()]
-                        );
-                        mediaSource = new MergingMediaSource(textSourceArray);
+                    try {
+                        MediaSource videoSource = buildMediaSource(srcUri, extension);
+                        MediaSource mediaSource;
+                        if (mediaSourceList.size() == 0) {
+                            mediaSource = videoSource;
+                        } else {
+                            mediaSourceList.add(0, videoSource);
+                            MediaSource[] textSourceArray = mediaSourceList.toArray(
+                                    new MediaSource[mediaSourceList.size()]
+                            );
+                            mediaSource = new MergingMediaSource(textSourceArray);
+                        }
+
+                        boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
+                        if (haveResumePosition) {
+                            player.seekTo(resumeWindow, resumePosition);
+                        }
+                        player.prepare(mediaSource, !haveResumePosition, false);
+                        playerNeedsSource = false;
+
+                        eventEmitter.loadStart();
+                        loadVideoStarted = true;
+                    } catch (Exception e) {
+                        eventEmitter.error("Error on", e);
                     }
 
-                    boolean haveResumePosition = resumeWindow != C.INDEX_UNSET;
-                    if (haveResumePosition) {
-                        player.seekTo(resumeWindow, resumePosition);
-                    }
-                    player.prepare(mediaSource, !haveResumePosition, false);
-                    playerNeedsSource = false;
-
-                    eventEmitter.loadStart();
-                    loadVideoStarted = true;
                 }
 
                 // Initializing the playerControlView
@@ -412,9 +417,9 @@ class ReactExoplayerView extends FrameLayout implements
                         new DefaultDashChunkSource.Factory(mediaDataSourceFactory), 
                         minLoadRetryCount, DashMediaSource.DEFAULT_LIVE_PRESENTATION_DELAY_MS,
                         mainHandler, null);
-            case C.TYPE_HLS:
-                return new HlsMediaSource(uri, mediaDataSourceFactory, 
-                        minLoadRetryCount, mainHandler, null);
+            // case C.TYPE_HLS:
+            //     return new HlsMediaSource(uri, mediaDataSourceFactory, 
+            //             minLoadRetryCount, mainHandler, null);
             case C.TYPE_OTHER:
                 return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(),
                         mainHandler, null);
@@ -640,6 +645,7 @@ class ReactExoplayerView extends FrameLayout implements
     private void videoLoaded() {
         if (loadVideoStarted) {
             loadVideoStarted = false;
+            Log.d("ReactExoplayerViewPHILIP", "dsds");
             setSelectedAudioTrack(audioTrackType, audioTrackValue);
             setSelectedVideoTrack(videoTrackType, videoTrackValue);
             setSelectedTextTrack(textTrackType, textTrackValue);
