@@ -2,7 +2,7 @@
 import React from 'react'
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation-locker';
-import { View, StatusBar, Dimensions, ToastAndroid, ActivityIndicator } from "react-native";
+import { ImageBackground,View, StatusBar, Dimensions, ToastAndroid, ActivityIndicator } from "react-native";
 import { REQUEST_HEADEARS, PAGES, TRANSLATIONS, APP_DATA_KEYS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
@@ -230,12 +230,10 @@ import Epg from './epg'
     let setup = await Api.change(this.ip,this.channels,channel)
     if (!setup || !setup.url){
       console.log("STB error channel data")
-      if (setup.msg) {
-        ToastAndroid.showWithGravity(
-          setup.msg, 
-          ToastAndroid.LONG, 
-          ToastAndroid.CENTER)
-      }
+      ToastAndroid.showWithGravity(
+        setup.msg || "STB error retrying...", 
+        ToastAndroid.LONG,
+        ToastAndroid.CENTER)
       this.retrycounter++
       return
     }
@@ -305,8 +303,13 @@ import Epg from './epg'
   render() { 
     console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
-    <View style={styles.Page}>
+            <ImageBackground
 
+        style={Object.assign({ 
+          resizeMode: 'stretch'
+          } 
+          ,styles.BackgroundImage)}>
+    <View >
       {this.state.loader && 
         <View style={{
           paddingTop:this.getDimensions().height/2
@@ -332,7 +335,7 @@ import Epg from './epg'
           aspectRatio: this.state.aspectRatio,
           width: this.state.width,
           height: this.state.height, 
-          backgroundColor: colors.app_background 
+          backgroundColor: colors.app_background
         }}
         //poster={Assets.loader}
          />}
@@ -352,6 +355,7 @@ import Epg from './epg'
         {/* Bootstrap Epg auto loader */}
         <Epg onUpdateChannels={this.onUpdateChannels.bind(this)} channels={this.state.channels} />
       </View>
+           </ImageBackground>
     )}
   }
 

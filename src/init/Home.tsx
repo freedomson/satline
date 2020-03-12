@@ -1,6 +1,6 @@
 
 import React, {  FunctionComponent } from "react";
-import { ImageBackground, ScrollView, Text, ToastAndroid} from "react-native";
+import { ImageBackground, ScrollView, Text} from "react-native";
 import { NavigationEvents } from "react-navigation";
 import { Stbs } from "../tables/stbs"
 import { useScanner } from "../containers/useScanner";

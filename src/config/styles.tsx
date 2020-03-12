@@ -9,7 +9,8 @@ var styles = StyleSheet.create({
 
     BackgroundImage: {
         flex: 1,
-        resizeMode: 'cover'
+        resizeMode: 'cover',
+        backgroundColor: colors.app_background
     },
 
     Lettering: {
@@ -51,7 +52,7 @@ var styles = StyleSheet.create({
       width: DEVICE_WIDTH/5-10, 
       borderColor: colors.app_foreground,
       borderStyle: "solid", 
-      borderWidth: 2,
+      borderWidth: 1,
       color: colors.app_background,  
       borderRadius: 5,
       backgroundColor: colors.inpt_background,
@@ -65,7 +66,7 @@ var styles = StyleSheet.create({
       width: DEVICE_WIDTH/5-10, 
       borderColor: colors.app_foreground,
       borderStyle: "solid", 
-      borderWidth: 2,
+      borderWidth: 1,
       color: colors.app_foreground,
       borderRadius: 5,
       backgroundColor: colors.btn_background

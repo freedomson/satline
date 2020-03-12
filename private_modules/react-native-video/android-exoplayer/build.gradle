@@ -23,18 +23,38 @@ android {
 
 dependencies {
     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
-    implementation('com.google.android.exoplayer:exoplayer:2.10.8') {
-        exclude group: 'com.android.support'
-    }
+    // implementation ('com.google.android.exoplayer:exoplayer:2.10.8') {
+    //     exclude group: 'com.android.support'
+    // }
+
+    implementation project(':exoplayer-library-core')
+    implementation project(':exoplayer-library-dash')
+    implementation project(':exoplayer-library-ui')
+    implementation project(':exoplayer-library-smoothstreaming')
+    implementation project(':exoplayer-library-hls')
+    implementation project(':exoplayer-extension-ffmpeg')
+    implementation project(':exoplayer-extension-okhttp')
+    // implementation project(':exoplayer-extension-av1')
+    implementation project(':exoplayer-extension-cast')
+    implementation project(':exoplayer-extension-cronet')
+    implementation project(':exoplayer-extension-flac')
+    implementation project(':exoplayer-extension-gvr')
+    implementation project(':exoplayer-extension-ima')
+    implementation project(':exoplayer-extension-jobdispatcher')
+    implementation project(':exoplayer-extension-leanback')
+    implementation project(':exoplayer-extension-mediasession')
+    implementation project(':exoplayer-extension-opus')
+    implementation project(':exoplayer-extension-rtmp')
+    implementation project(':exoplayer-extension-vp9')
 
     // All support libs must use the same version
     implementation "androidx.annotation:annotation:1.0.0"
     implementation "androidx.core:core:1.0.0"
     implementation "androidx.media:media:1.0.0"
 
-    implementation('com.google.android.exoplayer:extension-okhttp:2.10.8') {
-        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
-    }
-    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+    // implementation('com.google.android.exoplayer:extension-okhttp:2.10.8') {
+    //     exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    // }
+    // implementation 'com.squareup.okhttp3:okhttp:3.12.1'
 
 }

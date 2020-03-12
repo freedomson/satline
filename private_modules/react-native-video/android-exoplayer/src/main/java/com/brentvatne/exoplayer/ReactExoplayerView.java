@@ -65,6 +65,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -353,7 +354,8 @@ class ReactExoplayerView extends FrameLayout implements
 
                     DefaultAllocator allocator = new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE);
                     DefaultLoadControl defaultLoadControl = new DefaultLoadControl(allocator, minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs, -1, true);
-                    player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, defaultLoadControl);
+                    DefaultRenderersFactory renderersFactory = new DefaultRenderersFactory(getContext(), null, DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON);
+                    player = ExoPlayerFactory.newSimpleInstance(getContext(), renderersFactory, trackSelector, defaultLoadControl);
                     player.addListener(self);
                     player.setMetadataOutput(self);
                     exoPlayerView.setPlayer(player);
@@ -386,7 +388,6 @@ class ReactExoplayerView extends FrameLayout implements
                         }
                         player.prepare(mediaSource, !haveResumePosition, false);
                         playerNeedsSource = false;
-
                         eventEmitter.loadStart();
                         loadVideoStarted = true;
                     } catch (Exception e) {
@@ -395,7 +396,6 @@ class ReactExoplayerView extends FrameLayout implements
 
                 }
 
-                // Initializing the playerControlView
                 initializePlayerControl();
                 setControls(controls);
                 applyModifiers();
@@ -645,7 +645,7 @@ class ReactExoplayerView extends FrameLayout implements
     private void videoLoaded() {
         if (loadVideoStarted) {
             loadVideoStarted = false;
-            Log.d("ReactExoplayerViewPHILIP", "dsds");
+
             setSelectedAudioTrack(audioTrackType, audioTrackValue);
             setSelectedVideoTrack(videoTrackType, videoTrackValue);
             setSelectedTextTrack(textTrackType, textTrackValue);
