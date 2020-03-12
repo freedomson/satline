@@ -1,16 +1,11 @@
-# Satlite Android App
+# Satlite
 
-# Icons
-https://github.com/oblador/react-native-vector-icons/blob/master/glyphmaps/MaterialIcons.json
+If your set top box comes with TV WebServer then you can stream your channels via Satline to your mobile phone.
 
-# Next
-http://192.168.1.104:8800/POST%20KEY%20133
+Any device that as TV WebServer pre-installed should be able to use Satline.
 
-# Previous
-http://192.168.1.104:8800/POST%20KEY%20132
+**Satlite** was tested with** Amiko A4K** and **Amiko A5**.
 
-# Status
-http://192.168.1.104:8800/GET%20MEDIA%20STATUS%20tv
+If you connect a **OpenVPN** for example on your home network you will be able to stream content from your house to your location.
 
-# Info
-http://192.168.1.104:8800/GET%20CHANNEL%20INFO%205679
+Download the app at https://play.google.com/store/apps/details?id=com.satline
