@@ -9,3 +9,5 @@ Any device that as TV WebServer pre-installed should be able to use Satline.
 If you connect a **OpenVPN** for example on your home network you will be able to stream content from your house to your location.
 
 Download the app at https://play.google.com/store/apps/details?id=com.satline
+
+![image2](screenshot.png)
