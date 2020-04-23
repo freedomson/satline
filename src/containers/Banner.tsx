@@ -9,23 +9,23 @@ export default class Banner extends Component {
   }
 
    onAdLoaded(){
-    console.log("onAdLoaded")
+    // console.log("onAdLoaded")
   }
 
    onAdOpened(){
-    console.log("onAdOpened")
+    // console.log("onAdOpened")
   }
 
    onAdClosed(){
-    console.log("onAdClosed")
+    // console.log("onAdClosed")
   }
 
    onAdLeftApplication(){
-    console.log("onAdLeftApplication")
+    // console.log("onAdLeftApplication")
   }
 
    onSizeChange(){
-    console.log("onSizeChange")
+    // console.log("onSizeChange")
   }
 
   render() {

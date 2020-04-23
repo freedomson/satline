@@ -13,34 +13,16 @@ class Control extends Component {
             channels: props.channels.channels,
             height: props.getDimensions().height,
             width: props.getDimensions().width,
-            selectedIdx: -1
+            selectedIdx: props.channels.currentChannel.idx
         };
     }
 
-  // UNSAFE_componentWillReceiveProps(props){
-  //   console.log("CONTROL_componentWillReceiveProps")
-  //   this.setState({
-  //           ...this.state,
-  //           channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels.channels)
-  //       }); 
-  // }
-
-  setModalVisible(visible) {
-    console.log("CONTROL_setModalVisible",visible)
-    this.setState({
-            ...this.state,
-            visible: visible,
-            selectedIdx: -1
-        });
-    if (visible) {
-      setTimeout((() => {
-              this.scrollToIndex(this.props);
-      }).bind(this),100);
-    }
-  } 
-
   UNSAFE_componentWillReceiveProps(props){
-    console.log("CONTROL_shouldComponentUpdate Receive")
+    this.setState({
+      ...this.state,
+      search: ""
+    }); 
+    // console.log("CONTROL_shouldComponentUpdate Receive")
     setTimeout((() => {
             this.scrollToIndex(props, true);
     }).bind(this),100);
@@ -56,26 +38,26 @@ class Control extends Component {
     });
 
     let cidx = props.channels.channels.indexOf(selected[0])
-    console.log("CONTROL_shouldComponentUpdate Scrolling",cidx,this.state.selectedIdx)
+    // console.log("CONTROL_shouldComponentUpdate Scrolling",cidx,this.state.selectedIdx)
     if (this.state.selectedIdx != cidx || force ){
-      console.log("CONTROL_Scrolling LEVEL 1")
+      // console.log("CONTROL_Scrolling LEVEL 1")
       if (this.flatListRef || force) {
-        console.log("CONTROL_Scrolling LEVEL 2")
+        // console.log("CONTROL_Scrolling LEVEL 2")
         this.setState({
           ...this.state,
           channels: (this.state.search ? this.searchFilterFunction(this.state.search): props.channels.channels),
           selectedIdx: cidx
         });  
         try { 
-          console.log("CONTROL_Scrolling LEVEL 3")
+          // console.log("CONTROL_Scrolling LEVEL 3")
           this.flatListRef.scrollToIndex({
-            animated: false,
+            animated: true,
             index: cidx,
             viewOffset: 0,
             viewPosition: 0
           })
         } catch (error) {
-          console.log("CONTROL_scrollToindex ERROR")
+          // console.log("CONTROL_scrollToindex ERROR")
         }
       }
     }
@@ -87,7 +69,7 @@ class Control extends Component {
         style={[
           styles.listseparator,
           {
-            width:this.state.width/2-10
+            width:this.state.width
           }
         ]}
       />
@@ -110,7 +92,7 @@ class Control extends Component {
   };
 
 
-  render() {  
+  render() {
     return (
          <Modal
           animationType="none" 
@@ -138,10 +120,7 @@ class Control extends Component {
                     top: 0,
                     left: 0,
                     width:this.state.width,
-                    height:this.state.height}]} 
-                onPress={(() => {
-                  this.setModalVisible(!this.state.visible);
-                }).bind(this)}>
+                    height:this.state.height}]}>
                 <Text />
               </TouchableHighlight>
 
@@ -152,22 +131,11 @@ class Control extends Component {
                       {this.props.channels.currentChannel.channelName}</Text>
                 }
 
-              { this.state.visible &&
-               <TouchableHighlight
-                style={[styles.common,styles.refresh]} 
-                underlayColor={"transparent"} 
-                onPress={(async () => {
-                  this.props.cb(false)
-                }).bind(this)}>
-                <Icon name={"refresh"} raised={true} reverse={true} iconStyle={[styles.icon]}/>
-              </TouchableHighlight>
-              }
-
             { this.state.visible &&
             <View
               style={[styles.listcontainer,
                 {
-                  width:this.state.width/2-50,
+                  width:this.state.width,
                   height:this.state.height-50
                 }]}
             />
@@ -200,11 +168,12 @@ class Control extends Component {
 
             { this.state.visible && 
             <FlatList
+              initialScrollIndex = {this.state.selectedIdx}
               ref={(ref) => { this.flatListRef = ref; }}
               ItemSeparatorComponent={this.renderListSeparator}
               style={[styles.list,
               {
-                width:this.state.width/2-50,
+                width:this.state.width,
                 height:this.state.height-60
               }
               ]}
@@ -220,7 +189,7 @@ class Control extends Component {
                   underlayColor={"#FFF"}
                   onShowUnderlay={separators.highlight}
                   onHideUnderlay={separators.unhighlight}>
-                  <View style={[styles.listitem]}>
+                  <View style={[styles.listitem,{backgroundColor:(this.state.selectedIdx==index)?"#CCC":"transparent"}]}>
                     <Text style={[styles.listitemtexttitle]}>{String(index).padStart(4, '0')} | {item.channelName}</Text>
                     <Text style={[styles.listitemtextdesc]}>{item.epgName}</Text>
                   </View>
@@ -317,7 +286,7 @@ const styles = StyleSheet.create({
       left: 0,
       right:0,
       color: "white",
-      fontSize: 20,
+      fontSize: 15,
       fontWeight:"900",
       backgroundColor: "black",
       borderRadius: 0,
@@ -327,13 +296,5 @@ const styles = StyleSheet.create({
       textAlignVertical: "center",
       lineHeight: 60,
       paddingLeft: 10
-  },
-  refresh: {
-      position: "absolute",
-      top: 60,
-      left: 0,
-      backgroundColor: "#FFF",
-      borderBottomLeftRadius: 100,
-      borderBottomRightRadius: 100,
   }
 });

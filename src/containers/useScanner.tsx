@@ -24,14 +24,14 @@ export let useScanner = () => {
     async function scan(ip) {
         setScanner({stbs: [], scan: scan,scanning: true});
         DeviceInfo.getMacAddress().then(async mac => {
-            console.log("DEVICE MAC",mac)
+            //// console.log("DEVICE MAC",mac)
             mac = mac
             await getDeviceNetworkStatus(ip,mac)
         });
     }
 
     async function updateStbs(stbin,stage){
-        console.log("Updating STBS",stage,stbin)
+        //// console.log("Updating STBS",stage,stbin)
         stbs = []
         let scanner = {
             stbs: stbin,
@@ -40,7 +40,7 @@ export let useScanner = () => {
         }
         setScanner(scanner)
         if (!stbin.length) {
-            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.LONG, ToastAndroid.CENTER)
+            ToastAndroid.showWithGravity(TRANSLATIONS.en.home.noBoxFound, ToastAndroid.SHORT, ToastAndroid.CENTER)
         }
         // await Api.populateEPG(stbin[0].channels)
         AsyncStorage.setItem(APP_DATA_KEYS.STBS, JSON.stringify(stbin));
@@ -51,7 +51,7 @@ export let useScanner = () => {
         //  updateStbs(stbs,"onload")  
         //  return;
         try { 
-            console.log("Router IP",ip,mac)
+            // console.log("Router IP",ip,mac)
             let local_netmask = "255.255.255.0";
             let subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
             let firstHost = ipaddr.IPv4.networkAddressFromCIDR(ip + "/" + subconv);
@@ -59,7 +59,7 @@ export let useScanner = () => {
             let firstHostHex = sip.convertIPtoHex(firstHost);
             let lastHostHex = sip.convertIPtoHex(lastHost);
             let ipRange = (sip.getIPRange(firstHostHex,lastHostHex)).slice(1);
-            console.log("RANGE",ipRange.length)
+            // console.log("RANGE",ipRange.length)
             scanNet({ip_range: ipRange, mac: mac });
         } catch (err) {
             console.warn(err);
@@ -82,7 +82,7 @@ export let useScanner = () => {
         xhr.timeout = timeout; 
         xhr.responseType = "text";
         xhr.onload = async function(e) {
-            console.log("Detected STB", ip, totalipstoscan) 
+            // console.log("Detected STB", ip, totalipstoscan) 
             let pass = Math.floor((Math.random() * 100000) + 1)
             let channels = await Api.bootstrap(ip, mac, pass)
             stbs.push({

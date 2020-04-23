@@ -30,12 +30,12 @@ const columns = [
 export const Stbs: FunctionComponent = (props) => {  
  
     const [data, setData] = useState( async () => {
-            console.log("useState STBS")
+            // console.log("useState STBS")
             if (props.datasource===false) {
               let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
               let stbs = JSON.parse(data) 
               if (stbs){
-                console.log("STBS from meme")
+                // console.log("STBS from meme")
                 // await Api.populateEPG(stbs[1].channels)
                 setData(stbs)
                 return
@@ -85,13 +85,13 @@ export const Stbs: FunctionComponent = (props) => {
         } else {
           ToastAndroid.showWithGravity(
             TRANSLATIONS.en.home.streamError, 
-            ToastAndroid.LONG, 
+            ToastAndroid.SHORT, 
             ToastAndroid.CENTER)
         }
     } else {
         ToastAndroid.showWithGravity(
           TRANSLATIONS.en.home.streamError, 
-          ToastAndroid.LONG, 
+          ToastAndroid.SHORT, 
           ToastAndroid.CENTER)
     }
     setLoading(false)
