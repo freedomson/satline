@@ -1,13 +1,11 @@
 
 import React from 'react'
-import Video from 'react-native-video';
-import Orientation from 'react-native-orientation-locker';
-import { ImageBackground,View, StatusBar, Dimensions, ToastAndroid, ActivityIndicator } from "react-native";
+import { Linking, ImageBackground,View, StatusBar, Dimensions, ToastAndroid, ActivityIndicator } from "react-native";
 import { REQUEST_HEADEARS, PAGES, TRANSLATIONS, APP_DATA_KEYS } from "../config/app";
 import styles from "../config/styles";
 import {Loader} from '../containers/Loader';
 import colors from "../config/colors";
-import Control from './control';
+import Control from './Control';
 import Api from '../server/Api';
 import { NavigationActions, StackActions } from 'react-navigation';
 import Epg from './epg'
@@ -15,28 +13,27 @@ import Epg from './epg'
 
   constructor(props) {
     super(props); 
-    Orientation.lockToLandscapeLeft()
+    // Orientation.lockToLandscapeLeft()
     this.timeout                          = false
     this.timeoutInterval                  = false
     this.timeoutIntervals                 = 30
     this.timeoutIntervalsCounter          = 0
-    this.playerref                        = React.createRef()
     this.controlref                       = React.createRef()
     this.retries                          = 15
     this.retrycounter                     = 0
     this.stream                           = ""
-    this.channels                         = this.props.navigation.getParam('channels', 'no-data-stream')
     this.playing                          = false
     let dimensions                        = this.getDimensions()
     this.xhr = new XMLHttpRequest();
     this.state = { 
         stream      : "",
-        loader      : true,
+        loader      : false,
         width       : dimensions.width,
         height      : dimensions.height,
         aspecRatio  : dimensions.width/dimensions.height,
-        channels    : this.channels,
-        showControls: false
+        channels    : props.navigation.getParam('channels', 'no-data-stream'),
+        ip          : props.navigation.getParam('ip', 'no-data-stream'),
+        showControls: true
     };
   }
 
@@ -47,7 +44,7 @@ import Epg from './epg'
   }
 
   onUpdateChannels(channels){
-    console.log("STB onUpdateChannels")
+    // console.log("STB onUpdateChannels")
     let tmp_channels = this.state.channels
     tmp_channels.channels = channels
     this.setState({
@@ -56,240 +53,87 @@ import Epg from './epg'
       })
   }
 
-  onBuffer(e) { 
-    console.log("onBuffer",e)  
-  }
-
-  async onError(e) { 
-    console.log("onError",e)
-    this.playing = false
-    await this.reloadPlayer(this.state.channels.currentChannel,true)
-  }
-
-  // onVideoIdle(e) {
-  //   console.log("onVideoIdle","noop")
-  //   this.onError(e)
-  // }
-
-  // onVideoBuffer(e){
-  //   console.log("onVideoBuffer","noop")
-  // }
-
-  onReadyForDisplay(response) {
-    console.log("onReadyForDisplay",response)
-    this.playing = true
-    this.showChannelName()
-    this._reconfigureScreen(null)
-    this.clearTimeout(true)
-  }
-
-  validateTimeout(){
-    this.timeoutIntervalsCounter++
-    console.log("---\n\nEVALUATE TIMEOUT---", this.timeoutIntervalsCounter, this.timeoutIntervals)
-    if (this.timeoutIntervalsCounter == this.timeoutIntervals) {
-      this.clearTimeout()
-      this.timeout = true
-    }
-  }
-
-  clearTimeout(shallow=false){
-      if (!shallow){
-        this.setState({
-          ...this.state,
-          loader: false
-          })
-        ToastAndroid.showWithGravity(
-          TRANSLATIONS.en.home.streamError, 
-          ToastAndroid.LONG, 
-          ToastAndroid.CENTER)
-      }
-      clearInterval(this.timeoutInterval);
-      this.retrycounter = 0
-      this.timeoutIntervalsCounter = 0
-  }
-
-  // onReadyForDisplay(e) {
-  //   console.log("onReadyForDisplay",e)
-  //   this.onLoad(e)
-  // }
-
-  // onReady(e) {
-  //   console.log("onReady noop",e) 
-  // } 
-
-  async UNSAFE_componentWillReceiveProps(props){
-    Orientation.lockToLandscapeLeft()
-    console.log("componentWillReceiveProps",props)
-    this.playing    = false
-    this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
-    this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
-    Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
-    await this.reloadPlayer(this.channels.currentChannel)
-  }
-
   async componentDidMount(props){
-    // let data = await AsyncStorage.getItem(APP_DATA_KEYS.STBS);
-    // let stbs = JSON.parse(data) 
-    console.log("STB componentDidMount")
-    this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
-    this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
-    Orientation.addOrientationListener(this._reconfigureScreen.bind(this));
-    Orientation.addOrientationListener(this._orientationDidChange.bind(this));
-    await this.reloadPlayer(this.channels.currentChannel)
+    // console.log("STB componentDidMount")
+    //this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
+    //this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
+  this.setState({
+      ...this.state
+      })
   }
 
-  componentWillUpdate(props){
-    console.log("STB componentWillUpdate", "noop")
-  }
-  componentDidUpdate(props){
-    console.log("STB componentDidUpdate","noop")
-  } 
   shouldComponentUpdate(props){
-    console.log("STB shouldComponentUpdate","noop return true")
+    // console.log("STB shouldComponentUpdate","noop return true")
     return true
   }
 
-  componentWillUnmount() {
-    Orientation.removeOrientationListener(this._reconfigureScreen);
-    Orientation.removeOrientationListener(this._orientationDidChange);
-    this.clearTimeout(true)
-    console.log("STB componentWillUnmount")
-  }
-
-  _orientationDidChange(orientation){
-    console.log("STB _orientationDidChange",orientation)
-    setTimeout(() => {
-      if (orientation.toLowerCase().includes("landscape")) {
-        this.setState({
-          ...this.state,
-          showControls: true
-        });
-      }
-    }, 1000);
-  }
-
-  _reconfigureScreen(orientation){
-    if (this.props.navigation.isFocused()) {
-      let dimensions = this.getDimensions()
-      let newState = {
-        ...this.state,
-        stream: this.state.stream,
-        loader: (!this.playing),
-        width: dimensions.width,
-        height: dimensions.height,
-        aspecRatio : dimensions.width/dimensions.height,
-        channels: this.state.channels
-      }
-      this.setState(newState);
-      console.log("STB _reconfigureScreen",orientation)
-    }
-  }
-
-  getLoader(){
-    if (this.state.stream){
-      return {
-          uri: this.state.stream,
-          headers: REQUEST_HEADEARS
-        }
-    } else {   
-      return {
-          uri: "",
-          headers: REQUEST_HEADEARS
-        }
-    }
-  }
-
-  async reloadPlayer(channel, retry=false){
-
-    // Refresh
-    if (!channel) channel = this.channels.currentChannel
-
-    switch (retry) {
-      case false:
-        this.timeout = false
-        this.retrycounter = 0
-        this.clearTimeout(true)
-        this.timeoutInterval = setInterval(this.validateTimeout.bind(this), 1000);
-        break;
-    }
-
-    console.log(`****\nSTB reloading ${this.retrycounter} of ${this.retries}\n****`)
-
-    if (this.retrycounter >= this.retries || this.timeout ){
-      console.log(`STB no more retries (${(this.retrycounter >= this.retries)}) or timedout (${this.timeout})`)
-      this.clearTimeout()
-      return
-    }
+  async reloadPlayer(channel){
 
     this.setState({ 
-        ...this.state, 
-        stream: "",
+        ...state,
         loader: true
     })
 
-    let setup = await Api.change(this.ip,this.channels,channel)
+    // Refresh
+    if (!channel) channel = this.state.channels.currentChannel
+
+    let setup = await Api.change(this.state.ip,this.state.channels,channel)
     if (!setup || !setup.url){
-      console.log("STB error channel data")
+      this.xhr.abort()
+      // console.log("STB error channel data")
       ToastAndroid.showWithGravity(
-        setup.msg || "STB error retrying...", 
-        ToastAndroid.LONG,
+        setup.msg || "STB error please try again.", 
+        ToastAndroid.SHORT,
         ToastAndroid.CENTER)
-      this.retrycounter++
+      this.setState({ 
+          ...state,
+          loader: false
+      })
       return
     }
 
-    console.log("STB reloadPlayer",setup.url)
+    // console.log("STB reloadPlayer",setup.url)
     let reload = this.reloadPlayer.bind(this)
     let setState = this.setState.bind(this)
     let state = this.state
-    let ip = this.ip
+    let ip = this.state.ip
     let xhr = this.xhr
     xhr.abort() 
     xhr.open("GET", setup.url, true);
     xhr.withCredentials = false;
     xhr.timeout = 500; 
-    xhr.responseType = "text";
-    // xhr.ontimeout =  function(e) {
-    //   console.log("timoeout" )
-    //     xhr.abort()
-    //     reload()
-    // }
+    xhr.responseType = "arraybuffer";
+    xhr.onerror = function(e) {
+        // console.log("onerror",e )
+        reload()
+    }
+    xhr.ontimeout = function(e) {
+       // console.log("ontimeout",e )
+       reload()
+    }
     xhr.onprogress = async function(e) {
-      console.log("onprogress",e,xhr.status )
+      // console.log("onprogress",e,xhr.status )
       if (xhr.status==200){
-        console.log("onprogress2",e,xhr.responseURL )
-        xhr.abort()
-        setTimeout(() => {
-          xhr.abort() 
+        if (e.loaded>5000){
+          xhr.abort()
+          Linking.openURL(setup.url)
           setState({ 
               ...state, 
               stream: setup.url,
-              loader: true,
+              loader: false,
               ip: ip,
               channels: setup.channels
           })
-        }, 500);
+        } else {
+          reload()
+        }
       } else {
-        xhr.abort()
         reload()
       }
     }
-    xhr.send(); 
-
-    this.retrycounter++
+    xhr.send()
     return
 
-  }
-
-  showChannelName(){
-    try {
-      ToastAndroid.showWithGravity(
-        this.channels.currentChannel.channelName, 
-        ToastAndroid.LONG, 
-        ToastAndroid.CENTER)
-    } catch (error) {
-      console.log("STB no channelName")
-    }
   }
 
   goBack(){
@@ -301,7 +145,7 @@ import Epg from './epg'
   }
 
   render() { 
-    console.log("RENDER PLAYER WITH STREAM", this.state.stream)
+    // console.log("RENDER PLAYER WITH STREAM", this.state.stream)
     return (
             <ImageBackground
 
@@ -309,7 +153,6 @@ import Epg from './epg'
           resizeMode: 'stretch'
           } 
           ,styles.BackgroundImage)}>
-    <View >
       {this.state.loader && 
         <View style={{
           paddingTop:this.getDimensions().height/2
@@ -318,29 +161,8 @@ import Epg from './epg'
           size="large" 
           color="#FFFFFF" />
         </View>}
-      {!!this.state.stream && 
-      <Video source={this.getLoader()}   // Can be a URL or a local file.
-        ref={this.playerref}
-        id={"video"}
-        // onVideoIdle={this.onError.bind(this)}
-        onReadyForDisplay={this.onReadyForDisplay.bind(this)}
-        onError={this.onError.bind(this)}
-        bufferConfig={{
-          minBufferMs: 2000,
-          maxBufferMs: 5000,
-          bufferForPlaybackMs: 1000,
-          bufferForPlaybackAfterRebufferMs: 1000
-        }}
-        style={{ 
-          aspectRatio: this.state.aspectRatio,
-          width: this.state.width,
-          height: this.state.height, 
-          backgroundColor: colors.app_background
-        }}
-        //poster={Assets.loader}
-         />}
+    <View >
          {
-          this.state.showControls &&
           <Control
             ref={this.controlref}
             goBack={this.goBack.bind(this)}
@@ -349,11 +171,11 @@ import Epg from './epg'
             playing={this.playing}
             stbState={this.state}
             getDimensions={this.getDimensions}
-            ip={this.ip}
+            ip={this.state.ip}
             cb={this.reloadPlayer.bind(this)} />
         }
         {/* Bootstrap Epg auto loader */}
-        <Epg onUpdateChannels={this.onUpdateChannels.bind(this)} channels={this.state.channels} />
+         <Epg onUpdateChannels={this.onUpdateChannels.bind(this)} channels={this.state.channels} />
       </View>
            </ImageBackground>
     )}

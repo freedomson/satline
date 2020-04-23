@@ -33,11 +33,11 @@ export const Router: FunctionComponent = (props) => {
       try {
         let router = await AsyncStorage.getItem(APP_DATA_KEYS.ROUTER);
         let r = JSON.parse(router)
-        console.log("setting router mem", r)
+        // console.log("setting router mem", r)
          r ? setRouter(r) : setRouter(defaultRouter)
       } catch (error) { 
         // Error retrieving data
-         console.log("setting router def",defaultRouter)
+         // console.log("setting router def",defaultRouter)
          setRouter(defaultRouter)
       }
       return defaultRouter

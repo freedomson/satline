@@ -73,7 +73,8 @@ const StackNavigator = createStackNavigator({
       headerLeft: ( 
         <Icon
         size={36}
-        onPress={()=>{console.log(navigation);navigation.dispatch(DrawerActions.toggleDrawer())}}
+        onPress={()=>{// console.log(navigation);
+        navigation.dispatch(DrawerActions.toggleDrawer())}}
         name={PAGES.HOME.icon} />
       ),
     }),

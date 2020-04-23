@@ -22,7 +22,7 @@ let wsos = {
             {
                 let status = resp.data.substr(0,3)
                 let data = resp.data.substr(3,resp.data.length)
-                // console.log(status,data)
+                // // console.log(status,data)
                 out = JSON.parse(data) 
             }
             return out
@@ -32,7 +32,7 @@ let wsos = {
     },
     populateEPG : async (channels) => {
 
-        console.log("Bootstrapping populateEPG", channels)
+        // console.log("Bootstrapping populateEPG", channels)
 
         let ip = channels.ip
         let ch = channels.channels
@@ -49,7 +49,7 @@ let wsos = {
         end.setMinutes(end.getMinutes() + 120); // 1hour
         end = new Date(end).getTime(); // Date object
         await Promise.all(ch.map( async (item,key) => {
-            // console.log(item.channelName)
+            // // console.log(item.channelName)
             // if(item.channelName !="TVCine 1 HD") return
             var epgURL = endpoints.epg 
                             .replace(/\{ip\}/g, ip)
@@ -113,7 +113,7 @@ let wsos = {
         let startResp = await wsos.apiCall(start)
         let statusResp = await wsos.apiCall(status)
         var config;
-        console.log("API processStatus",statusResp)
+        // console.log("API processStatus",statusResp)
         if (statusResp && statusResp.response.status == 200)
         {
             let data = statusResp.data.split(/\d\d\d\s/) 
@@ -150,7 +150,7 @@ let wsos = {
 
     change : async (ip,channels,channel) => {
 
-        console.log("API currentChannel CHANGE", channel)
+        // console.log("API currentChannel CHANGE", channel)
 
         channels.currentChannel = channel
         var setURL = endpoints.set.replace(/\{ip\}/g, ip).replace(/\{progNo\}/g, channel.channelNo);
@@ -168,7 +168,7 @@ let wsos = {
             }
         } else {
             // Channel as issues bypass rescursive
-            console.log("API bad channel...")
+            // console.log("API bad channel...")
             return {
                 url:"",
                 channels:"",

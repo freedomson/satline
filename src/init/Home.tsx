@@ -19,7 +19,7 @@ export const Home: FunctionComponent = (props) => {
   let scanner = useScanner();
 
   const  NavigationsonWillFocus = ()=>{
-    console.log('[SMSC][HOME] WillFocus'); // callback message
+    // console.log('[SMSC][HOME] WillFocus'); // callback message
     Orientation.lockToPortrait()
   }
 

@@ -13,7 +13,7 @@ import org.wonday.orientation.OrientationPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.example.habibi.mynativemodule.MyNativeModulePackage;
 import com.pusherman.networkinfo.RNNetworkInfoPackage;
-import com.brentvatne.react.ReactVideoPackage;
+// import com.brentvatne.react.ReactVideoPackage;
 import com.oblador.shimmer.RNShimmerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -43,7 +43,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNDeviceInfo(),
             new MyNativeModulePackage(),
             new RNNetworkInfoPackage(),
-            new ReactVideoPackage(),
+            // new ReactVideoPackage(),
             new RNShimmerPackage()
       );
     }
