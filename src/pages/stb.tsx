@@ -57,9 +57,10 @@ import Epg from './epg'
     // console.log("STB componentDidMount")
     //this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
     //this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
-      // this.setState({
-      // ...this.state
-      // })
+    this.setState({ 
+        ...this.state,
+        loader: true
+    })
   }
 
   shouldComponentUpdate(props){
