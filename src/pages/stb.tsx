@@ -44,7 +44,7 @@ import Epg from './epg'
   }
 
   onUpdateChannels(channels){
-    // console.log("STB onUpdateChannels")
+    console.log("STB onUpdateChannels")
     let tmp_channels = this.state.channels
     tmp_channels.channels = channels
     this.setState({
@@ -57,9 +57,9 @@ import Epg from './epg'
     // console.log("STB componentDidMount")
     //this.ip         = this.props.navigation.getParam('ip', 'no-data-stream')
     //this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
-  this.setState({
-      ...this.state
-      })
+      // this.setState({
+      // ...this.state
+      // })
   }
 
   shouldComponentUpdate(props){
@@ -67,34 +67,38 @@ import Epg from './epg'
     return true
   }
 
+
+  onError(msg){
+    this.xhr.abort()
+    ToastAndroid.showWithGravity(
+      msg || "STB error please try again.", 
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER)
+    this.setState({ 
+    ...this.state,
+    loader: false
+    })
+  }
+
   async reloadPlayer(channel){
 
     this.setState({ 
-        ...state,
+        ...this.state,
         loader: true
     })
 
     // Refresh
     if (!channel) channel = this.state.channels.currentChannel
-
     let setup = await Api.change(this.state.ip,this.state.channels,channel)
     if (!setup || !setup.url){
-      this.xhr.abort()
-      // console.log("STB error channel data")
-      ToastAndroid.showWithGravity(
-        setup.msg || "STB error please try again.", 
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER)
-      this.setState({ 
-          ...state,
-          loader: false
-      })
+      this.onError(setup.msg)
       return
     }
 
     // console.log("STB reloadPlayer",setup.url)
     let reload = this.reloadPlayer.bind(this)
     let setState = this.setState.bind(this)
+    let onError = this.onError.bind(this)
     let state = this.state
     let ip = this.state.ip
     let xhr = this.xhr
@@ -104,17 +108,14 @@ import Epg from './epg'
     xhr.timeout = 500; 
     xhr.responseType = "arraybuffer";
     xhr.onerror = function(e) {
-        // console.log("onerror",e )
-        reload()
+        onError("STB validation error")
     }
     xhr.ontimeout = function(e) {
-       // console.log("ontimeout",e )
-       reload()
+        onError("STB timeout")
     }
     xhr.onprogress = async function(e) {
-      // console.log("onprogress",e,xhr.status )
       if (xhr.status==200){
-        if (e.loaded>5000){
+        if (e.loaded>10000){
           xhr.abort()
           Linking.openURL(setup.url)
           setState({ 
@@ -124,16 +125,12 @@ import Epg from './epg'
               ip: ip,
               channels: setup.channels
           })
-        } else {
-          reload()
+          return;
         }
-      } else {
-        reload()
       }
+      reload()
     }
     xhr.send()
-    return
-
   }
 
   goBack(){
