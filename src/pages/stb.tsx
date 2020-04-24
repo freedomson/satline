@@ -59,7 +59,7 @@ import Epg from './epg'
     //this.channels   = this.props.navigation.getParam('channels', 'no-data-stream')
     this.setState({ 
         ...this.state,
-        loader: true
+        loader: false
     })
   }
 
